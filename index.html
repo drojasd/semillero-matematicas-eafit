@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#07121f">
+  <meta name="description" content="Semillero de Matemáticas de la Universidad EAFIT: matemáticas puras y biomatemática. Jueves de 3 a 5 p.m. en el aula 20-520, sin prerrequisitos.">
+  <title>Semillero de Matemáticas – EAFIT</title>
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="#inicio">SEMILLERO <span>∂</span> MAT</a>
+    <nav>
+      <a href="#inicio">Inicio</a>
+      <a href="#investigacion">Investigación</a>
+      <a href="#semestre" data-semestre>2026-2</a>
+      <a href="#cronograma">Cronograma</a>
+      <a href="#presentaciones">Presentaciones</a>
+      <a href="#documentos">Documentos</a>
+      <a href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <section id="inicio" class="hero">
+      <p class="eyebrow">Semillero de Investigación · Universidad EAFIT</p>
+      <h1>Semillero de <em>Matemáticas</em></h1>
+      <p class="spaced">s o b r e &nbsp; n o s o t r o s</p>
+      <p class="lead">
+        El semillero es un punto de encuentro para quienes quieren entender las matemáticas
+        desde sus fundamentos y verlas en acción. Nació de la unión de dos semilleros, el de
+        <strong>Matemáticas Puras</strong> y el de <strong>Biomatemáticas</strong>, y hoy reúne
+        ambas miradas: el rigor que construye las ideas y los modelos que las llevan a la vida.
+      </p>
+      <div class="facts">
+        <div><span>Horario</span><strong data-horario></strong></div>
+        <div><span>Salón</span><strong data-salon></strong></div>
+        <div><span>Requisitos</span><strong data-requisitos></strong></div>
+      </div>
+      <p class="invite">¡Todos están invitados! <a data-whatsapp target="_blank" rel="noopener">Grupo de WhatsApp →</a></p>
+    </section>
+
+    <section id="lineas" class="lineas">
+      <article class="linea puras">
+        <p class="tag">Línea</p>
+        <h2>Matemáticas puras</h2>
+        <p>
+          Un espacio riguroso pero intuitivo, pensado como complemento a Cálculo I. Construimos
+          las bases desde la teoría de conjuntos hasta la definición rigurosa de límites,
+          derivadas e integrales, en tiempo continuo y discreto.
+        </p>
+        <ul>
+          <li>Fundamentos del cálculo diferencial e integral</li>
+          <li>Cálculo en tiempo discreto</li>
+          <li>Topologías discretas y espacios moldeados</li>
+          <li>Teoría de grafos</li>
+          <li>Resolución de problemas y comunicación matemática</li>
+        </ul>
+      </article>
+      <article class="linea biomat">
+        <p class="tag">Línea</p>
+        <h2>Biomatemática</h2>
+        <p>
+          Cursos cortos y prácticos sobre el modelado de enfermedades infecciosas con sistemas
+          dinámicos en tiempo continuo y discreto, apoyados en herramientas computacionales
+          como los toolboxes de MATLAB. No se requieren prerrequisitos avanzados.
+        </p>
+        <ul>
+          <li>Modelado epidemiológico con herramientas computacionales</li>
+          <li>Diseño y análisis de modelos de fenómenos biológicos</li>
+          <li>Vínculo entre teoría matemática y datos experimentales</li>
+          <li>Ecología, epidemiología y dinámica poblacional</li>
+        </ul>
+      </article>
+    </section>
+
+    <section id="investigacion">
+      <p class="spaced center">i n v e s t i g a c i ó n</p>
+      <p class="muted center">Además de las sesiones, el semillero tiene líneas de investigación activas.</p>
+      <div class="cards" id="lista-investigacion"></div>
+    </section>
+
+    <section id="semestre">
+      <p class="spaced center" data-semestre-spaced></p>
+      <div class="curso">
+        <figure>
+          <img data-ecard alt="Invitación del semestre: ¿Qué es un diferencial? Nivel 1: construyendo las bases del cálculo desde la función hasta el diferencial." decoding="async">
+        </figure>
+        <div>
+          <p class="tag" data-curso-nivel></p>
+          <h2 data-curso-pregunta></h2>
+          <p class="lead" data-curso-titulo></p>
+          <p class="lead">
+            Partimos de la noción de función y, paso a paso, construimos con rigor las ideas que
+            llevan al diferencial. En el camino también nos preguntamos qué significa que una
+            función sea <em>continua</em> cuando el mundo es discreto. No hace falta haber
+            asistido antes ni saber nada en particular.
+          </p>
+          <a class="boton" data-whatsapp target="_blank" rel="noopener">Únete al grupo de WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="cronograma">
+      <h2 class="section-title">Cronograma de actividades</h2>
+      <p class="muted center">Semestre <span data-semestre-text></span> · El cronograma es tentativo y puede cambiar.</p>
+      <div class="filters" role="group" aria-label="Filtrar por línea">
+        <button class="on" data-filter="todas">Todas</button>
+        <button data-filter="puras">Puras</button>
+        <button data-filter="biomat">Biomat</button>
+      </div>
+      <ol class="sesiones" id="lista-sesiones"></ol>
+    </section>
+
+    <section id="presentaciones">
+      <p class="spaced center">p r e s e n t a c i o n e s</p>
+      <div class="cards" id="lista-presentaciones"></div>
+    </section>
+
+    <section id="documentos">
+      <p class="spaced center">d o c u m e n t o s</p>
+      <div class="cards" id="lista-documentos"></div>
+    </section>
+    <section id="contacto">
+      <p class="spaced center">c o o r d i n a c i ó n</p>
+      <p class="muted center">Para mayor información comunícate con nuestros coordinadores.</p>
+      <div class="coordinadores" id="lista-coordinadores"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>Semillero de Investigación en Matemáticas · Universidad EAFIT · Medellín</p>
+  </footer>
+
+  <script src="data/sitio.js"></script>
+  <script src="assets/main.js"></script>
+</body>
+</html>

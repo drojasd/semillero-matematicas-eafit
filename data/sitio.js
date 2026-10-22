@@ -38,6 +38,7 @@ window.SEMILLERO = {
       estado: "En curso",
       descripcion:
         "Análogos de la topología en el mundo discreto: los espacios moldeados dicen qué elementos son adyacentes y permiten definir cuándo una función entre ellos es continua.",
+      enlace: "charlas/espacios-moldeados/funcion-discreta.html",
     },
     {
       titulo: "Pedagogía de las matemáticas",

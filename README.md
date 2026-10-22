@@ -11,10 +11,8 @@ Sitio y material abierto del Semillero de Matemáticas de EAFIT, que reúne las 
 
 ```
 index.html                       página principal
-data/sitio.js                    horario, cronograma, líneas de investigación, documentos
+data/sitio.js                    horario, cronograma, líneas de investigación
 assets/                          estilos, script y la invitación del semestre
-cursos/introduccion-edo/         notas de introducción a ecuaciones diferenciales
-cursos/Nivel 1 diferencial/      notas del Nivel 1 (LaTeX)
 cursos/Modelado epidemiológico/  material de las sesiones de modelado con GSUA-CSB
 ```
 

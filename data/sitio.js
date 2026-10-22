@@ -69,13 +69,6 @@ window.SEMILLERO = {
   // Material PRIVADO (espacios moldeados) vive en data/privado.js y no se publica.
   presentaciones: [],
 
-  documentos: [
-    {
-      titulo: "Introducción a las ecuaciones diferenciales",
-      linea: "ambas",
-      descripcion:
-        "Notas a mano de la introducción del semillero: la ecuación diferencial como operador, espacio de estado y campo vectorial, existencia y unicidad, el espacio solución y el caso discreto.",
-      enlace: "cursos/introduccion-edo/notas-introduccion-edo.pdf",
-    },
-  ],
+  // Las notas fuente (a mano, .tex) NUNCA se enlazan: se presentan como HTML interactivo.
+  documentos: [],
 };

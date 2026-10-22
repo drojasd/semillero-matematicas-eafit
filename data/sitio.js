@@ -68,7 +68,15 @@ window.SEMILLERO = {
   ],
 
   // Material PRIVADO (espacios moldeados) vive en data/privado.js y no se publica.
-  presentaciones: [],
+  presentaciones: [
+    {
+      titulo: "¿Qué es una ecuación diferencial?",
+      linea: "ambas",
+      descripcion:
+        "La introducción del semillero, interactiva: la ecuación como operador y su kernel, el problema de valor inicial, espacio de estado y campo vectorial, existencia y unicidad, el espacio solución, autovalores, el mundo discreto y el péndulo.",
+      enlace: "cursos/introduccion-edo/presentacion.html",
+    },
+  ],
 
   // Las notas fuente (a mano, .tex) NUNCA se enlazan: se presentan como HTML interactivo.
   documentos: [],

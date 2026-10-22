@@ -1,0 +1,253 @@
+{
+  "reto": 2,
+  "equipo": "",
+  "integrantes": [],
+  "casos": {
+    "c1": {
+      "parametros": {
+        "S0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "I0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "R0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "beta": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "gamma": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "alpha": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        }
+      },
+      "justificacion": ""
+    },
+    "c2": {
+      "parametros": {
+        "S0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "I0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "R0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "beta": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "gamma": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "alpha": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        }
+      },
+      "justificacion": ""
+    },
+    "c3": {
+      "parametros": {
+        "S0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "I0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "R0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "beta": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "gamma": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "alpha": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        }
+      },
+      "justificacion": ""
+    },
+    "c4": {
+      "parametros": {
+        "S0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "I0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "R0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "beta": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "gamma": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "alpha": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        }
+      },
+      "justificacion": ""
+    },
+    "c5": {
+      "parametros": {
+        "S0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "I0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "R0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "beta": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "gamma": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "alpha": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        }
+      },
+      "justificacion": ""
+    },
+    "c6": {
+      "parametros": {
+        "S0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "I0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "R0": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "beta": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "gamma": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        },
+        "alpha": {
+          "estimacion": null,
+          "ic_inferior": null,
+          "ic_superior": null,
+          "identificable": null
+        }
+      },
+      "justificacion": ""
+    }
+  }
+}

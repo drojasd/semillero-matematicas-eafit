@@ -108,6 +108,20 @@ h1 em { color: var(--puras); font-weight: 400; }
 .card p { color: var(--muted); }
 .cta { margin-top: auto; font-weight: 800; font-size: .8rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; }
 
+.retos-intro { max-width: 760px; margin: 0 auto 24px; }
+#lista-retos { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; }
+.reto { padding: 24px; border: 1px solid var(--line); border-left: 3px solid var(--biomat); border-radius: 18px; background: #091827dc; }
+.reto h3 { margin: 6px 0 10px; font: 500 1.4rem/1.2 Georgia, serif; }
+.sello { margin: 0 0 16px; color: var(--muted); font-size: .8rem; }
+.sello span { letter-spacing: .1em; text-transform: uppercase; font-weight: 700; font-size: .68rem; }
+.sello code { display: block; margin-top: 4px; color: var(--ink); overflow-wrap: anywhere; font-size: .78rem; }
+.tabla { overflow-x: auto; }
+.reto table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.reto th { color: var(--muted); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; text-align: left; }
+.reto th, .reto td { padding: 8px 10px; border-bottom: 1px solid #ffffff14; white-space: nowrap; }
+.reto td:nth-child(n+3), .reto th:nth-child(n+3) { text-align: right; font-variant-numeric: tabular-nums; }
+.reto tr.primero td { color: var(--puras); font-weight: 700; }
+
 footer { margin-top: 80px; padding: 32px 16px; text-align: center; color: var(--muted); font-size: .85rem; border-top: 1px solid #ffffff14; }
 
 @media (max-width: 600px) {
@@ -115,3 +129,8 @@ footer { margin-top: 80px; padding: 32px 16px; text-align: center; color: var(--
   section { padding-top: 48px; }
   .curso { grid-template-columns: 1fr; gap: 24px; }
 }
+
+/* Curso GSUA-CSB */
+.cta-par { display: flex; flex-wrap: wrap; gap: 18px; margin: auto 0 0; }
+.cta-par .cta { margin-top: 0; }
+.curso-enlaces { margin-top: 22px; font-size: .92rem; }

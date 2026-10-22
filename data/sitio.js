@@ -76,7 +76,34 @@ window.SEMILLERO = {
         "La introducción del semillero, interactiva: la ecuación como operador y su kernel, el problema de valor inicial, espacio de estado y campo vectorial, existencia y unicidad, el espacio solución, autovalores, el mundo discreto y el péndulo.",
       enlace: "cursos/introduccion-edo/presentacion.html",
     },
+    {
+      titulo: "Función discreta · continuidad en moldes",
+      linea: "puras",
+      descripcion:
+        "Construye la estructura y luego ponla a prueba: un laboratorio paso a paso, con estética de Manim, para graficar una función discreta y comprobar su continuidad en moldes.",
+      enlace: "charlas/espacios-moldeados/funcion-discreta.html",
+    },
   ],
+
+  // Curso de la toolbox GSUA-CSB (las páginas viven en el sitio de la toolbox).
+  cursoGSUA: {
+    titulo: "Curso GSUA-CSB",
+    descripcion:
+      "Validación de modelos con la toolbox GSUA-CSB, en MATLAB y en Python: del modelo a la incertidumbre, la sensibilidad, la estimación de parámetros y la identificabilidad. Cada módulo está escrito dos veces, una por lenguaje, resolviendo lo mismo.",
+    base: "https://drojasd.github.io/GSUA-CSB/course/",
+    modulos: [
+      { n: 1, titulo: "Introducción a modelos", tema: "Modelos discretos y continuos; simulación nominal y ensamble" },
+      { n: 2, titulo: "Muestreo", tema: "Uniforme, hipercubo latino y Sobol" },
+      { n: 3, titulo: "Incertidumbre y Monte Carlo", tema: "Bandas de percentiles y filtrado Monte Carlo" },
+      { n: 4, titulo: "Análisis de sensibilidad", tema: "Índices de Sobol de primer orden y totales" },
+      { n: 5, titulo: "Estimación e identificabilidad", tema: "Estimación multicomienzo, bootstrap e identificabilidad práctica" },
+    ],
+    enlaces: [
+      { texto: "Guía de usuario", url: "https://drojasd.github.io/GSUA-CSB/gsua_userguide.html" },
+      { texto: "Descargar la toolbox (.mltbx)", url: "https://github.com/drojasd/GSUA-CSB/releases/latest" },
+      { texto: "Repositorio GSUA-CSB", url: "https://github.com/drojasd/GSUA-CSB" },
+    ],
+  },
 
   // Las notas fuente (a mano, .tex) NUNCA se enlazan: se presentan como HTML interactivo.
   documentos: [],

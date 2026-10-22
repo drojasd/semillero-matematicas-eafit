@@ -1,0 +1,87 @@
+{
+  "reto": 2,
+  "titulo": "SIR discreto con pérdida de inmunidad (HandsOn SIR)",
+  "modelo": "SIRSemilleroSV",
+  "dominio": [0, 100],
+  "salidas": ["S", "I", "R"],
+  "nivel": 0.95,
+  "parametros": [
+    {
+      "id": "S0",
+      "nombre": "S(0)",
+      "rango": [700, 1100]
+    },
+    {
+      "id": "I0",
+      "nombre": "I(0)",
+      "rango": [1, 20]
+    },
+    {
+      "id": "R0",
+      "nombre": "R(0)",
+      "rango": [0, 50]
+    },
+    {
+      "id": "beta",
+      "nombre": "\\beta",
+      "rango": [0.1, 0.7]
+    },
+    {
+      "id": "gamma",
+      "nombre": "\\gamma",
+      "rango": [0.05, 0.35]
+    },
+    {
+      "id": "alpha",
+      "nombre": "\\alpha",
+      "rango": [0, 0.1]
+    }
+  ],
+  "casos": [
+    {
+      "id": "c1",
+      "observadas": ["I"],
+      "tiempos": [0, 100],
+      "n_tiempos": 101,
+      "ruido": 0.02
+    },
+    {
+      "id": "c2",
+      "observadas": ["I"],
+      "tiempos": [0, 100],
+      "n_tiempos": 101,
+      "ruido": 0.05
+    },
+    {
+      "id": "c3",
+      "observadas": ["I"],
+      "tiempos": [0, 100],
+      "n_tiempos": 101,
+      "ruido": 0.1
+    },
+    {
+      "id": "c4",
+      "observadas": ["S", "I"],
+      "tiempos": [0, 100],
+      "n_tiempos": 101,
+      "ruido": 0.02
+    },
+    {
+      "id": "c5",
+      "observadas": ["S", "I"],
+      "tiempos": [0, 100],
+      "n_tiempos": 101,
+      "ruido": 0.05
+    },
+    {
+      "id": "c6",
+      "observadas": ["S", "I"],
+      "tiempos": [0, 100],
+      "n_tiempos": 101,
+      "ruido": 0.08
+    }
+  ],
+  "datos": "reto_2_datos.csv",
+  "sha256_datos": "785faba8a6266dd5d8b2a8f0e681bb672464028710c1f83000b216620c20232e",
+  "sha256_verdad": "52a744b2d6838082360ccf8d49105ff59abe8ececf70cad3f34ebf20c34f2934"
+}

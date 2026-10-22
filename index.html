@@ -17,6 +17,8 @@
       <a href="#semestre" data-semestre>2026-2</a>
       <a href="#cronograma">Cronograma</a>
       <a href="#presentaciones">Presentaciones</a>
+      <a href="#curso">Curso GSUA</a>
+      <a href="#retos">Retos</a>
       <a href="#documentos">Documentos</a>
       <a href="#contacto">Contacto</a>
     </nav>
@@ -118,6 +120,26 @@
       <div class="cards" id="lista-presentaciones"></div>
     </section>
 
+    <section id="curso">
+      <p class="spaced center">c u r s o &nbsp; g s u a - c s b</p>
+      <p class="muted center retos-intro" data-curso-desc></p>
+      <div class="cards" id="lista-curso"></div>
+      <p class="center curso-enlaces" id="curso-enlaces"></p>
+    </section>
+
+    <section id="retos">
+      <p class="spaced center">r e t o s</p>
+      <p class="muted center retos-intro">
+        Competencias de identificabilidad: datos simulados con ruido y parámetros secretos. Cada
+        equipo dice qué parámetros se pueden recuperar, los estima y da su intervalo de confianza.
+        Gana la <strong>menor penalización</strong>: intervalos estrechos que contengan la verdad y
+        honestidad sobre lo que no se puede recuperar. La huella SHA-256 de cada verdad se publica
+        al lanzar el reto, para que nadie pueda cambiarla después.
+        <a href="https://github.com/drojasd/semillero-matematicas-eafit/blob/main/retos/README.md" target="_blank" rel="noopener">Cómo se califica →</a>
+      </p>
+      <div id="lista-retos"></div>
+    </section>
+
     <section id="documentos">
       <p class="spaced center">d o c u m e n t o s</p>
       <div class="cards" id="lista-documentos"></div>
@@ -134,6 +156,7 @@
   </footer>
 
   <script src="data/sitio.js"></script>
+  <script src="data/retos.js"></script>
   <script src="assets/main.js"></script>
 </body>
 </html>

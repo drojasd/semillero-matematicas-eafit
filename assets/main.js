@@ -73,6 +73,61 @@
     if (a) a.hidden = true;
   });
 
+  // Curso GSUA-CSB: cada módulo enlaza a su página en MATLAB y en Python.
+  const K = S.cursoGSUA;
+  if (K) {
+    $("[data-curso-desc]").textContent = K.descripcion;
+    $("#lista-curso").innerHTML = K.modulos
+      .map((m) => {
+        const n = String(m.n).padStart(2, "0");
+        return `<article class="card linea-biomat">
+      <p class="tag">Módulo ${m.n}</p>
+      <h3>${esc(m.titulo)}</h3>
+      <p>${esc(m.tema)}</p>
+      <p class="cta-par"><a class="cta" href="${esc(K.base)}modulo-${n}-matlab.html" target="_blank" rel="noopener">MATLAB →</a>
+        <a class="cta" href="${esc(K.base)}modulo-${n}-python.html" target="_blank" rel="noopener">Python →</a></p>
+    </article>`;
+      })
+      .join("");
+    $("#curso-enlaces").innerHTML = K.enlaces
+      .map((e) => `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.texto)}</a>`)
+      .join(" · ");
+  } else {
+    $("#curso").hidden = true;
+    document.querySelector('.nav a[href="#curso"]').hidden = true;
+  }
+
+  // Retos de identificabilidad (data/retos.js, generado por retos/calificar.py --sitio).
+  const R = window.SEMILLERO_RETOS || [];
+  const num = (x, d) => Number(x).toFixed(d);
+  $("#lista-retos").innerHTML = R.map((r) => {
+    const filas = r.posiciones
+      .map(
+        (f) => `<tr${f.posicion === 1 ? ' class="primero"' : ""}>
+          <td>${f.posicion}</td><td>${esc(f.equipo)}</td><td>${num(f.penalizacion, 2)}</td>
+          <td>${f.aciertos}/${f.total}</td><td>${num(100 * f.cobertura, 0)} %</td>
+          <td>${num(f.error_relativo, 3)}</td></tr>`
+      )
+      .join("");
+    const tabla = r.posiciones.length
+      ? `<div class="tabla"><table>
+          <thead><tr><th>#</th><th>Equipo</th><th>Penalización</th><th>Aciertos</th>
+          <th>Cobertura</th><th>Error</th></tr></thead><tbody>${filas}</tbody></table></div>`
+      : `<p class="muted">Reto abierto: aún no hay posiciones.</p>`;
+    return `<article class="reto">
+      <p class="tag">Reto R${esc(r.reto)} · ${esc(r.casos)} casos · ${esc(r.parametros.length)} parámetros</p>
+      <h3>${esc(r.titulo)}</h3>
+      <p class="sello"><span>SHA-256 de la verdad</span> <code>${esc(r.sha256_verdad)}</code></p>
+      ${r.kit ? `<p class="cta-par"><a class="cta" href="${esc(r.kit)}" download>Descargar el kit del reto →</a>
+        ${r.instrucciones ? `<a class="cta" href="${esc(r.instrucciones)}" target="_blank" rel="noopener">Instrucciones →</a>` : ""}</p>` : ""}
+      ${tabla}
+    </article>`;
+  }).join("");
+  if (!R.length) {
+    $("#retos").hidden = true;
+    document.querySelector('.nav a[href="#retos"]').hidden = true;
+  }
+
   document.querySelectorAll("[data-filter]").forEach((btn) =>
     btn.addEventListener("click", () => {
       document.querySelectorAll("[data-filter]").forEach((b) => b.classList.toggle("on", b === btn));

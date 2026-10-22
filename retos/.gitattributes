@@ -1,0 +1,4 @@
+# Los archivos de los retos se sellan con SHA-256: sus bytes no pueden cambiar al hacer checkout
+# (core.autocrlf convertiría LF en CRLF en Windows y la huella dejaría de coincidir).
+* text=auto eol=lf
+*.mat binary

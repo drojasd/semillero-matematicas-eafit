@@ -1,0 +1,895 @@
+[
+  {
+    "id": "sir_continuo",
+    "modelo": "sir_continuo",
+    "nombre": "SIR continuo (Kermack–McKendrick)",
+    "tipo": "continuo",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "S' = -βSI/N; I' = βSI/N - γI; R' = γI; C' = βSI/N (C = infecciones acumuladas, estado auxiliar no devuelto)",
+    "parametros": [
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Tasa de contagio: contactos efectivos por persona por día.",
+        "rango": [
+          0.05,
+          1.5
+        ],
+        "unidad": "1/día",
+        "fuente": "rango didáctico del hands-on (no proviene de un artículo): con γ en su rango cubre R₀ = β/γ entre 0.1 y 30"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Tasa de recuperación; 1/γ es el período infeccioso medio.",
+        "rango": [
+          0.05,
+          0.5
+        ],
+        "unidad": "1/día",
+        "fuente": "rango didáctico del hands-on: período infeccioso medio entre 2 y 20 días"
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "I0",
+        "nombre": "I₀",
+        "descripcion": "Infectados al inicio de la simulación (t0).",
+        "rango": [
+          1,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): rango [0, 1000] de I_f inicial; aquí el mínimo es 1 para que haya brote."
+      },
+      {
+        "id": "R0",
+        "nombre": "R₀ (condición inicial)",
+        "descripcion": "Recuperados (inmunes) al inicio. Fijo en 0 por omisión: población totalmente susceptible; amplíe el rango si hay inmunidad previa.",
+        "rango": [
+          0,
+          0
+        ],
+        "unidad": "personas",
+        "fuente": "elección del hands-on (población inicialmente susceptible)"
+      }
+    ],
+    "estados": [
+      "S",
+      "I",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos",
+        "fila": 4,
+        "descripcion": "Infectados activos I(t)."
+      },
+      {
+        "id": "casos_nuevos",
+        "fila": 5,
+        "descripcion": "Infecciones nuevas en el paso que termina en t: C(t) - C(t-1), con C' = βSI/N; en t0 vale I0 (infectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "N": 50000000
+    },
+    "notas": "S0 = N - I0 - R0. ode45 / solve_ivp RK45 con rtol = atol = 1e-6; casos_nuevos se obtiene con diferencias hacia atrás del estado auxiliar C en la rejilla entera. Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "Kermack WO, McKendrick AG (1927). A contribution to the mathematical theory of epidemics. Proc R Soc Lond A 115:700-721."
+  },
+  {
+    "id": "sir_discreto",
+    "modelo": "sir_discreto",
+    "nombre": "SIR discreto (probabilidad de contagio exponencial)",
+    "tipo": "discreto",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "S(t+1) = S(1-P); I(t+1) = I + S·P - γI; R(t+1) = R + γI; P = 1 - exp(-β·I/N)",
+    "parametros": [
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Tasa de contagio en P = 1 - exp(-βI/N).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "1/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): β ∈ [0, 1]"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Probabilidad diaria de recuperación de un infectado.",
+        "rango": [
+          0,
+          0.5
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "subconjunto de γ ∈ [0, 1] del guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2); se limita a 0.5 (período infeccioso ≥ 2 días) para que el nominal produzca epidemia"
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "I0",
+        "nombre": "I₀",
+        "descripcion": "Infectados al inicio de la simulación (t0).",
+        "rango": [
+          1,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): rango [0, 1000] de I_f inicial; aquí el mínimo es 1 para que haya brote."
+      },
+      {
+        "id": "R0",
+        "nombre": "R₀ (condición inicial)",
+        "descripcion": "Recuperados (inmunes) al inicio. Fijo en 0 por omisión: población totalmente susceptible; amplíe el rango si hay inmunidad previa.",
+        "rango": [
+          0,
+          0
+        ],
+        "unidad": "personas",
+        "fuente": "elección del hands-on (población inicialmente susceptible)"
+      }
+    ],
+    "estados": [
+      "S",
+      "I",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos",
+        "fila": 4,
+        "descripcion": "Infectados activos I(t)."
+      },
+      {
+        "id": "casos_nuevos",
+        "fila": 5,
+        "descripcion": "Contagios nuevos en el paso que termina en t: S(t-1)·P(t-1); en t0 vale I0 (infectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "prob": "exp",
+      "N": 50000000
+    },
+    "notas": "Una sola función (sir_discreto) y una entrada de catálogo por opción de opt.prob, porque el vector de parámetros depende de ella: 'exp' no lleva ν ni z, 'G3' no lleva z. Orden de pars: parámetros del catálogo y luego condiciones iniciales. S0 = N - I0 - R0. G1 y G2 se evalúan con log1p/expm1 (misma función, más precisa); G1 = 0 si S ≤ 1, como en el código de los autores. Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "SIR discreto clásico (probabilidad de escape de Reed-Frost / Poisson); contrato del hands-on"
+  },
+  {
+    "id": "sir_discreto_G1",
+    "modelo": "sir_discreto",
+    "nombre": "SIR discreto (contagio G1 de Cataño-López et al. 2022)",
+    "tipo": "discreto",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "S(t+1) = S(1-P); I(t+1) = I + S·P - γI; R(t+1) = R + γI; P = β·G1, G1 = 1 - (1 - 1/S)^(z·I·(S/N)^ℵ), ℵ = 1 + ν·I/(S+I)  (ec. 3)",
+    "parametros": [
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Probabilidad de contagio tras una interacción infecciosa; P = β·G.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): β ∈ [0, 1]; definición en Cataño-López et al. (2022), ec. 3-5"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Probabilidad diaria de recuperación de un infectado.",
+        "rango": [
+          0,
+          0.5
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "subconjunto de γ ∈ [0, 1] del guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2); se limita a 0.5 (período infeccioso ≥ 2 días) para que el nominal produzca epidemia"
+      },
+      {
+        "id": "nu",
+        "nombre": "ν",
+        "descripcion": "Conectividad: exponente adicional de ℵ(S,I) = 1 + ν·I/(S+I); mide cuánto se reducen las interacciones efectivas cuando crece la fracción de infectados.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "adimensional",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): ν ∈ [0, 1000] (para φ = G1 los autores lo amplían a [0, 30000])."
+      },
+      {
+        "id": "z",
+        "nombre": "z",
+        "descripcion": "Número medio de interacciones diarias de un individuo (Cataño-López et al. 2022).",
+        "rango": [
+          0,
+          30
+        ],
+        "unidad": "interacciones/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): z ∈ [0, 30] (para ψ = G2 los autores usan [1, 30])."
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "I0",
+        "nombre": "I₀",
+        "descripcion": "Infectados al inicio de la simulación (t0).",
+        "rango": [
+          1,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): rango [0, 1000] de I_f inicial; aquí el mínimo es 1 para que haya brote."
+      },
+      {
+        "id": "R0",
+        "nombre": "R₀ (condición inicial)",
+        "descripcion": "Recuperados (inmunes) al inicio. Fijo en 0 por omisión: población totalmente susceptible; amplíe el rango si hay inmunidad previa.",
+        "rango": [
+          0,
+          0
+        ],
+        "unidad": "personas",
+        "fuente": "elección del hands-on (población inicialmente susceptible)"
+      }
+    ],
+    "estados": [
+      "S",
+      "I",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos",
+        "fila": 4,
+        "descripcion": "Infectados activos I(t)."
+      },
+      {
+        "id": "casos_nuevos",
+        "fila": 5,
+        "descripcion": "Contagios nuevos en el paso que termina en t: S(t-1)·P(t-1); en t0 vale I0 (infectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "prob": "G1",
+      "N": 50000000
+    },
+    "notas": "Una sola función (sir_discreto) y una entrada de catálogo por opción de opt.prob, porque el vector de parámetros depende de ella: 'exp' no lleva ν ni z, 'G3' no lleva z. Orden de pars: parámetros del catálogo y luego condiciones iniciales. S0 = N - I0 - R0. G1 y G2 se evalúan con log1p/expm1 (misma función, más precisa); G1 = 0 si S ≤ 1, como en el código de los autores. Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "Cataño-López A, Rojas-Díaz D, Lizarralde DP, Puerta Yepes ME (2022). Discrete Models in Epidemiology: New Contagion Probability Functions Based on Real Data Behavior. Bull Math Biol 84:127. doi:10.1007/s11538-022-01076-6"
+  },
+  {
+    "id": "sir_discreto_G2",
+    "modelo": "sir_discreto",
+    "nombre": "SIR discreto (contagio G2 de Cataño-López et al. 2022)",
+    "tipo": "discreto",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "S(t+1) = S(1-P); I(t+1) = I + S·P - γI; R(t+1) = R + γI; P = β·G2, G2 = 1 - (1 - (I/N)^ℵ)^z, ℵ = 1 + ν·I/(S+I)  (ec. 4)",
+    "parametros": [
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Probabilidad de contagio tras una interacción infecciosa; P = β·G.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): β ∈ [0, 1]; definición en Cataño-López et al. (2022), ec. 3-5"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Probabilidad diaria de recuperación de un infectado.",
+        "rango": [
+          0,
+          0.5
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "subconjunto de γ ∈ [0, 1] del guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2); se limita a 0.5 (período infeccioso ≥ 2 días) para que el nominal produzca epidemia"
+      },
+      {
+        "id": "nu",
+        "nombre": "ν",
+        "descripcion": "Conectividad: exponente adicional de ℵ(S,I) = 1 + ν·I/(S+I); mide cuánto se reducen las interacciones efectivas cuando crece la fracción de infectados.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "adimensional",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): ν ∈ [0, 1000] (para φ = G1 los autores lo amplían a [0, 30000])."
+      },
+      {
+        "id": "z",
+        "nombre": "z",
+        "descripcion": "Número medio de interacciones diarias de un individuo (Cataño-López et al. 2022).",
+        "rango": [
+          0,
+          30
+        ],
+        "unidad": "interacciones/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): z ∈ [0, 30] (para ψ = G2 los autores usan [1, 30])."
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "I0",
+        "nombre": "I₀",
+        "descripcion": "Infectados al inicio de la simulación (t0).",
+        "rango": [
+          1,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): rango [0, 1000] de I_f inicial; aquí el mínimo es 1 para que haya brote."
+      },
+      {
+        "id": "R0",
+        "nombre": "R₀ (condición inicial)",
+        "descripcion": "Recuperados (inmunes) al inicio. Fijo en 0 por omisión: población totalmente susceptible; amplíe el rango si hay inmunidad previa.",
+        "rango": [
+          0,
+          0
+        ],
+        "unidad": "personas",
+        "fuente": "elección del hands-on (población inicialmente susceptible)"
+      }
+    ],
+    "estados": [
+      "S",
+      "I",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos",
+        "fila": 4,
+        "descripcion": "Infectados activos I(t)."
+      },
+      {
+        "id": "casos_nuevos",
+        "fila": 5,
+        "descripcion": "Contagios nuevos en el paso que termina en t: S(t-1)·P(t-1); en t0 vale I0 (infectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "prob": "G2",
+      "N": 50000000
+    },
+    "notas": "Una sola función (sir_discreto) y una entrada de catálogo por opción de opt.prob, porque el vector de parámetros depende de ella: 'exp' no lleva ν ni z, 'G3' no lleva z. Orden de pars: parámetros del catálogo y luego condiciones iniciales. S0 = N - I0 - R0. G1 y G2 se evalúan con log1p/expm1 (misma función, más precisa); G1 = 0 si S ≤ 1, como en el código de los autores. Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "Cataño-López A, Rojas-Díaz D, Lizarralde DP, Puerta Yepes ME (2022). Discrete Models in Epidemiology: New Contagion Probability Functions Based on Real Data Behavior. Bull Math Biol 84:127. doi:10.1007/s11538-022-01076-6"
+  },
+  {
+    "id": "sir_discreto_G3",
+    "modelo": "sir_discreto",
+    "nombre": "SIR discreto (contagio G3 de Cataño-López et al. 2022)",
+    "tipo": "discreto",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "S(t+1) = S(1-P); I(t+1) = I + S·P - γI; R(t+1) = R + γI; P = β·G3, G3 = (I/N)^ℵ, ℵ = 1 + ν·I/(S+I)  (ec. 5)",
+    "parametros": [
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Probabilidad de contagio tras una interacción infecciosa; P = β·G.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): β ∈ [0, 1]; definición en Cataño-López et al. (2022), ec. 3-5"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Probabilidad diaria de recuperación de un infectado.",
+        "rango": [
+          0,
+          0.5
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "subconjunto de γ ∈ [0, 1] del guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2); se limita a 0.5 (período infeccioso ≥ 2 días) para que el nominal produzca epidemia"
+      },
+      {
+        "id": "nu",
+        "nombre": "ν",
+        "descripcion": "Conectividad: exponente adicional de ℵ(S,I) = 1 + ν·I/(S+I); mide cuánto se reducen las interacciones efectivas cuando crece la fracción de infectados.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "adimensional",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): ν ∈ [0, 1000] (para φ = G1 los autores lo amplían a [0, 30000])."
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "I0",
+        "nombre": "I₀",
+        "descripcion": "Infectados al inicio de la simulación (t0).",
+        "rango": [
+          1,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): rango [0, 1000] de I_f inicial; aquí el mínimo es 1 para que haya brote."
+      },
+      {
+        "id": "R0",
+        "nombre": "R₀ (condición inicial)",
+        "descripcion": "Recuperados (inmunes) al inicio. Fijo en 0 por omisión: población totalmente susceptible; amplíe el rango si hay inmunidad previa.",
+        "rango": [
+          0,
+          0
+        ],
+        "unidad": "personas",
+        "fuente": "elección del hands-on (población inicialmente susceptible)"
+      }
+    ],
+    "estados": [
+      "S",
+      "I",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos",
+        "fila": 4,
+        "descripcion": "Infectados activos I(t)."
+      },
+      {
+        "id": "casos_nuevos",
+        "fila": 5,
+        "descripcion": "Contagios nuevos en el paso que termina en t: S(t-1)·P(t-1); en t0 vale I0 (infectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "prob": "G3",
+      "N": 50000000
+    },
+    "notas": "Una sola función (sir_discreto) y una entrada de catálogo por opción de opt.prob, porque el vector de parámetros depende de ella: 'exp' no lleva ν ni z, 'G3' no lleva z. Orden de pars: parámetros del catálogo y luego condiciones iniciales. S0 = N - I0 - R0. G1 y G2 se evalúan con log1p/expm1 (misma función, más precisa); G1 = 0 si S ≤ 1, como en el código de los autores. Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "Cataño-López A, Rojas-Díaz D, Lizarralde DP, Puerta Yepes ME (2022). Discrete Models in Epidemiology: New Contagion Probability Functions Based on Real Data Behavior. Bull Math Biol 84:127. doi:10.1007/s11538-022-01076-6"
+  },
+  {
+    "id": "sir_cuarentena_cl",
+    "modelo": "sir_cuarentena_cl",
+    "nombre": "SIR discreto con cuarentena y detección (Cataño-López et al. 2022, contagio G̃1)",
+    "tipo": "discreto",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "Sf' = Sf(1-βG̃)(1-λ) + Sq·α + μR; Sq' = Sf(1-βG̃)λ + Sq(1-α); If' = Sf·βG̃ + If(1-γ)(1-θ)(1-λ) + Iq(1-γ)(1-θ)α; Iq' = If(1-γ)(1-θ)λ + Iq(1-γ)(1-θ)(1-α); Ij' = (If+Iq)(1-γ)θ + Ij(1-γ); R' = R(1-μ) + γ(If+Iq+Ij); G̃1 = 1 - (1 - 1/Sf)^(z·If·(Sf/N)^ℵ), ℵ = 1 + ν·If/(If+Sf)  (ec. 6-8)",
+    "parametros": [
+      {
+        "id": "lambda",
+        "nombre": "λ",
+        "descripcion": "Probabilidad diaria de entrar en cuarentena (libres → cuarentena).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): λ ∈ [0, 1]"
+      },
+      {
+        "id": "alpha",
+        "nombre": "α",
+        "descripcion": "Probabilidad diaria de salir de cuarentena (cuarentena → libres).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): α ∈ [0, 1]"
+      },
+      {
+        "id": "mu",
+        "nombre": "μ",
+        "descripcion": "Probabilidad diaria de perder la inmunidad (R → Sf).",
+        "rango": [
+          0,
+          0.01
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "rango didáctico del hands-on (inmunidad media ≥ 100 días); el guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2) fija μ = 0 (rango [0, 0])"
+      },
+      {
+        "id": "theta",
+        "nombre": "θ",
+        "descripcion": "Probabilidad diaria de detección de un infectado no detectado (pasa a Ij).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): θ ∈ [0, 1]"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Probabilidad diaria de recuperación.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): γ ∈ [0, 1]"
+      },
+      {
+        "id": "nu",
+        "nombre": "ν",
+        "descripcion": "Conectividad: exponente adicional de ℵ(S,I) = 1 + ν·I/(S+I); mide cuánto se reducen las interacciones efectivas cuando crece la fracción de infectados.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "adimensional",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): ν ∈ [0, 1000] (para φ = G1 los autores lo amplían a [0, 30000])."
+      },
+      {
+        "id": "z",
+        "nombre": "z",
+        "descripcion": "Número medio de interacciones diarias de un individuo (Cataño-López et al. 2022).",
+        "rango": [
+          0,
+          30
+        ],
+        "unidad": "interacciones/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): z ∈ [0, 30] (para ψ = G2 los autores usan [1, 30])."
+      },
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Probabilidad de contagio tras una interacción infecciosa; P = β·G̃.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): β ∈ [0, 1]"
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "If0",
+        "nombre": "I_f(0)",
+        "descripcion": "Infectados libres (no detectados) al inicio.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): I_f inicial ∈ [0, 1000]"
+      },
+      {
+        "id": "Ij0",
+        "nombre": "I_j(0)",
+        "descripcion": "Infectados detectados al inicio (en el guion de los autores se fija al primer dato observado).",
+        "rango": [
+          1,
+          100
+        ],
+        "unidad": "personas",
+        "fuente": "rango didáctico del hands-on; los autores lo fijan al primer dato de activos detectados"
+      }
+    ],
+    "estados": [
+      "Sf",
+      "Sq",
+      "If",
+      "Iq",
+      "Ij",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos_detectados",
+        "fila": 7,
+        "descripcion": "Infectados activos detectados Ij(t)."
+      },
+      {
+        "id": "casos_nuevos_detectados",
+        "fila": 8,
+        "descripcion": "Detecciones nuevas en el paso que termina en t: θ(1-γ)(If+Iq) evaluado en t-1; en t0 vale Ij0 (detectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "prob": "G1",
+      "N": 50000000,
+      "aleph": "articulo"
+    },
+    "notas": "Orden de parámetros como en CHIMERA_FQ.m (λ, α, μ, θ, γ, ν, z, β), quitando los que la opción de contagio no usa (G̃3 no lleva z); luego If0, Ij0. Sf0 = N - If0 - Ij0, Sq0 = Iq0 = R0 = 0. Diferencia con el código de los autores (CHIMERA_FQ.m): allí ℵ = 1 + ν·(If+Iq+Ij)/(Sf+If+Iq+Ij), mientras que el artículo (ec. 7) usa ℵ = 1 + ν·If/(If+Sf). Por omisión se sigue el ARTÍCULO; opt.aleph = 'autores' reproduce CHIMERA_FQ.m. Correspondencia de opciones con CHIMERA_FQ.m: Prob 1 (ψ) = G2, Prob 2 (φ) = G1, Prob 3 = G3. Resto de ecuaciones idéntico a la ec. (6). Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "Cataño-López A, Rojas-Díaz D, Lizarralde DP, Puerta Yepes ME (2022). Discrete Models in Epidemiology: New Contagion Probability Functions Based on Real Data Behavior. Bull Math Biol 84:127. doi:10.1007/s11538-022-01076-6; código de los autores CHIMERITApaper/Repository/Covid19/CHIMERA_FQ.m"
+  },
+  {
+    "id": "sir_cuarentena_cl_G2",
+    "modelo": "sir_cuarentena_cl",
+    "nombre": "SIR discreto con cuarentena y detección (Cataño-López et al. 2022, contagio G̃2)",
+    "tipo": "discreto",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "Sf' = Sf(1-βG̃)(1-λ) + Sq·α + μR; Sq' = Sf(1-βG̃)λ + Sq(1-α); If' = Sf·βG̃ + If(1-γ)(1-θ)(1-λ) + Iq(1-γ)(1-θ)α; Iq' = If(1-γ)(1-θ)λ + Iq(1-γ)(1-θ)(1-α); Ij' = (If+Iq)(1-γ)θ + Ij(1-γ); R' = R(1-μ) + γ(If+Iq+Ij); G̃2 = 1 - (1 - (If/N)^ℵ)^z, ℵ = 1 + ν·If/(If+Sf)  (ec. 6-8)",
+    "parametros": [
+      {
+        "id": "lambda",
+        "nombre": "λ",
+        "descripcion": "Probabilidad diaria de entrar en cuarentena (libres → cuarentena).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): λ ∈ [0, 1]"
+      },
+      {
+        "id": "alpha",
+        "nombre": "α",
+        "descripcion": "Probabilidad diaria de salir de cuarentena (cuarentena → libres).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): α ∈ [0, 1]"
+      },
+      {
+        "id": "mu",
+        "nombre": "μ",
+        "descripcion": "Probabilidad diaria de perder la inmunidad (R → Sf).",
+        "rango": [
+          0,
+          0.01
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "rango didáctico del hands-on (inmunidad media ≥ 100 días); el guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2) fija μ = 0 (rango [0, 0])"
+      },
+      {
+        "id": "theta",
+        "nombre": "θ",
+        "descripcion": "Probabilidad diaria de detección de un infectado no detectado (pasa a Ij).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): θ ∈ [0, 1]"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Probabilidad diaria de recuperación.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): γ ∈ [0, 1]"
+      },
+      {
+        "id": "nu",
+        "nombre": "ν",
+        "descripcion": "Conectividad: exponente adicional de ℵ(S,I) = 1 + ν·I/(S+I); mide cuánto se reducen las interacciones efectivas cuando crece la fracción de infectados.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "adimensional",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): ν ∈ [0, 1000] (para φ = G1 los autores lo amplían a [0, 30000])."
+      },
+      {
+        "id": "z",
+        "nombre": "z",
+        "descripcion": "Número medio de interacciones diarias de un individuo (Cataño-López et al. 2022).",
+        "rango": [
+          0,
+          30
+        ],
+        "unidad": "interacciones/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): z ∈ [0, 30] (para ψ = G2 los autores usan [1, 30])."
+      },
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Probabilidad de contagio tras una interacción infecciosa; P = β·G̃.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): β ∈ [0, 1]"
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "If0",
+        "nombre": "I_f(0)",
+        "descripcion": "Infectados libres (no detectados) al inicio.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): I_f inicial ∈ [0, 1000]"
+      },
+      {
+        "id": "Ij0",
+        "nombre": "I_j(0)",
+        "descripcion": "Infectados detectados al inicio (en el guion de los autores se fija al primer dato observado).",
+        "rango": [
+          1,
+          100
+        ],
+        "unidad": "personas",
+        "fuente": "rango didáctico del hands-on; los autores lo fijan al primer dato de activos detectados"
+      }
+    ],
+    "estados": [
+      "Sf",
+      "Sq",
+      "If",
+      "Iq",
+      "Ij",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos_detectados",
+        "fila": 7,
+        "descripcion": "Infectados activos detectados Ij(t)."
+      },
+      {
+        "id": "casos_nuevos_detectados",
+        "fila": 8,
+        "descripcion": "Detecciones nuevas en el paso que termina en t: θ(1-γ)(If+Iq) evaluado en t-1; en t0 vale Ij0 (detectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "prob": "G2",
+      "N": 50000000,
+      "aleph": "articulo"
+    },
+    "notas": "Orden de parámetros como en CHIMERA_FQ.m (λ, α, μ, θ, γ, ν, z, β), quitando los que la opción de contagio no usa (G̃3 no lleva z); luego If0, Ij0. Sf0 = N - If0 - Ij0, Sq0 = Iq0 = R0 = 0. Diferencia con el código de los autores (CHIMERA_FQ.m): allí ℵ = 1 + ν·(If+Iq+Ij)/(Sf+If+Iq+Ij), mientras que el artículo (ec. 7) usa ℵ = 1 + ν·If/(If+Sf). Por omisión se sigue el ARTÍCULO; opt.aleph = 'autores' reproduce CHIMERA_FQ.m. Correspondencia de opciones con CHIMERA_FQ.m: Prob 1 (ψ) = G2, Prob 2 (φ) = G1, Prob 3 = G3. Resto de ecuaciones idéntico a la ec. (6). Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "Cataño-López A, Rojas-Díaz D, Lizarralde DP, Puerta Yepes ME (2022). Discrete Models in Epidemiology: New Contagion Probability Functions Based on Real Data Behavior. Bull Math Biol 84:127. doi:10.1007/s11538-022-01076-6; código de los autores CHIMERITApaper/Repository/Covid19/CHIMERA_FQ.m"
+  },
+  {
+    "id": "sir_cuarentena_cl_G3",
+    "modelo": "sir_cuarentena_cl",
+    "nombre": "SIR discreto con cuarentena y detección (Cataño-López et al. 2022, contagio G̃3)",
+    "tipo": "discreto",
+    "unidad_tiempo": "dia",
+    "transmision": "humano-humano",
+    "ecuaciones": "Sf' = Sf(1-βG̃)(1-λ) + Sq·α + μR; Sq' = Sf(1-βG̃)λ + Sq(1-α); If' = Sf·βG̃ + If(1-γ)(1-θ)(1-λ) + Iq(1-γ)(1-θ)α; Iq' = If(1-γ)(1-θ)λ + Iq(1-γ)(1-θ)(1-α); Ij' = (If+Iq)(1-γ)θ + Ij(1-γ); R' = R(1-μ) + γ(If+Iq+Ij); G̃3 = (If/N)^ℵ, ℵ = 1 + ν·If/(If+Sf)  (ec. 6-8)",
+    "parametros": [
+      {
+        "id": "lambda",
+        "nombre": "λ",
+        "descripcion": "Probabilidad diaria de entrar en cuarentena (libres → cuarentena).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): λ ∈ [0, 1]"
+      },
+      {
+        "id": "alpha",
+        "nombre": "α",
+        "descripcion": "Probabilidad diaria de salir de cuarentena (cuarentena → libres).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): α ∈ [0, 1]"
+      },
+      {
+        "id": "mu",
+        "nombre": "μ",
+        "descripcion": "Probabilidad diaria de perder la inmunidad (R → Sf).",
+        "rango": [
+          0,
+          0.01
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "rango didáctico del hands-on (inmunidad media ≥ 100 días); el guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2) fija μ = 0 (rango [0, 0])"
+      },
+      {
+        "id": "theta",
+        "nombre": "θ",
+        "descripcion": "Probabilidad diaria de detección de un infectado no detectado (pasa a Ij).",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): θ ∈ [0, 1]"
+      },
+      {
+        "id": "gamma",
+        "nombre": "γ",
+        "descripcion": "Probabilidad diaria de recuperación.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad/día",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): γ ∈ [0, 1]"
+      },
+      {
+        "id": "nu",
+        "nombre": "ν",
+        "descripcion": "Conectividad: exponente adicional de ℵ(S,I) = 1 + ν·I/(S+I); mide cuánto se reducen las interacciones efectivas cuando crece la fracción de infectados.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "adimensional",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): ν ∈ [0, 1000] (para φ = G1 los autores lo amplían a [0, 30000])."
+      },
+      {
+        "id": "beta",
+        "nombre": "β",
+        "descripcion": "Probabilidad de contagio tras una interacción infecciosa; P = β·G̃.",
+        "rango": [
+          0,
+          1
+        ],
+        "unidad": "probabilidad",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): β ∈ [0, 1]"
+      }
+    ],
+    "condiciones_iniciales": [
+      {
+        "id": "If0",
+        "nombre": "I_f(0)",
+        "descripcion": "Infectados libres (no detectados) al inicio.",
+        "rango": [
+          0,
+          1000
+        ],
+        "unidad": "personas",
+        "fuente": "guion de estimación de los autores CHIMERITApaper/Repository/Covid19/EstimationsFQ_discrete.mlx (Range2): I_f inicial ∈ [0, 1000]"
+      },
+      {
+        "id": "Ij0",
+        "nombre": "I_j(0)",
+        "descripcion": "Infectados detectados al inicio (en el guion de los autores se fija al primer dato observado).",
+        "rango": [
+          1,
+          100
+        ],
+        "unidad": "personas",
+        "fuente": "rango didáctico del hands-on; los autores lo fijan al primer dato de activos detectados"
+      }
+    ],
+    "estados": [
+      "Sf",
+      "Sq",
+      "If",
+      "Iq",
+      "Ij",
+      "R"
+    ],
+    "salidas": [
+      {
+        "id": "activos_detectados",
+        "fila": 7,
+        "descripcion": "Infectados activos detectados Ij(t)."
+      },
+      {
+        "id": "casos_nuevos_detectados",
+        "fila": 8,
+        "descripcion": "Detecciones nuevas en el paso que termina en t: θ(1-γ)(If+Iq) evaluado en t-1; en t0 vale Ij0 (detectados iniciales)."
+      }
+    ],
+    "opt_defecto": {
+      "prob": "G3",
+      "N": 50000000,
+      "aleph": "articulo"
+    },
+    "notas": "Orden de parámetros como en CHIMERA_FQ.m (λ, α, μ, θ, γ, ν, z, β), quitando los que la opción de contagio no usa (G̃3 no lleva z); luego If0, Ij0. Sf0 = N - If0 - Ij0, Sq0 = Iq0 = R0 = 0. Diferencia con el código de los autores (CHIMERA_FQ.m): allí ℵ = 1 + ν·(If+Iq+Ij)/(Sf+If+Iq+Ij), mientras que el artículo (ec. 7) usa ℵ = 1 + ν·If/(If+Sf). Por omisión se sigue el ARTÍCULO; opt.aleph = 'autores' reproduce CHIMERA_FQ.m. Correspondencia de opciones con CHIMERA_FQ.m: Prob 1 (ψ) = G2, Prob 2 (φ) = G1, Prob 3 = G3. Resto de ecuaciones idéntico a la ec. (6). Convención hacia atrás (igual que los modelos vectoriales): el valor en t corresponde al paso que TERMINA en t.",
+    "fuente": "Cataño-López A, Rojas-Díaz D, Lizarralde DP, Puerta Yepes ME (2022). Discrete Models in Epidemiology: New Contagion Probability Functions Based on Real Data Behavior. Bull Math Biol 84:127. doi:10.1007/s11538-022-01076-6; código de los autores CHIMERITApaper/Repository/Covid19/CHIMERA_FQ.m"
+  }
+]

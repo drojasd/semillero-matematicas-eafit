@@ -2,8 +2,9 @@
 
     pars = [S0, I0, R0, beta, gamma, alpha]
 
-    S(k+1) = S(k)*(1 - beta*I(k)/N) + alpha*R(k)
-    I(k+1) = S(k)*beta*I(k)/N + (1-gamma)*I(k)
+    P(k)   = 1 - exp(-beta*I(k)/N)      (probabilidad de contagio, calculada con -expm1)
+    S(k+1) = S(k)*(1 - P(k)) + alpha*R(k)
+    I(k+1) = S(k)*P(k) + (1-gamma)*I(k)
     R(k+1) = (1-alpha)*R(k) + gamma*I(k)
 
 Con alpha = 0 es el SIR clásico. N = S+I+R se conserva.
@@ -29,7 +30,8 @@ def sir_semillero_sv(pars, tiempos, **_):
     for k in range(tf - t0):
         s, i, r = m[:, k]
         n = s + i + r
-        m[0, k + 1] = s * (1 - i / n * beta) + alpha * r
-        m[1, k + 1] = s * i / n * beta + (1 - gamma) * i
+        prob = -np.expm1(-beta * i / n)  # P(k) = 1 - exp(-beta*I(k)/N)
+        m[0, k + 1] = s * (1 - prob) + alpha * r
+        m[1, k + 1] = s * prob + (1 - gamma) * i
         m[2, k + 1] = (1 - alpha) * r + gamma * i
     return m[:, np.round(tiempos).astype(int) - t0]

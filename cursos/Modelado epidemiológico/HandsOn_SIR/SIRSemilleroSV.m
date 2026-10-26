@@ -22,10 +22,13 @@ function sol = SIRSemilleroSV(pars,domain,in) %#ok<INUSD>
 %     sol.x = vector de tiempos t0:tf
 %     sol.y = matriz 3 x length(t) con las filas [S; I; R]
 %
-%   Dinamica (poblacion N = S+I+R constante):
-%     S(k+1) = S(k)*(1 - beta*I(k)/N) + alpha*R(k)
-%     I(k+1) = S(k)*beta*I(k)/N + (1-gamma)*I(k)
+%   Dinamica (poblacion N = S+I+R constante). Cada susceptible se contagia
+%   en el paso k con probabilidad exponencial (nunca supera 1):
+%     P(k)   = 1 - exp(-beta*I(k)/N)
+%     S(k+1) = S(k)*(1 - P(k)) + alpha*R(k)
+%     I(k+1) = S(k)*P(k) + (1-gamma)*I(k)
 %     R(k+1) = (1-alpha)*R(k) + gamma*I(k)
+%   P(k) se calcula como -expm1(-beta*I(k)/N) para no perder precision.
 
     time = domain(1):domain(2);
     M = zeros(3,length(time));
@@ -39,8 +42,9 @@ function sol = SIRSemilleroSV(pars,domain,in) %#ok<INUSD>
     sim_time = 1:(length(time)-1);
     for k = sim_time
         N = sum(M(1:3,k));
-        M(1,k+1) = M(1,k)*(1 - M(2,k)/N*beta) + alpha*M(3,k);
-        M(2,k+1) = M(1,k)*M(2,k)/N*beta + (1-gamma)*M(2,k);
+        P = -expm1(-beta*M(2,k)/N);          % P(k) = 1 - exp(-beta*I(k)/N)
+        M(1,k+1) = M(1,k)*(1 - P) + alpha*M(3,k);
+        M(2,k+1) = M(1,k)*P + (1-gamma)*M(2,k);
         M(3,k+1) = (1-alpha)*M(3,k) + gamma*M(2,k);
     end
 

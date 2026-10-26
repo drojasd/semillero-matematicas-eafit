@@ -1,0 +1,1100 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07121f">
+<title>Nivel 1: las bases del cálculo · Semillero de Matemáticas</title>
+<style>
+:root{
+  --bg:#07121f; --surface:#0d2033; --surface2:#102a40; --line:#29465d;
+  --ink:#eef7fb; --muted:#a6bdcb; --dim:#587386;
+  --puras:#f5c96f; --biomat:#53d5cd; --violet:#bda0ff; --bad:#ff8194; --good:#68e3a0;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+math.acc{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.05em}
+html,body{height:100%}
+body{margin:0;color:var(--ink);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:radial-gradient(1000px 620px at 0 -15%,#16495b8a,transparent 58%),radial-gradient(1000px 640px at 100% 110%,#54266566,transparent 59%),var(--bg);
+  display:flex;flex-direction:column;min-height:100vh}
+a{color:var(--biomat)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px max(16px,calc((100% - 1180px)/2));border-bottom:1px solid #ffffff14}
+.top a{font-size:.75rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.top span{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+main{flex:1;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:22px 0 110px}
+.kicker{margin:0 0 6px;color:var(--puras);font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+h1{margin:0;font:500 clamp(2.4rem,6.5vw,5.2rem)/.95 Georgia,"Times New Roman",serif;letter-spacing:-.04em}
+h1 em,h2 em{color:var(--puras);font-weight:400}
+h2{margin:0 0 14px;font:500 clamp(1.6rem,3.4vw,2.5rem)/1.08 Georgia,serif;letter-spacing:-.02em}
+p{margin:0 0 12px}
+.lead{color:#bfd0db;font:1.08rem/1.6 Georgia,serif;max-width:62ch}
+.muted{color:var(--muted)} .small{font-size:.86rem}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:26px;align-items:start}
+.cols.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.panel{border:1px solid var(--line);border-radius:16px;background:#091827dc;padding:16px;min-width:0}
+canvas{display:block;width:100%;height:360px;border-radius:12px;background:#050d17;border:1px solid #ffffff12;touch-action:none;cursor:crosshair}
+canvas.short{height:300px}
+canvas:focus-visible{outline:2px solid var(--puras);outline-offset:2px}
+.ctl{display:grid;grid-template-columns:auto 1fr 3.4em;gap:8px 10px;align-items:center;margin:10px 0}
+.ctl label{font-size:.85rem;color:var(--muted);min-width:2.2em} .ctl output{font:600 .9rem ui-monospace,Consolas,monospace;text-align:right}
+input[type=range]{width:100%;accent-color:var(--puras)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+button.b{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-size:.85rem;cursor:pointer}
+button.b:hover{color:var(--ink);border-color:var(--muted)}
+button.b.on{background:var(--surface2);color:var(--ink);border-color:var(--puras)}
+button.b:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--puras);outline-offset:2px}
+.m{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:1.06em}
+.m i,.eq i{font-style:italic}
+.eq{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:1.15rem;line-height:2;text-align:center;margin:10px 0;overflow-x:auto;overflow-y:hidden}
+.box{border-left:3px solid var(--puras);background:#f5c96f12;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.box.t{border-color:var(--biomat);background:#53d5cd12}
+.box.v{border-color:var(--violet);background:#bda0ff12}
+.ok{color:var(--good)} .no{color:var(--bad)}
+ul.clean{padding-left:18px;margin:6px 0} ul.clean li{margin:4px 0}
+.chk{list-style:none;padding:0;margin:8px 0}
+.chk li{display:grid;grid-template-columns:1.6em minmax(0,1fr);gap:4px;margin:6px 0}
+.form{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:.9rem;color:var(--muted);margin:8px 0}
+select{background:#050d17;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 6px;font:inherit;max-width:100%}
+.chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:10px 0}
+.chips .b{padding:5px 4px;font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:.86rem;border-radius:10px}
+svg text{font-family:Inter,system-ui,sans-serif}
+svg [role=button]{cursor:pointer;outline:none}
+svg [role=button]:focus-visible .nd{stroke:var(--puras);stroke-width:3.5}
+.tabs{display:flex;flex-wrap:wrap;gap:14px;overflow-x:auto}
+table.cay{border-collapse:collapse;font:600 .85rem ui-monospace,Consolas,monospace}
+table.cay td,table.cay th{min-width:1.9em;height:1.8em;text-align:center;border:1px solid #ffffff14;padding:0 2px}
+table.cay th{color:var(--muted);background:#ffffff08}
+table.cay td.one{background:#f5c96f33;color:var(--puras)}
+table.cay td.zero{background:#53d5cd22;color:var(--biomat)}
+table.cay tr.badrow td{background:#ff81941c}
+.cover{min-height:58vh;display:flex;flex-direction:column;justify-content:center}
+.keys{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;color:var(--muted);font-size:.85rem}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;font:600 .8rem ui-monospace,Consolas,monospace;color:var(--ink)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#07121fee;backdrop-filter:blur(10px);border-top:1px solid #ffffff14}
+.dock .in{width:min(1180px,calc(100% - 32px));margin:0 auto;display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:10px 0}
+.dock .lbl{grid-column:1/-1;font-size:.78rem;color:var(--muted);letter-spacing:.06em;margin-top:-4px}
+.dock button{width:42px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:1.1rem;cursor:pointer}
+.dock button:disabled{opacity:.35;cursor:default}
+@media (max-width:820px){
+  .cols,.cols.even{grid-template-columns:minmax(0,1fr)}
+  .top span{display:none}
+  .dock .in{grid-template-columns:auto minmax(0,1fr) auto auto}
+  canvas{height:280px} canvas.short{height:240px}
+  main{padding-bottom:130px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="../../index.html">← Semillero de Matemáticas</a>
+  <span>Nivel 1 · Bases del cálculo</span>
+</header>
+<main id="stage" tabindex="-1" aria-live="polite"></main>
+<nav class="dock" aria-label="Navegación de la presentación">
+  <div class="in">
+    <button id="prev" aria-label="Escena anterior">←</button>
+    <input id="prog" type="range" min="0" value="0" aria-label="Progreso de la presentación">
+    <button id="next" aria-label="Escena siguiente">→</button>
+    <button id="full" aria-label="Pantalla completa" title="Pantalla completa (F)">⛶</button>
+    <div class="lbl" id="lbl"></div>
+  </div>
+</nav>
+<script>
+"use strict";
+/* ===================== utilidades ===================== */
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = { ink: css("--ink"), muted: css("--muted"), dim: css("--dim"), line: css("--line"), teal: css("--biomat"), gold: css("--puras"), violet: css("--violet"), bad: css("--bad"), good: css("--good") };
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const fmt = (x, d = 2) => (Math.abs(x) < 10 ** -d / 2 ? 0 : x).toFixed(d).replace("-", "−");
+const fv = (p, d = 2) => `(${fmt(p[0], d)}, ${fmt(p[1], d)})`;
+const mark = (ok) => (ok === null ? '<span class="muted">?</span>' : ok ? '<span class="ok">✓</span>' : '<span class="no">✗</span>');
+
+function fitCanvas(cv) {
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  cv.width = Math.max(1, Math.round(r.width * dpr));
+  cv.height = Math.max(1, Math.round(r.height * dpr));
+  const ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: r.width, h: r.height };
+}
+function view(w, h, xr, yr, pad = 30) {
+  const sx = (w - 2 * pad) / (xr[1] - xr[0]), sy = (h - 2 * pad) / (yr[1] - yr[0]);
+  return { w, h, pad, xr, yr,
+    X: (x) => pad + (x - xr[0]) * sx, Y: (y) => h - pad - (y - yr[0]) * sy,
+    ix: (px) => xr[0] + (px - pad) / sx, iy: (py) => yr[0] + (h - pad - py) / sy };
+}
+/* Misma escala en ambos ejes: amplía el rango del eje con más espacio. */
+function equalize(w, h, xr, yr, pad = 30) {
+  const pw = w - 2 * pad, ph = h - 2 * pad, s = Math.max((xr[1] - xr[0]) / pw, (yr[1] - yr[0]) / ph);
+  const cx = (xr[0] + xr[1]) / 2, cy = (yr[0] + yr[1]) / 2;
+  return [[cx - s * pw / 2, cx + s * pw / 2], [cy - s * ph / 2, cy + s * ph / 2]];
+}
+const eqView = (w, h, xr, yr) => { const [a, b] = equalize(w, h, xr, yr); return view(w, h, a, b); };
+function clip(ctx, v) { ctx.save(); ctx.beginPath(); ctx.rect(v.pad, v.pad, v.w - 2 * v.pad, v.h - 2 * v.pad); ctx.clip(); }
+function step(span) { const raw = span / 8, p = Math.pow(10, Math.floor(Math.log10(raw))); const m = raw / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
+function axes(ctx, v, lab = ["x", "y"]) {
+  ctx.lineWidth = 1; ctx.font = "11px Inter,system-ui,sans-serif"; ctx.fillStyle = C.dim;
+  const gx = step(v.xr[1] - v.xr[0]), gy = step(v.yr[1] - v.yr[0]);
+  ctx.strokeStyle = "#ffffff0d";
+  for (let x = Math.ceil(v.xr[0] / gx) * gx; x <= v.xr[1] + 1e-9; x += gx) { ctx.beginPath(); ctx.moveTo(v.X(x), v.pad); ctx.lineTo(v.X(x), v.h - v.pad); ctx.stroke(); }
+  for (let y = Math.ceil(v.yr[0] / gy) * gy; y <= v.yr[1] + 1e-9; y += gy) { ctx.beginPath(); ctx.moveTo(v.pad, v.Y(y)); ctx.lineTo(v.w - v.pad, v.Y(y)); ctx.stroke(); }
+  ctx.strokeStyle = "#ffffff40";
+  const x0 = clamp(0, v.xr[0], v.xr[1]), y0 = clamp(0, v.yr[0], v.yr[1]);
+  ctx.beginPath(); ctx.moveTo(v.pad, v.Y(y0)); ctx.lineTo(v.w - v.pad, v.Y(y0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(v.X(x0), v.pad); ctx.lineTo(v.X(x0), v.h - v.pad); ctx.stroke();
+  ctx.textAlign = "center";
+  for (let x = Math.ceil(v.xr[0] / gx) * gx; x <= v.xr[1] + 1e-9; x += gx) if (Math.abs(x) > 1e-9) ctx.fillText(+x.toFixed(6), v.X(x), Math.min(v.h - 8, v.Y(y0) + 14));
+  ctx.textAlign = "right";
+  for (let y = Math.ceil(v.yr[0] / gy) * gy; y <= v.yr[1] + 1e-9; y += gy) if (Math.abs(y) > 1e-9) ctx.fillText(+y.toFixed(6), Math.max(26, v.X(x0) - 5), v.Y(y) + 4);
+  ctx.fillStyle = C.muted; ctx.font = "italic 13px Georgia,serif";
+  ctx.textAlign = "right"; ctx.fillText(lab[0], v.w - v.pad, v.Y(y0) - 6);
+  ctx.textAlign = "left"; ctx.fillText(lab[1], v.X(x0) + 6, v.pad + 10);
+}
+function plotFn(ctx, v, f, color, lw = 2, dash = [], from = v.xr[0], to = v.xr[1]) {
+  clip(ctx, v); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash); ctx.beginPath();
+  let pen = false; const N = 500;
+  for (let i = 0; i <= N; i++) {
+    const t = from + (to - from) * i / N, y = f(t);
+    if (!isFinite(y) || Math.abs(y) > 1e4) { pen = false; continue; }
+    pen ? ctx.lineTo(v.X(t), v.Y(y)) : ctx.moveTo(v.X(t), v.Y(y)); pen = true;
+  }
+  ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+}
+function polyline(ctx, v, pts, color, lw = 2, dash = []) {
+  clip(ctx, v); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash); ctx.beginPath();
+  pts.forEach(([x, y], i) => (i ? ctx.lineTo(v.X(x), v.Y(y)) : ctx.moveTo(v.X(x), v.Y(y))));
+  ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+}
+function dot(ctx, v, x, y, color, r = 5) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(v.X(x), v.Y(y), r, 0, 7); ctx.fill(); }
+function ring(ctx, v, x, y, color, r = 6, lw = 2) { ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.beginPath(); ctx.arc(v.X(x), v.Y(y), r, 0, 7); ctx.stroke(); }
+function hole(ctx, v, x, y, color, r = 5) { ctx.fillStyle = "#050d17"; ctx.beginPath(); ctx.arc(v.X(x), v.Y(y), r, 0, 7); ctx.fill(); ring(ctx, v, x, y, color, r, 2); }
+function arrowPx(ctx, x1, y1, x2, y2, color, lw = 2, dash = []) {
+  const a = Math.atan2(y2 - y1, x2 - x1), L = Math.hypot(x2 - x1, y2 - y1), hd = Math.min(10, L * .45);
+  if (L < 1) return;
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash);
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2 - hd * .8 * Math.cos(a), y2 - hd * .8 * Math.sin(a)); ctx.stroke(); ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x2, y2); ctx.lineTo(x2 - hd * Math.cos(a - .42), y2 - hd * Math.sin(a - .42)); ctx.lineTo(x2 - hd * Math.cos(a + .42), y2 - hd * Math.sin(a + .42)); ctx.closePath(); ctx.fill();
+}
+function vec(ctx, v, p, q, color, lw = 2.5, label = "", dash = []) {
+  arrowPx(ctx, v.X(p[0]), v.Y(p[1]), v.X(q[0]), v.Y(q[1]), color, lw, dash);
+  if (label) { ctx.fillStyle = color; ctx.font = "italic 15px Georgia,serif"; ctx.textAlign = "left"; ctx.fillText(label, v.X(q[0]) + 7, v.Y(q[1]) - 7); }
+}
+/* Lienzo simple con redibujado al cambiar de tamaño. */
+function Canvas(cv, render) {
+  const ro = new ResizeObserver(() => draw()); ro.observe(cv);
+  function draw() { if (!cv.isConnected) return; const { ctx, w, h } = fitCanvas(cv); ctx.clearRect(0, 0, w, h); render(ctx, w, h); }
+  return { draw, dispose() { ro.disconnect(); } };
+}
+/* Puntos arrastrables en un lienzo, con equivalente de teclado:
+   con el lienzo enfocado, Enter cambia de punto y las flechas lo mueven (Mayús = pasos largos). */
+function Drag(cv, getView, H, onChange, o = {}) {
+  let sel = 0, act = -1;
+  cv.tabIndex = 0;
+  const pos = (e) => { const r = cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  const near = (px, py) => { const v = getView(); if (!v) return -1; let b = -1, d = 24; H.forEach((h, i) => { const [x, y] = h.get(); const dd = Math.hypot(v.X(x) - px, v.Y(y) - py); if (dd < d) { d = dd; b = i; } }); return b; };
+  const snap = (x) => (o.snap ? Math.round(x / o.snap) * o.snap : x);
+  const setAt = (i, px, py) => { const v = getView(); H[i].set(snap(v.ix(px)), snap(v.iy(py))); onChange(); };
+  cv.addEventListener("pointerdown", (e) => { const [px, py] = pos(e); let i = near(px, py); if (i < 0 && o.free != null) i = o.free; if (i < 0) return; act = sel = i; cv.setPointerCapture(e.pointerId); setAt(i, px, py); });
+  cv.addEventListener("pointermove", (e) => { if (act < 0) { cv.style.cursor = near(...pos(e)) >= 0 ? "grab" : o.free != null ? "crosshair" : "default"; return; } setAt(act, ...pos(e)); });
+  const up = () => { act = -1; }; cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("keydown", (e) => {
+    const k = e.key, st = e.shiftKey ? .5 : o.snap || .1;
+    if (k === "Enter") { e.preventDefault(); sel = (sel + 1) % H.length; onChange(); return; }
+    const d = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, st], ArrowDown: [0, -st] }[k];
+    if (!d) return; e.preventDefault(); const [x, y] = H[sel].get(); H[sel].set(+(x + d[0]).toFixed(3), +(y + d[1]).toFixed(3)); onChange();
+  });
+  cv.addEventListener("focus", onChange); cv.addEventListener("blur", onChange);
+  return { get sel() { return document.activeElement === cv ? sel : -1; } };
+}
+/* Animación que se cancela al salir de la escena (window.__loops cuenta las vivas). */
+window.__loops = 0;
+function Loop(tick) {
+  let id = 0, last = 0;
+  const run = (ts) => { const dt = last ? Math.min(.05, (ts - last) / 1000) : 0; last = ts; if (tick(dt) === false) return stop(); id = requestAnimationFrame(run); };
+  function start() { if (id) return; window.__loops++; last = 0; id = requestAnimationFrame(run); }
+  function stop() { if (!id) return; cancelAnimationFrame(id); id = 0; window.__loops--; }
+  return { start, stop, get on() { return !!id; } };
+}
+function slider(root, id, cb) { const el = $("#" + id, root), out = $(`output[for=${id}]`, root); const up = () => { if (out) out.value = el.dataset.fmt ? window[el.dataset.fmt](+el.value) : fmt(+el.value, +(el.dataset.d || 2)); cb(+el.value); }; el.addEventListener("input", up); up(); return el; }
+function setR(el, x) { el.value = x; el.dispatchEvent(new Event("input")); }
+function choice(root, sel, cb) { const bs = $$(sel, root); bs.forEach((b) => b.addEventListener("click", () => { bs.forEach((x) => { x.classList.toggle("on", x === b); x.setAttribute("aria-pressed", x === b); }); cb(b.dataset.k, b); })); }
+window.pow10 = (s) => fmt(10 ** s, 3);
+
+/* SVG */
+const NS = "http://www.w3.org/2000/svg";
+function sv(tag, at = {}, par) { const e = document.createElementNS(NS, tag); for (const k in at) e.setAttribute(k, at[k]); if (par) par.appendChild(e); return e; }
+function svText(par, x, y, t, at = {}) { const e = sv("text", { x, y, fill: C.ink, "font-size": 15, "text-anchor": "middle", ...at }, par); e.textContent = t; return e; }
+const NODE = { "": ["#0d2033", "#29465d", "#eef7fb"], sel: ["#f5c96f2e", "#f5c96f", "#f5c96f"], hit: ["#f5c96f2e", "#f5c96f", "#f5c96f"],
+  bad: ["#ff819424", "#ff8194", "#ff8194"], dim: ["#0a1a2a", "#ffffff1a", "#587386"] };
+const EDGE = { "": ["#53d5cd", 1.8], sel: ["#f5c96f", 2.8], bad: ["#ff8194", 2.2], dim: ["#ffffff22", 1.4] };
+/* Dos conjuntos en columnas y las flechas de una relación entre ellos.
+   Las flechas son curvas de Bézier recortadas en ambos extremos y se abren en abanico
+   cuando comparten origen o destino. */
+function drawBip(svg, o) {
+  const ae = document.activeElement, fk = ae && svg.contains(ae) ? ae.dataset.k : null;
+  svg.innerHTML = "";
+  const n = Math.max(o.A.length, o.B.length), top = 52, gap = 58, H = top + n * gap + 18;
+  svg.setAttribute("viewBox", `0 0 520 ${H}`);
+  const xa = 118, xb = 402, cy = top + n * gap / 2;
+  const yA = (i) => cy + (i - (o.A.length - 1) / 2) * gap, yB = (j) => cy + (j - (o.B.length - 1) / 2) * gap;
+  const wd = (t) => Math.max(46, t.length * 9 + 26);
+  [[xa, o.titleA], [xb, o.titleB]].forEach(([x, t]) => {
+    sv("ellipse", { cx: x, cy, rx: 96, ry: n * gap / 2 + 14, fill: "#ffffff05", stroke: "#ffffff1c" }, svg);
+    svText(svg, x, 20, t, { fill: C.muted, "font-size": 14 });
+  });
+  if (o.label) svText(svg, 260, 20, o.label, { "font-style": "italic", "font-size": 17, fill: C.ink });
+  const rank = (arr, key) => { const g = {}; arr.forEach((e, k) => { (g[key(e)] = g[key(e)] || []).push(k); }); const r = []; Object.values(g).forEach((ks) => ks.forEach((k, q) => { r[k] = q - (ks.length - 1) / 2; })); return r; };
+  const E = [...o.E].sort((p, q) => yA(p[0]) - yA(q[0]) || p[1] - q[1]);
+  const rs = rank(E, (e) => e[0]), rt = rank(E, (e) => e[1]);
+  const ge = sv("g", {}, svg);
+  E.forEach((e, k) => {
+    const [i, j] = e, [col, lw] = EDGE[o.edge ? o.edge(e) : ""];
+    const x1 = xa + wd(o.A[i]) / 2 + 3, y1 = yA(i) + rs[k] * 8, x2 = xb - wd(o.B[j]) / 2 - 3, y2 = yB(j) + rt[k] * 8, xm = (x1 + x2) / 2;
+    sv("path", { d: `M${x1} ${y1} C${xm} ${y1} ${xm} ${y2} ${x2 - 9} ${y2}`, fill: "none", stroke: col, "stroke-width": lw }, ge);
+    sv("polygon", { points: `${x2},${y2} ${x2 - 11},${y2 - 5} ${x2 - 11},${y2 + 5}`, fill: col }, ge);
+  });
+  [[o.A, xa, yA, 0], [o.B, xb, yB, 1]].forEach(([L, x, y, side]) => L.forEach((t, i) => {
+    const [fill, stroke, ink] = NODE[o.node ? o.node(side, i) : ""], w = wd(t);
+    const g = sv("g", { "data-k": `${side}-${i}` }, svg);
+    sv("rect", { class: "nd", x: x - w / 2, y: y(i) - 17, width: w, height: 34, rx: 17, fill, stroke, "stroke-width": 2 }, g);
+    svText(g, x, y(i) + 5, t, { fill: ink, "font-size": t.length > 2 ? 14 : 17 });
+    if (o.onNode) {
+      g.setAttribute("role", "button"); g.setAttribute("tabindex", 0);
+      g.setAttribute("aria-label", `${side ? o.titleB : o.titleA}: ${t}`);
+      g.addEventListener("click", () => o.onNode(side, i));
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); o.onNode(side, i); } });
+    }
+  }));
+  if (fk) { const g = svg.querySelector(`[data-k="${fk}"]`); if (g) g.focus(); }
+}
+
+/* Conjunto B = {△, □, ★, ○}: subconjuntos como máscaras de 4 bits. */
+const SYM = ["△", "□", "★", "○"];
+const bits = (m) => [0, 1, 2, 3].filter((k) => (m >> k) & 1);
+const pc = (m) => bits(m).length;
+const setLab = (m) => (m === 0 ? "∅" : "{" + bits(m).map((k) => SYM[k]).join(", ") + "}");
+const byOrder = (a, b) => pc(a) - pc(b) || a - b;
+function topoCheck(T) {
+  const S = new Set(T), r = { vacio: S.has(0), total: S.has(15), inter: null, union: null };
+  for (const a of T) for (const b of T) {
+    if (!r.inter && !S.has(a & b)) r.inter = [a, b, a & b];
+    if (!r.union && !S.has(a | b)) r.union = [a, b, a | b];
+  }
+  r.ok = r.vacio && r.total && !r.inter && !r.union; return r;
+}
+const TOPS = { notas: [0, 1, 12, 13, 15], discreta: [...Array(16).keys()], trivial: [0, 15], tri: [0, 1, 15], cua: [0, 2, 15] };
+const TOPN = { notas: "𝒯 de las notas", discreta: "discreta: 𝒫(B)", trivial: "trivial: {∅, B}", tri: "{∅, {△}, B}", cua: "{∅, {□}, B}" };
+
+/* ===================== escenas ===================== */
+const S = [];
+
+S.push({ id: "portada", title: "Nivel 1: las bases del cálculo", html: `
+<section class="cover">
+  <p class="kicker">Semillero de Investigación en Matemáticas · EAFIT · Las matemáticas del modelado epidemiológico</p>
+  <h1>Nivel 1: construyendo las bases del <em>cálculo</em></h1>
+  <p class="lead" style="margin-top:18px">De la función a la diferencial: conjuntos y funciones, topología y continuidad, límites entre espacios topológicos, campos, espacios vectoriales y bases, funciones lineales, el espacio dual y la diferencial como la mejor aproximación lineal.</p>
+  <p class="muted small">A partir de las notas de Andrés Restrepo Botero y Felipe Arcila Palacio.</p>
+  <div class="keys"><span><kbd>→</kbd> <kbd>espacio</kbd> avanzar</span><span><kbd>←</kbd> retroceder</span><span><kbd>Inicio</kbd>/<kbd>Fin</kbd></span><span><kbd>F</kbd> pantalla completa</span></div>
+</section>` });
+
+S.push({ id: "funcion", title: "Funciones", html: `
+<p class="kicker">1 · Funciones</p>
+<h2>Una <em>regla de asignación</em></h2>
+<div class="cols">
+  <div>
+    <p>Una función asigna a <b>cada</b> elemento de un conjunto de partida (dominio) <b>un único</b> elemento de un conjunto de llegada (codominio). Para definirla damos un nombre, un dominio, un codominio y una regla de asignación.</p>
+    <div class="btns" id="pre" role="group" aria-label="Ejemplos">
+      <button class="b" data-k="notas">f de las notas</button><button class="b" data-k="perro">PerroHelado</button><button class="b" data-k="mal">¿Es función?</button><button class="b" data-k="vacia">Construir una</button>
+    </div>
+    <div class="box t" id="regla"></div>
+    <div class="eq" id="tuplas"></div>
+    <ul class="chk" id="verd"></ul>
+  </div>
+  <div class="panel"><svg id="map" width="100%" role="group" aria-label="Diagrama de flechas de la función"></svg>
+    <p class="small muted" style="margin:6px 0 0">Elige un elemento del dominio y luego uno del codominio para poner o quitar la flecha. Con teclado: <kbd>Tab</kbd> y <kbd>Enter</kbd>.</p></div>
+</div>`,
+  mount(r) {
+    const N3 = ["□", "△", "R"], B4 = ["1", "2", "3", "4"];
+    const P = {
+      notas: [N3, B4, [[0, 0], [1, 1], [2, 2]], "Las notas escriben la función como un conjunto de tuplas: <span class='m'><i>f</i> : { [□, 1], [△, 2], [R, 3] }</span>."],
+      perro: [["perro", "gato", "gallina", "pez"], ["vainilla", "fresa"], [[0, 0], [1, 0], [2, 1], [3, 1]], "<span class='m'>PerroHelado : <i>P</i> → <i>H</i></span>: helado de vainilla si <i>p</i> tiene 4 patas, de fresa en otro caso. La regla puede ser una frase; no hace falta una fórmula."],
+      mal: [N3, B4, [[0, 0], [0, 1], [2, 2]], "¿Esto es una función? Revisa cada elemento del dominio."],
+      vacia: [N3, B4, [], "Construye tu propia función: a cada elemento de <i>A</i> asígnale exactamente uno de <i>B</i>."],
+    };
+    let A, B, E, sel = -1;
+    const svg = $("#map", r), has = (i, j) => E.some(([a, b]) => a === i && b === j);
+    function draw() {
+      const cnt = A.map((_, i) => E.filter((e) => e[0] === i).length);
+      drawBip(svg, { A, B, E, titleA: "A (dominio)", titleB: "B (codominio)", label: "f",
+        node: (side, i) => (side === 0 ? (i === sel ? "sel" : cnt[i] === 1 ? "" : "bad") : sel >= 0 && has(sel, i) ? "hit" : ""),
+        edge: ([i]) => (cnt[i] !== 1 ? "bad" : i === sel ? "sel" : sel >= 0 ? "dim" : ""),
+        onNode: (side, i) => {
+          if (side === 0) sel = sel === i ? -1 : i;
+          else if (sel >= 0) E = has(sel, i) ? E.filter(([a, b]) => !(a === sel && b === i)) : [...E, [sel, i]];
+          draw();
+        } });
+      const sorted = [...E].sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+      $("#tuplas", r).innerHTML = `<i>f</i> = { ${sorted.map(([i, j]) => `(${A[i]}, ${B[j]})`).join(", ")} }`;
+      const sin = A.filter((_, i) => cnt[i] === 0), mul = A.filter((_, i) => cnt[i] > 1), fn = !sin.length && !mul.length;
+      const L = [];
+      L.push(`<li>${mark(fn)}<span><b>${fn ? "Es una función" : "No es una función"}</b>${sin.length ? `: ${sin.join(", ")} no tiene imagen` : ""}${mul.length ? `${sin.length ? ";" : ":"} ${mul.join(", ")} tiene más de una imagen` : ""}.</span></li>`);
+      if (fn) {
+        const img = A.map((_, i) => E.find((e) => e[0] === i)[1]);
+        const rep = img.findIndex((b, i) => img.indexOf(b) !== i), libre = B.findIndex((_, j) => !img.includes(j));
+        L.push(`<li>${mark(rep < 0)}<span><b>Inyectiva</b>${rep < 0 ? ": elementos distintos van a imágenes distintas" : `: no, ${A[img.indexOf(img[rep])]} y ${A[rep]} van ambos a ${B[img[rep]]}`}.</span></li>`);
+        L.push(`<li>${mark(libre < 0)}<span><b>Sobreyectiva</b>${libre < 0 ? ": todo el codominio es alcanzado" : `: no, nadie va a ${B[libre]}`}.</span></li>`);
+        L.push(`<li>${mark(rep < 0 && libre < 0)}<span><b>Biyectiva</b> (inyectiva y sobreyectiva): la usaremos para los isomorfismos.</span></li>`);
+      } else L.push(`<li><span></span><span class="muted small">La definición pide <b>exactamente una</b> flecha saliendo de cada elemento de <i>A</i>. A <i>B</i> no se le exige nada.</span></li>`);
+      $("#verd", r).innerHTML = L.join("");
+    }
+    choice(r, "#pre .b", (k) => { [A, B, E] = P[k]; E = E.map((e) => [...e]); sel = -1; $("#regla", r).innerHTML = P[k][3]; draw(); });
+    $("#pre .b", r).click();
+  } });
+
+S.push({ id: "producto", title: "Producto cartesiano", html: `
+<p class="kicker">1 · Producto cartesiano y definición formal</p>
+<h2>Una función es un <em>subconjunto</em> de A × B</h2>
+<div class="cols">
+  <div>
+    <p><span class="m"><i>A</i> × <i>B</i> = { (<i>a</i>, <i>b</i>) | <i>a</i> ∈ <i>A</i> y <i>b</i> ∈ <i>B</i> }</span>: todos los pares ordenados. Con <span class="m"><i>A</i> = {pelota, libro, lápiz}</span> y <span class="m"><i>B</i> = {△, □, ★, ○}</span> son 3 · 4 = 12 pares, un plano discreto.</p>
+    <div class="box"><b>Definición formal.</b> Una función <i>f</i> de <i>A</i> en <i>B</i> es un subconjunto <span class="m"><i>f</i> ⊆ <i>A</i> × <i>B</i></span> tal que <span class="m">∀<i>a</i> ∈ <i>A</i>, ∃! <i>b</i> ∈ <i>B</i> : (<i>a</i>, <i>b</i>) ∈ <i>f</i></span>.</div>
+    <p class="small muted">Marca pares del plano. Cada columna es un elemento de <i>A</i>: para que el subconjunto sea una función, cada columna debe tener <b>exactamente un</b> punto.</p>
+    <div class="btns" id="pre" role="group" aria-label="Subconjuntos de ejemplo"><button class="b" data-k="f">Una función</button><button class="b" data-k="todo">Todo A × B</button><button class="b" data-k="nada">Vacío</button></div>
+    <div class="box t" id="verd"></div>
+  </div>
+  <div class="panel"><svg id="grid" viewBox="0 0 460 330" width="100%" role="group" aria-label="Plano discreto A × B"></svg>
+  <p class="eq small" id="lista" style="font-size:.95rem;white-space:normal"></p></div>
+</div>`,
+  mount(r) {
+    const A = ["pelota", "libro", "lápiz"], X = [150, 260, 370], Y = [262, 207, 152, 97];
+    let R = new Set(["0,0", "1,2", "2,2"]);
+    const svg = $("#grid", r);
+    function draw() {
+      const ae = document.activeElement, fk = ae && svg.contains(ae) ? ae.dataset.k : null;
+      svg.innerHTML = "";
+      const cnt = A.map((_, i) => [0, 1, 2, 3].filter((j) => R.has(`${i},${j}`)).length);
+      A.forEach((a, i) => {
+        sv("rect", { x: X[i] - 42, y: 68, width: 84, height: 222, rx: 12, fill: cnt[i] === 1 ? "#68e3a014" : "#ff819414", stroke: cnt[i] === 1 ? "#68e3a055" : "#ff819455" }, svg);
+        svText(svg, X[i], 312, a, { fill: C.muted, "font-size": 14 });
+        svText(svg, X[i], 56, cnt[i] === 1 ? "✓" : cnt[i] ? `${cnt[i]} imágenes` : "sin imagen", { fill: cnt[i] === 1 ? C.good : C.bad, "font-size": 12 });
+        sv("line", { x1: X[i], y1: 80, x2: X[i], y2: 280, stroke: "#ffffff22" }, svg);
+      });
+      SYM.forEach((s, j) => { svText(svg, 70, Y[j] + 6, s, { "font-size": 19, fill: C.muted }); sv("line", { x1: 92, y1: Y[j], x2: 420, y2: Y[j], stroke: "#ffffff16" }, svg); });
+      svText(svg, 30, 185, "B", { "font-style": "italic", fill: C.dim }); svText(svg, 430, 312, "A", { "font-style": "italic", fill: C.dim });
+      A.forEach((a, i) => SYM.forEach((s, j) => {
+        const k = `${i},${j}`, on = R.has(k);
+        const g = sv("g", { role: "button", tabindex: 0, "data-k": k, "aria-pressed": on, "aria-label": `(${a}, ${s})` }, svg);
+        sv("circle", { class: "nd", cx: X[i], cy: Y[j], r: on ? 11 : 8, fill: on ? C.gold : "#07121f", stroke: on ? C.gold : "#ffffff55", "stroke-width": 2 }, g);
+        const t = () => { R.has(k) ? R.delete(k) : R.add(k); draw(); };
+        g.addEventListener("click", t); g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); t(); } });
+      }));
+      if (fk) { const g = svg.querySelector(`[data-k="${fk}"]`); if (g) g.focus(); }
+      const pares = [...R].map((k) => k.split(",").map(Number)).sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+      $("#lista", r).innerHTML = pares.length ? `{ ${pares.map(([i, j]) => `(${A[i]}, ${SYM[j]})`).join(", ")} }` : "∅";
+      const fn = cnt.every((c) => c === 1);
+      $("#verd", r).innerHTML = fn ? `<span class="ok"><b>Es una función</b></span>: cada <i>a</i> tiene un único <i>b</i>. ${A.map((a, i) => `<i>f</i>(${a}) = ${SYM[[0, 1, 2, 3].find((j) => R.has(`${i},${j}`))]}`).join(", ")}.`
+        : `<span class="no"><b>No es una función</b></span>: ${A.filter((_, i) => cnt[i] !== 1).map((a, i) => a).join(", ")} ${cnt.filter((c) => c !== 1).length > 1 ? "no cumplen" : "no cumple"} «∃! <i>b</i>».`;
+    }
+    choice(r, "#pre .b", (k) => { R = new Set(k === "f" ? ["0,0", "1,2", "2,2"] : k === "todo" ? A.flatMap((_, i) => [0, 1, 2, 3].map((j) => `${i},${j}`)) : []); draw(); });
+    draw();
+  } });
+
+S.push({ id: "topologia", title: "Topología", html: `
+<p class="kicker">2 · Topología</p>
+<h2>¿Qué subconjuntos declaramos <em>abiertos</em>?</h2>
+<div class="cols">
+  <div>
+    <p>Una topología es una estructura que permite conocer las adyacencias presentes en un conjunto. Sobre <span class="m"><i>B</i> = {△, □, ★, ○}</span> se escoge una colección <span class="m">𝒯 ⊆ 𝒫(<i>B</i>)</span> de los 16 subconjuntos que cumpla:</p>
+    <ol class="small" style="padding-left:20px;margin:0 0 8px"><li><span class="m">∅ ∈ 𝒯</span> y <span class="m"><i>B</i> ∈ 𝒯</span>;</li><li>la intersección finita de conjuntos de 𝒯 está en 𝒯;</li><li>la unión arbitraria de conjuntos de 𝒯 está en 𝒯.</li></ol>
+    <p class="small muted">Activa o desactiva subconjuntos de 𝒫(<i>B</i>):</p>
+    <div class="chips" id="chips" role="group" aria-label="Subconjuntos de B"></div>
+    <div class="btns" id="pre" role="group" aria-label="Colecciones de ejemplo"><button class="b" data-k="notas">𝒯 de las notas</button><button class="b" data-k="discreta">Discreta</button><button class="b" data-k="trivial">Trivial</button><button class="b" data-k="rota">Una que falla</button></div>
+  </div>
+  <div class="panel"><svg id="rows" width="100%" role="img" aria-label="Conjuntos de la colección"></svg>
+    <ul class="chk" id="ax"></ul><div class="box" id="verd"></div></div>
+</div>`,
+  mount(r) {
+    let T = new Set(TOPS.notas);
+    const chips = $("#chips", r), svg = $("#rows", r);
+    [...Array(16).keys()].sort(byOrder).forEach((m) => {
+      const b = document.createElement("button"); b.className = "b"; b.dataset.m = m; b.textContent = m === 15 ? "B" : setLab(m);
+      b.setAttribute("aria-label", m === 15 ? "B completo" : setLab(m));
+      b.addEventListener("click", () => { T.has(m) ? T.delete(m) : T.add(m); upd(); }); chips.appendChild(b);
+    });
+    function upd() {
+      $$("#chips .b", r).forEach((b) => { const on = T.has(+b.dataset.m); b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+      const L = [...T].sort(byOrder), c = topoCheck(L);
+      const falta = []; if (!c.vacio) falta.push([0, "falta ∅"]); if (!c.total) falta.push([15, "falta B"]);
+      if (c.inter) falta.push([c.inter[2], `falta ${setLab(c.inter[0])} ∩ ${setLab(c.inter[1])}`]);
+      if (c.union && c.union[2] !== (c.inter && c.inter[2])) falta.push([c.union[2], `falta ${setLab(c.union[0])} ∪ ${setLab(c.union[1])}`]);
+      svg.innerHTML = ""; const rows = L.length + falta.length, H = 50 + rows * 27;
+      svg.setAttribute("viewBox", `0 0 520 ${H}`);
+      const X = (k) => 300 + k * 52;
+      SYM.forEach((s, k) => svText(svg, X(k), 24, s, { "font-size": 19, fill: C.muted }));
+      svText(svg, 14, 24, `𝒯 tiene ${L.length} conjuntos`, { "text-anchor": "start", fill: C.dim, "font-size": 13 });
+      const row = (m, i, txt, kind) => {
+        const y = 50 + i * 27;
+        const hi = kind === "falta" ? "#ff819418" : c.inter && (m === c.inter[0] || m === c.inter[1]) ? "#f5c96f1e" : c.union && (m === c.union[0] || m === c.union[1]) ? "#bda0ff1e" : null;
+        if (hi) sv("rect", { x: 4, y: y - 13, width: 512, height: 24, rx: 8, fill: hi, stroke: kind === "falta" ? "#ff8194" : "none", "stroke-dasharray": "4 3" }, svg);
+        svText(svg, 14, y + 5, txt, { "text-anchor": "start", fill: kind === "falta" ? C.bad : C.ink, "font-size": 14 });
+        SYM.forEach((_, k) => { const on = (m >> k) & 1;
+          sv("circle", { cx: X(k), cy: y, r: on ? 8 : 3.5, fill: on ? (kind === "falta" ? C.bad : C.teal) : "none", stroke: on ? "none" : "#ffffff40" }, svg); });
+      };
+      L.forEach((m, i) => row(m, i, m === 15 ? "B" : setLab(m)));
+      falta.forEach(([m, t], i) => row(m, L.length + i, `${t} = ${m === 15 ? "B" : setLab(m)}`, "falta"));
+      $("#ax", r).innerHTML = `<li>${mark(c.vacio && c.total)}<span>∅ y <i>B</i> están en 𝒯</span></li>
+        <li>${mark(!c.inter)}<span>Intersecciones${c.inter ? `: <span class="m">${setLab(c.inter[0])} ∩ ${setLab(c.inter[1])} = ${setLab(c.inter[2])} ∉ 𝒯</span>` : " cerradas"}</span></li>
+        <li>${mark(!c.union)}<span>Uniones${c.union ? `: <span class="m">${setLab(c.union[0])} ∪ ${setLab(c.union[1])} = ${c.union[2] === 15 ? "B" : setLab(c.union[2])} ∉ 𝒯</span>` : " cerradas"}</span></li>`;
+      $("#verd", r).innerHTML = c.ok ? `<b class="ok">(B, 𝒯) es un espacio topológico.</b> <span class="small muted">Con un número finito de conjuntos, basta revisar parejas: las uniones e intersecciones más grandes se arman de a dos.</span>` : `<b class="no">No es una topología.</b> Agrega lo que falta (en rojo) o quita algún conjunto.`;
+    }
+    choice(r, "#pre .b", (k) => { T = new Set(k === "rota" ? [0, 1, 2, 15] : TOPS[k]); upd(); });
+    upd();
+  } });
+
+/* Dos espacios topológicos finitos y una función entre ellos (continuidad y homeomorfismo). */
+const topoOpts = (sel) => Object.keys(TOPN).map((k) => `<option value="${k}"${k === sel ? " selected" : ""}>${TOPN[k]}</option>`).join("");
+function mapHTML(iso) {
+  return `<div class="form"><label>𝒯<sub>${iso ? "A" : "X"}</sub> <select id="tx" aria-label="Topología del dominio"></select></label><label>𝒯<sub>${iso ? "B" : "Y"}</sub> <select id="ty" aria-label="Topología del codominio"></select></label></div>
+    <div class="form" id="fdef">${SYM.map((s, i) => `<label><i>f</i>(${s}) = <select data-i="${i}" aria-label="Imagen de ${s}">${SYM.map((t, j) => `<option value="${j}">${t}</option>`).join("")}</select></label>`).join("")}</div>
+    <div class="btns" id="fpre" role="group" aria-label="Funciones de ejemplo"><button class="b" data-k="id">identidad</button><button class="b" data-k="cte">constante △</button><button class="b" data-k="sw">intercambia △ ↔ □</button></div>`;
+}
+function mountMap(r, iso) {
+  const st = iso ? { X: "tri", Y: "cua", f: [0, 1, 2, 3] } : { X: "notas", Y: "notas", f: [0, 1, 2, 3] };
+  let sel = null, modo = "pre";
+  const svg = $("#map", r), sx = $("#tx", r), sy = $("#ty", r);
+  sx.innerHTML = topoOpts(st.X); sy.innerHTML = topoOpts(st.Y);
+  const pre = (V) => [0, 1, 2, 3].reduce((m, x) => ((V >> st.f[x]) & 1 ? m | (1 << x) : m), 0);
+  const img = (U) => bits(U).reduce((m, x) => m | (1 << st.f[x]), 0);
+  function upd() {
+    const TX = TOPS[st.X], TY = TOPS[st.Y], sX = new Set(TX), sY = new Set(TY);
+    $$("#fdef select", r).forEach((s) => { s.value = st.f[+s.dataset.i]; });
+    const inj = new Set(st.f).size === 4, biy = inj;
+    const malF = TY.find((V) => !sX.has(pre(V))), cont = malF === undefined;
+    const malI = biy ? TX.find((U) => !sY.has(img(U))) : undefined, contI = biy && malI === undefined;
+    const lista = modo === "pre" ? TY : TX;
+    if (sel === null || !lista.includes(sel)) sel = modo === "pre" ? (malF ?? TY.find((V) => V && V !== 15) ?? 15) : (malI ?? TX.find((U) => U && U !== 15) ?? 15);
+    const P = modo === "pre" ? pre(sel) : img(sel), okSel = modo === "pre" ? sX.has(P) : sY.has(P);
+    const nA = iso ? "A" : "X", nB = iso ? "B" : "Y";
+    drawBip(svg, { A: SYM, B: SYM, E: st.f.map((j, i) => [i, j]), titleA: `Espacio ${nA}`, titleB: `Espacio ${nB}`, label: "f",
+      node: (side, i) => modo === "pre" ? (side === 1 ? ((sel >> i) & 1 ? "hit" : "") : (P >> i) & 1 ? (okSel ? "hit" : "bad") : "")
+        : (side === 0 ? ((sel >> i) & 1 ? "hit" : "") : (P >> i) & 1 ? (okSel ? "hit" : "bad") : ""),
+      edge: ([i]) => ((modo === "pre" ? (P >> i) & 1 : (sel >> i) & 1) ? (okSel ? "sel" : "bad") : "dim") });
+    const box = $("#opens", r); box.innerHTML = "";
+    lista.forEach((V) => {
+      const W = modo === "pre" ? pre(V) : img(V), ok = modo === "pre" ? sX.has(W) : sY.has(W);
+      const b = document.createElement("button"); b.className = "b" + (V === sel ? " on" : ""); b.setAttribute("aria-pressed", V === sel);
+      b.innerHTML = `<span class="m">${modo === "pre" ? "<i>f</i>⁻¹" : "<i>f</i>"}(${V === 15 ? (modo === "pre" ? nB : nA) : setLab(V)})</span> ${mark(ok)}`;
+      b.addEventListener("click", () => { sel = V; upd(); $$("#opens .b", r)[lista.indexOf(V)].focus(); }); box.appendChild(b);
+    });
+    const tLab = (m) => (m === 15 ? "todo el espacio" : setLab(m));
+    let txt = modo === "pre"
+      ? `<span class="m"><i>f</i>⁻¹(${tLab(sel)}) = { <i>x</i> | <i>f</i>(<i>x</i>) ∈ ${tLab(sel)} } = ${tLab(P)}</span> ${okSel ? `<span class="ok">∈ 𝒯<sub>${nA}</sub></span>` : `<span class="no">∉ 𝒯<sub>${nA}</sub></span>`}.<br>`
+      : `<span class="m"><i>f</i>(${tLab(sel)}) = ${tLab(P)}</span> ${okSel ? `<span class="ok">∈ 𝒯<sub>${nB}</sub></span>` : `<span class="no">∉ 𝒯<sub>${nB}</sub></span>`}: es la preimagen de ${tLab(sel)} bajo <i>f</i>⁻¹.<br>`;
+    if (!iso) txt += cont ? `<b class="ok">f es continua</b>: la preimagen de todo abierto de <i>Y</i> es abierta en <i>X</i>.` : `<b class="no">f no es continua</b>: <span class="m"><i>f</i>⁻¹(${tLab(malF)}) = ${tLab(pre(malF))}</span> no es abierto en <i>X</i>.`;
+    $("#verd", r).innerHTML = txt;
+    if (iso) {
+      $("#chk", r).innerHTML = `<li>${mark(inj)}<span><b>Biyectiva</b>${inj ? "" : ": dos elementos van al mismo; con 4 y 4 elementos, tampoco es sobreyectiva"}</span></li>
+        <li>${mark(cont)}<span><b>Continua</b>${cont ? "" : `: <span class="m"><i>f</i>⁻¹(${tLab(malF)}) = ${tLab(pre(malF))} ∉ 𝒪<sub>A</sub></span>`}</span></li>
+        <li>${biy ? mark(contI) : mark(null)}<span><b>Inversa continua</b>${!biy ? ": no hay inversa" : contI ? "" : `: <span class="m">(<i>f</i>⁻¹)⁻¹(${tLab(malI)}) = <i>f</i>(${tLab(malI)}) = ${tLab(img(malI))} ∉ 𝒪<sub>B</sub></span>`}</span></li>`;
+      $("#iso", r).innerHTML = biy && cont && contI ? `<b class="ok">f es un homeomorfismo</b>: (A, 𝒪<sub>A</sub>) y (B, 𝒪<sub>B</sub>) tienen la misma estructura topológica.` : `<b class="no">No es un homeomorfismo.</b>`;
+    }
+  }
+  sx.addEventListener("change", () => { st.X = sx.value; upd(); }); sy.addEventListener("change", () => { st.Y = sy.value; upd(); });
+  $$("#fdef select", r).forEach((s) => s.addEventListener("change", () => { st.f[+s.dataset.i] = +s.value; upd(); }));
+  choice(r, "#fpre .b", (k) => { st.f = k === "id" ? [0, 1, 2, 3] : k === "cte" ? [0, 0, 0, 0] : [1, 0, 2, 3]; upd(); });
+  if (iso) {
+    choice(r, "#modo .b", (k) => { modo = k; sel = null; upd(); });
+    choice(r, "#casos .b", (k) => { [st.X, st.Y, st.f] = k === "a" ? ["tri", "cua", [0, 1, 2, 3]] : k === "b" ? ["tri", "cua", [1, 0, 2, 3]] : ["discreta", "trivial", [0, 1, 2, 3]]; sx.value = st.X; sy.value = st.Y; sel = null; upd(); });
+  }
+  upd();
+}
+
+S.push({ id: "continuidad", title: "Continuidad", html: `
+<p class="kicker">2.1 · Definición de continuidad</p>
+<h2>Continua: la preimagen de un abierto es <em>abierta</em></h2>
+<div class="cols">
+  <div>
+    <p>Sean <span class="m">(<i>X</i>, 𝒯<sub><i>X</i></sub>)</span> y <span class="m">(<i>Y</i>, 𝒯<sub><i>Y</i></sub>)</span> espacios topológicos. <span class="m"><i>f</i> : <i>X</i> → <i>Y</i></span> es <b>continua</b> si</p>
+    <div class="eq">∀<i>V</i> ∈ 𝒯<sub><i>Y</i></sub>, &nbsp; <i>f</i><sup>−1</sup>(<i>V</i>) ∈ 𝒯<sub><i>X</i></sub>, &nbsp; con &nbsp; <i>f</i><sup>−1</sup>(<i>V</i>) = { <i>x</i> ∈ <i>X</i> | <i>f</i>(<i>x</i>) ∈ <i>V</i> }.</div>
+    <p class="small muted">El ejercicio de las notas: con <span class="m"><i>X</i> = <i>Y</i> = {△, □, ★, ○}</span>, crea funciones y topologías (pueden ser distintas en el dominio y el codominio) y estudia si son continuas.</p>
+    ${mapHTML(false)}
+  </div>
+  <div class="panel"><svg id="map" width="100%" role="img" aria-label="La función f y la preimagen del abierto elegido"></svg>
+    <p class="small muted" style="margin:6px 0 0">Abiertos <i>V</i> de <i>Y</i>; elige uno para ver su preimagen:</p>
+    <div class="btns" id="opens" role="group" aria-label="Abiertos del codominio"></div>
+    <div class="box" id="verd"></div></div>
+</div>`,
+  mount(r) { mountMap(r, false); } });
+
+S.push({ id: "homeomorfismo", title: "Isomorfismos topológicos", html: `
+<p class="kicker">2.2 · Isomorfismos</p>
+<h2>Homeomorfismo: la misma <em>estructura</em> topológica</h2>
+<div class="cols">
+  <div>
+    <p>Un isomorfismo es una función biyectiva que preserva la estructura. Entre espacios topológicos se llama <b>homeomorfismo</b>: <span class="m"><i>f</i> : (<i>A</i>, 𝒪<sub><i>A</i></sub>) → (<i>B</i>, 𝒪<sub><i>B</i></sub>)</span> es</p>
+    <ul class="chk" id="chk"></ul>
+    <div class="box t" id="iso"></div>
+    <div class="btns" id="casos" role="group" aria-label="Casos"><button class="b" data-k="a">Biyectiva, no continua</button><button class="b" data-k="b">Intercambio △ ↔ □</button><button class="b" data-k="c">Continua, inversa no</button></div>
+    ${mapHTML(true)}
+  </div>
+  <div class="panel"><svg id="map" width="100%" role="img" aria-label="La función f entre los dos espacios"></svg>
+    <div class="btns" id="modo" role="group" aria-label="Qué revisar"><button class="b on" data-k="pre" aria-pressed="true">Continuidad de f</button><button class="b" data-k="img" aria-pressed="false">Continuidad de f⁻¹</button></div>
+    <div class="btns" id="opens" role="group" aria-label="Abiertos"></div>
+    <div class="box" id="verd"></div></div>
+</div>`,
+  mount(r) { mountMap(r, true); } });
+
+S.push({ id: "limite", title: "Límite entre espacios topológicos", html: `
+<p class="kicker">2.3 · Límite de una función entre espacios topológicos</p>
+<h2>El límite es un <em>conjunto</em> de puntos b</h2>
+<div class="cols">
+  <div>
+    <div class="eq" style="font-size:1rem">lím<sub><i>x</i>→<i>a</i></sub> <i>f</i>(<i>x</i>) := { <i>b</i> ∈ <i>B</i> : (∀<i>V<sub>b</sub></i> ∈ 𝒪<sub><i>B</i></sub>)(∃<i>V<sub>a</sub></i> ∈ 𝒪<sub><i>A</i></sub> : <i>f</i>(<i>V</i><sub><i>a</i></sub>°) ⊆ <i>V<sub>b</sub></i>) }</div>
+    <p class="small"><i>b</i> está en el límite si para <b>cualquier</b> entorno abierto <i>V<sub>b</sub></i> de <i>b</i> <b>existe</b> un entorno abierto <i>V<sub>a</sub></i> de <i>a</i> cuya imagen cabe en <i>V<sub>b</sub></i>. El anillo ° indica el entorno al que se le quita su centro, <span class="m"><i>V</i><sub><i>a</i></sub>° = <i>V<sub>a</sub></i> − {<i>a</i>}</span>. Aquí <i>A</i> = <i>B</i> = ℝ y los entornos son intervalos.</p>
+    <div class="btns" id="fn" role="group" aria-label="Función"><button class="b" data-k="cuad"><span class="m"><i>x</i>², <i>a</i> = 1</span></button><button class="b" data-k="salto">salto en <i>a</i> = 0</button><button class="b" data-k="hueco"><span class="m">(<i>x</i>² − 1)/(<i>x</i> − 1)</span>, <i>f</i>(1) = 3</button></div>
+    <div class="btns" id="lam" role="group" aria-label="Subconjunto Λ"><button class="b" data-k="A">Λ = <i>A</i></button><button class="b" data-k="mas">Λ = {<i>x</i> &gt; <i>a</i>}</button><button class="b" data-k="menos">Λ = {<i>x</i> &lt; <i>a</i>}</button></div>
+    <div class="ctl"><label for="b"><i>b</i></label><input id="b" type="range" min="-2.5" max="4.5" step="0.05" value="1.6"><output for="b"></output></div>
+    <div class="ctl"><label for="eps"><i>V<sub>b</sub></i> ± <i>ε</i></label><input id="eps" type="range" min="0.05" max="2" step="0.01" value="0.8"><output for="eps"></output></div>
+    <div class="ctl"><label for="del"><i>V<sub>a</sub></i> ± <i>δ</i></label><input id="del" type="range" min="0.005" max="2" step="0.005" value="0.6"><output for="del"></output></div>
+    <div class="btns"><button class="b" id="buscar">Buscar δ</button><button class="b" id="enc">▶ Encoger ε</button><button class="b" id="perf" aria-pressed="true">V<sub>a</sub>° sin a</button></div>
+  </div>
+  <div class="panel"><canvas id="cv" aria-label="Gráfica con los entornos de a y de b"></canvas>
+    <div class="btns" id="stg" role="group" aria-label="Paso de la explicación"><button class="b" data-k="1">1 · V<sub>b</sub></button><button class="b" data-k="2">2 · V<sub>a</sub>°</button><button class="b" data-k="3">3 · f(V<sub>a</sub>°)</button><button class="b" data-k="4">4 · ¿cabe?</button></div>
+    <div class="box" id="txt"></div></div>
+</div>`,
+  mount(r) {
+    const F = {
+      cuad: { f: (x) => x * x, a: 1, xr: [-1, 3], yr: [-1, 5], b: 1.6, lim: { A: "{1}", mas: "{1}", menos: "{1}" } },
+      salto: { f: (x) => (x < 0 ? x / 2 - 1 : x / 2 + 1), a: 0, xr: [-2, 2], yr: [-2.6, 2.6], b: .6, lim: { A: "∅", mas: "{1}", menos: "{−1}" } },
+      hueco: { f: (x) => (x === 1 ? 3 : x + 1), a: 1, xr: [-1, 3], yr: [-1, 4.5], b: 2.4, lim: { A: "{2}", mas: "{2}", menos: "{2}" }, limCon: "∅" },
+    };
+    let k = "cuad", lam = "A", b = 1.6, eps = .8, del = .6, stage = 1, perf = true, nf = false;
+    const inL = (x, a) => (lam === "mas" ? x > a : lam === "menos" ? x < a : true);
+    const image = () => {
+      const { f, a } = F[k]; let lo = Infinity, hi = -Infinity; const N = 800;
+      const take = (x) => { const y = f(x); lo = Math.min(lo, y); hi = Math.max(hi, y); };
+      for (let i = 0; i < N; i++) { const x = a - del + 2 * del * (i + .5) / N; if (inL(x, a)) take(x); }
+      if (!perf && lam === "A") take(a);
+      return [lo, hi];
+    };
+    const fits = () => { const [lo, hi] = image(); return lo > b - eps && hi < b + eps; };
+    const cvs = Canvas($("#cv", r), (ctx, w, h) => {
+      const P = F[k], v = view(w, h, P.xr, P.yr), a = P.a; axes(ctx, v);
+      const [lo, hi] = image(), ok = lo > b - eps && hi < b + eps;
+      clip(ctx, v);
+      if (stage >= 1) {
+        ctx.fillStyle = "#f5c96f1a"; ctx.fillRect(v.pad, v.Y(b + eps), w - 2 * v.pad, v.Y(b - eps) - v.Y(b + eps));
+        ctx.strokeStyle = "#f5c96f88"; ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
+        [b - eps, b + eps].forEach((y) => { ctx.beginPath(); ctx.moveTo(v.pad, v.Y(y)); ctx.lineTo(w - v.pad, v.Y(y)); ctx.stroke(); }); ctx.setLineDash([]);
+      }
+      if (stage >= 2) {
+        const x0 = lam === "mas" ? a : a - del, x1 = lam === "menos" ? a : a + del;
+        ctx.fillStyle = "#53d5cd1c"; ctx.fillRect(v.X(x0), v.pad, v.X(x1) - v.X(x0), h - 2 * v.pad);
+        ctx.strokeStyle = perf ? "#ff8194aa" : "#53d5cd88"; ctx.setLineDash([3, 4]); ctx.beginPath(); ctx.moveTo(v.X(a), v.pad); ctx.lineTo(v.X(a), h - v.pad); ctx.stroke(); ctx.setLineDash([]);
+      }
+      ctx.restore();
+      const segs = k === "salto" ? [[P.xr[0], -1e-9], [0, P.xr[1]]] : [[P.xr[0], P.xr[1]]];
+      segs.forEach(([p, q]) => plotFn(ctx, v, P.f, "#a6bdcb", 2, [], p, q));
+      if (stage >= 3) {
+        const col = stage >= 4 ? (ok ? C.good : C.bad) : C.violet;
+        segs.forEach(([p, q]) => { const s = Math.max(p, a - del), e = Math.min(q, a + del);
+          const s2 = lam === "mas" ? Math.max(s, a) : s, e2 = lam === "menos" ? Math.min(e, a) : e; if (e2 > s2) plotFn(ctx, v, P.f, col, 4, [], s2, e2); });
+        ctx.strokeStyle = col; ctx.lineWidth = 6; ctx.lineCap = "round"; ctx.beginPath(); ctx.moveTo(v.pad + 8, v.Y(lo)); ctx.lineTo(v.pad + 8, v.Y(hi)); ctx.stroke(); ctx.lineCap = "butt";
+        ctx.fillStyle = col; ctx.font = "italic 13px Georgia,serif"; ctx.textAlign = "left"; ctx.fillText("f(Vₐ°)", v.pad + 16, v.Y((lo + hi) / 2) + 4);
+      }
+      if (k === "salto") { hole(ctx, v, 0, -1, "#a6bdcb"); dot(ctx, v, 0, 1, "#a6bdcb", 5); }
+      if (k === "hueco") { hole(ctx, v, 1, 2, "#a6bdcb"); dot(ctx, v, 1, 3, "#a6bdcb", 5); }
+      ctx.fillStyle = C.gold; ctx.font = "italic 14px Georgia,serif"; ctx.textAlign = "right"; if (stage >= 1) ctx.fillText("entorno de b", w - v.pad - 4, v.Y(b + eps) - 5);
+      ctx.fillStyle = C.gold; ctx.beginPath(); ctx.moveTo(w - v.pad, v.Y(b)); ctx.lineTo(w - v.pad - 9, v.Y(b) - 5); ctx.lineTo(w - v.pad - 9, v.Y(b) + 5); ctx.fill();
+      ctx.fillStyle = C.teal; ctx.textAlign = "center"; ctx.fillText("a", v.X(a), h - v.pad + 18);
+    });
+    const T = {
+      1: "<b>1.</b> Toma un entorno abierto <i>V<sub>b</sub></i> de <i>b</i>: el intervalo (<i>b</i> − <i>ε</i>, <i>b</i> + <i>ε</i>), en dorado.",
+      2: () => `<b>2.</b> Propón un entorno de <i>a</i>: (<i>a</i> − <i>δ</i>, <i>a</i> + <i>δ</i>)${lam === "A" ? "" : ", dentro de Λ"}${perf ? ", <b>sin el punto <i>a</i></b> (línea roja): lo que pase justo en <i>a</i> no cuenta." : ", esta vez <b>con</b> el punto <i>a</i>."}`,
+      3: () => { const [lo, hi] = image(); return `<b>3.</b> Su imagen <i>f</i>(<i>V<sub>a</sub></i>°) son los valores que toma <i>f</i> ahí: de ${fmt(lo)} a ${fmt(hi)} (barra junto al eje).`; },
+      4: () => { const P = F[k], lim = !perf && lam === "A" && P.limCon ? P.limCon : P.lim[lam];
+        return (fits() ? `<b class="ok">f(V<sub>a</sub>°) ⊆ V<sub>b</sub> ✓</b> Para este <i>V<sub>b</sub></i> sí hay un <i>V<sub>a</sub></i>. Pero la definición pide <b>todo</b> <i>V<sub>b</sub></i>: encoge <i>ε</i>.`
+          : `<b class="no">f(V<sub>a</sub>°) ⊄ V<sub>b</sub> ✗</b> Con este <i>δ</i> no. Achica <i>δ</i> o pulsa «Buscar δ». Si ningún <i>δ</i> sirve, <i>b</i> no está en el límite.`)
+          + (nf ? ` <span class="no">Ningún δ ≥ 0.005 funcionó.</span>` : "") + `<br><span class="small muted">Para esta función, con este Λ${lam === "A" && !perf ? " y sin quitar a" : ""}: lím = <span class="m">${lim}</span>.</span>`; },
+    };
+    const say = () => { const t = T[stage]; $("#txt", r).innerHTML = typeof t === "function" ? t() : t; };
+    const upd = () => { cvs.draw(); say(); };
+    const sb = slider(r, "b", (x) => { b = x; nf = false; upd(); }), se = slider(r, "eps", (x) => { eps = x; upd(); }), sd = slider(r, "del", (x) => { del = x; upd(); });
+    function buscar() {
+      const keep = del;
+      for (let d = 2; d >= .005; d *= .9) { del = d; if (fits()) { nf = false; setR(sd, Math.max(.005, Math.floor(d / .005) * .005)); return true; } }
+      del = keep; nf = true; return false;
+    }
+    $("#buscar", r).addEventListener("click", () => { if (stage < 4) setStage(4); buscar(); upd(); });
+    const loop = Loop((dt) => { setR(se, Math.max(.05, eps * Math.exp(-dt * .9))); buscar(); upd(); if (eps <= .05) { $("#enc", r).textContent = "▶ Encoger ε"; return false; } });
+    $("#enc", r).addEventListener("click", () => {
+      if (stage < 4) setStage(4);
+      if (loop.on) { loop.stop(); $("#enc", r).textContent = "▶ Encoger ε"; return; }
+      if (RM) { setR(se, .05); buscar(); upd(); return; }
+      if (eps <= .05) setR(se, 1);
+      loop.start(); $("#enc", r).textContent = "❚❚ Pausa";
+    });
+    $("#perf", r).addEventListener("click", (e) => { perf = !perf; const bt = e.currentTarget; bt.setAttribute("aria-pressed", perf); bt.classList.toggle("on", perf); bt.innerHTML = perf ? "V<sub>a</sub>° sin a" : "V<sub>a</sub> con a"; upd(); });
+    $("#perf", r).classList.add("on");
+    const setStage = (s) => { stage = s; $$("#stg .b", r).forEach((x) => { x.classList.toggle("on", +x.dataset.k === s); x.setAttribute("aria-pressed", +x.dataset.k === s); }); upd(); };
+    $$("#stg .b", r).forEach((x) => x.addEventListener("click", () => setStage(+x.dataset.k)));
+    choice(r, "#fn .b", (key) => { k = key; nf = false; loop.stop(); $("#enc", r).textContent = "▶ Encoger ε"; setR(sb, F[k].b); });
+    choice(r, "#lam .b", (key) => { lam = key; nf = false; upd(); });
+    $("#lam .b", r).click(); $("#fn .b", r).click(); setStage(1);
+    return () => { loop.stop(); cvs.dispose(); };
+  } });
+
+S.push({ id: "campos", title: "Campos", html: `
+<p class="kicker">3 · Campos</p>
+<h2>Un conjunto con dos <em>operaciones</em></h2>
+<div class="cols">
+  <div>
+    <p>Un campo es un triplete <span class="m">(<i>A</i>, +<sub><i>A</i></sub>, ·<sub><i>A</i></sub>)</span>: un conjunto y dos operaciones binarias, que son funciones <span class="m">+<sub><i>A</i></sub> : <i>A</i> × <i>A</i> → <i>A</i></span> y <span class="m">·<sub><i>A</i></sub> : <i>A</i> × <i>A</i> → <i>A</i></span>.</p>
+    <p class="small muted">Preguntas para el lector: elige un conjunto con su suma y su producto usuales.</p>
+    <div class="btns" id="sets" role="group" aria-label="Conjunto"><button class="b" data-k="R">ℝ</button><button class="b" data-k="Q">ℚ</button><button class="b" data-k="C">ℂ</button><button class="b" data-k="Z">ℤ</button><button class="b" data-k="N">ℕ</button></div>
+    <div class="box t" id="resp"></div>
+  </div>
+  <div class="panel"><ul class="chk" id="ax"></ul></div>
+</div>`,
+  mount(r) {
+    const AX = [
+      ["cerr", "<b>Cerradura</b>: <i>a</i> +<sub>A</sub> <i>b</i> y <i>a</i> ·<sub>A</sub> <i>b</i> están en <i>A</i>."],
+      ["asoc", "<b>Asociatividad</b>: (<i>a</i> + <i>b</i>) + <i>c</i> = <i>a</i> + (<i>b</i> + <i>c</i>), y lo mismo para ·."],
+      ["conm", "<b>Conmutatividad</b>: <i>a</i> + <i>b</i> = <i>b</i> + <i>a</i>, <i>a</i> · <i>b</i> = <i>b</i> · <i>a</i>."],
+      ["id", "<b>Identidades</b>: 0<sub>A</sub> con <i>a</i> + 0<sub>A</sub> = <i>a</i>; 1<sub>A</sub> con <i>a</i> · 1<sub>A</sub> = <i>a</i>, y 1<sub>A</sub> ≠ 0<sub>A</sub>."],
+      ["invs", "<b>Inverso aditivo</b>: para cada <i>a</i> hay −<i>a</i> con <i>a</i> + (−<i>a</i>) = 0<sub>A</sub>. La resta no es una operación: es sumar el inverso."],
+      ["invp", "<b>Inverso multiplicativo</b>: para cada <i>a</i> ≠ 0<sub>A</sub> hay <i>a</i>⁻¹ con <i>a</i> · <i>a</i>⁻¹ = 1<sub>A</sub>."],
+      ["dist", "<b>Distributividad</b>: <i>a</i> · (<i>b</i> + <i>c</i>) = <i>a</i> · <i>b</i> + <i>a</i> · <i>c</i>."],
+    ];
+    const R = {
+      R: [{}, "<b>Sí</b>: (ℝ, +, ·) cumple todas las condiciones."],
+      Q: [{}, "<b>Sí</b>: los racionales también son un campo."],
+      C: [{}, "<b>Sí</b>: los complejos forman un campo con su suma y su multiplicación."],
+      Z: [{ invp: false }, "<b>No</b>: en general no hay inversos multiplicativos. Por ejemplo, ningún entero <i>a</i> cumple 2 · <i>a</i> = 1."],
+      N: [{ invs: false, invp: false, id: null }, "<b>No</b>: en general no hay inversos; por ejemplo, ningún natural cumple 1 + <i>a</i> = 0. Que exista el neutro de la suma depende de la construcción (si 0 ∈ ℕ o no)."],
+    };
+    choice(r, "#sets .b", (k) => {
+      const [fail, t] = R[k];
+      $("#ax", r).innerHTML = AX.map(([id, h]) => `<li>${mark(id in fail ? fail[id] : true)}<span>${h}</span></li>`).join("");
+      $("#resp", r).innerHTML = `¿${$(`#sets [data-k=${k}]`, r).textContent} es un campo? ${t}`;
+    });
+    $("#sets .b", r).click();
+  } });
+
+S.push({ id: "campitos", title: "Campitos", html: `
+<p class="kicker">3 · «Campitos» creados por los estudiantes</p>
+<h2>¿Un campo con <em>finitos</em> elementos?</h2>
+<div class="cols">
+  <div>
+    <p>Toma <span class="m">{0, 1, … , <i>n</i> − 1}</span> y opera «como un reloj»: suma o multiplica y quédate con el residuo de dividir por <i>n</i>. Revisemos las propiedades de campo una por una, por fuerza bruta.</p>
+    <div class="ctl"><label for="n"><i>n</i></label><input id="n" type="range" min="2" max="10" step="1" value="4" data-d="0"><output for="n"></output></div>
+    <ul class="chk" id="ax"></ul>
+    <div class="box" id="verd"></div>
+  </div>
+  <div class="panel"><div class="tabs" id="tabs"></div>
+    <p class="small muted" style="margin:10px 0 0">En la tabla de ·, los 1 marcan inversos multiplicativos; una fila sin 1 (en rojo) es un elemento sin inverso.</p></div>
+</div>`,
+  mount(r) {
+    slider(r, "n", (n) => {
+      const E = [...Array(n).keys()], ad = (a, b) => (a + b) % n, mu = (a, b) => (a * b) % n;
+      const all3 = (p) => E.every((a) => E.every((b) => E.every((c) => p(a, b, c))));
+      const asoc = all3((a, b, c) => ad(ad(a, b), c) === ad(a, ad(b, c)) && mu(mu(a, b), c) === mu(a, mu(b, c)));
+      const conm = all3((a, b) => ad(a, b) === ad(b, a) && mu(a, b) === mu(b, a));
+      const dist = all3((a, b, c) => mu(a, ad(b, c)) === ad(mu(a, b), mu(a, c)));
+      const invs = E.every((a) => E.some((b) => ad(a, b) === 0));
+      const sinInv = E.filter((a) => a && !E.some((b) => mu(a, b) === 1));
+      const tab = (op, sym, cls) => `<table class="cay" aria-label="Tabla de ${sym} módulo ${n}"><tr><th>${sym}</th>${E.map((b) => `<th>${b}</th>`).join("")}</tr>${E.map((a) => `<tr class="${sym === "·" && sinInv.includes(a) ? "badrow" : ""}"><th>${a}</th>${E.map((b) => { const c = op(a, b); return `<td class="${cls(c)}">${c}</td>`; }).join("")}</tr>`).join("")}</table>`;
+      $("#tabs", r).innerHTML = tab(ad, "+", (c) => (c === 0 ? "zero" : "")) + tab(mu, "·", (c) => (c === 1 ? "one" : ""));
+      $("#ax", r).innerHTML = [[true, "Cerradura: todo resultado es un residuo, está en el conjunto"], [asoc, "Asociatividad de + y ·"], [conm, "Conmutatividad de + y ·"], [true, "Identidades: 0 y 1, con 1 ≠ 0"], [invs, "Inverso aditivo: cada fila de + tiene un 0"],
+        [!sinInv.length, `Inverso multiplicativo${sinInv.length ? `: no ${sinInv.length > 1 ? "lo tienen" : "lo tiene"} ${sinInv.join(", ")}` : ": cada fila de · (salvo la del 0) tiene un 1"}`], [dist, "Distributividad"]].map(([ok, t]) => `<li>${mark(ok)}<span>${t}</span></li>`).join("");
+      const campo = asoc && conm && dist && invs && !sinInv.length;
+      $("#verd", r).innerHTML = campo ? `<b class="ok">Con n = ${n} es un campo</b>: un campito de ${n} elementos.` : `<b class="no">Con n = ${n} no es un campo.</b> Por ejemplo, ${sinInv[0]} · <i>b</i> nunca da 1. ¿Para qué valores de <i>n</i> sí funciona?`;
+    });
+  } });
+
+S.push({ id: "espacios", title: "Espacios vectoriales", html: `
+<p class="kicker">4 · Espacios vectoriales</p>
+<h2>Vectores: se <em>suman</em> y se <em>escalan</em></h2>
+<div class="cols">
+  <div>
+    <p>Un espacio vectorial sobre un campo 𝕂 es <span class="m">(<i>V</i>, +<sub><i>V</i></sub>, ·<sub><i>V</i></sub>)</span>: una suma <span class="m">+<sub><i>V</i></sub> : <i>V</i> × <i>V</i> → <i>V</i></span> y un producto que toma un escalar <span class="m"><i>α</i> ∈ 𝕂</span> y un vector y devuelve otro vector de <i>V</i>.</p>
+    <p class="small muted">Nueve propiedades: cerradura, asociatividad y conmutatividad de la suma, neutro e inverso aditivo, cerradura del producto por escalares, dos distributividades y <span class="m">1 · <i>v</i> = <i>v</i></span>. Mira algunas en ℝ², donde todo se hace componente a componente:</p>
+    <div class="btns" id="ax" role="group" aria-label="Propiedad"><button class="b" data-k="suma">u + v y αu</button><button class="b" data-k="conm">u + v = v + u</button><button class="b" data-k="dist">α(u + v) = αu + αv</button><button class="b" data-k="inv">u + (−u) = 0</button></div>
+    <div class="ctl"><label for="al"><i>α</i></label><input id="al" type="range" min="-2" max="2" step="0.05" value="1.5"><output for="al"></output></div>
+    <div class="box t" id="txt"></div>
+    <div class="box v small">Preguntas para el lector: ¿ℝ es un espacio vectorial? ¿ℝ² es un espacio vectorial?</div>
+  </div>
+  <div class="panel"><canvas id="cv" aria-label="Vectores u y v en el plano"></canvas>
+    <p class="small muted" style="margin:8px 0 0">Arrastra las puntas de <i>u</i> y <i>v</i>. Con teclado: enfoca el lienzo, <kbd>Enter</kbd> cambia de vector y las flechas lo mueven.</p></div>
+</div>`,
+  mount(r) {
+    let u = [2, .5], v = [.5, 1.5], al = 1.5, mode = "suma", V0 = null, dg = null;
+    const add = (p, q) => [p[0] + q[0], p[1] + q[1]], sc = (a, p) => [a * p[0], a * p[1]], O = [0, 0];
+    const cvs = Canvas($("#cv", r), (ctx, w, h) => {
+      const vw = eqView(w, h, [-4, 4], [-3.5, 3.5]); V0 = vw; axes(ctx, vw, ["x₁", "x₂"]);
+      const s = add(u, v);
+      if (mode === "suma") { vec(ctx, vw, O, sc(al, u), "#ff8194", 2.5, "αu"); vec(ctx, vw, u, s, "#bda0ff88", 1.5, "", [5, 4]); vec(ctx, vw, O, s, C.gold, 3, "u + v"); }
+      if (mode === "conm") { vec(ctx, vw, u, s, C.violet, 2, "", [6, 4]); vec(ctx, vw, v, s, C.teal, 2, "", [6, 4]); vec(ctx, vw, O, s, C.gold, 3, "u + v = v + u"); }
+      if (mode === "dist") { const au = sc(al, u), av = sc(al, v), t = sc(al, s);
+        vec(ctx, vw, O, s, "#f5c96f66", 2, "u + v"); vec(ctx, vw, O, au, "#53d5cd99", 2, "αu"); vec(ctx, vw, au, t, "#bda0ff", 2, "", [6, 4]); vec(ctx, vw, O, t, C.gold, 3, "α(u + v)"); }
+      if (mode === "inv") { vec(ctx, vw, O, sc(-1, u), C.bad, 2.5, "−u"); vec(ctx, vw, u, O, "#ff819488", 1.5, "", [5, 4]); dot(ctx, vw, 0, 0, C.gold, 6); }
+      vec(ctx, vw, O, u, C.teal, 3, "u"); vec(ctx, vw, O, v, C.violet, 3, "v");
+      [u, v].forEach((p, i) => { if (dg && dg.sel === i) ring(ctx, vw, p[0], p[1], C.gold, 11); });
+    });
+    const say = () => { const s = add(u, v), au = sc(al, u), av = sc(al, v);
+      $("#txt", r).innerHTML = {
+        suma: `<span class="m"><i>u</i> + <i>v</i> = ${fv(u)} + ${fv(v)} = ${fv(s)}</span><br><span class="m"><i>α</i><i>u</i> = ${fmt(al)} · ${fv(u)} = ${fv(au)}</span>. Ambos resultados siguen en ℝ²: cerradura.`,
+        conm: `Ir por <i>u</i> y luego por <i>v</i>, o por <i>v</i> y luego por <i>u</i>, termina en el mismo punto <span class="m">${fv(s)}</span>: el paralelogramo.`,
+        dist: `<span class="m"><i>α</i>(<i>u</i> + <i>v</i>) = ${fmt(al)} · ${fv(s)} = ${fv(sc(al, s))}</span><br><span class="m"><i>α</i><i>u</i> + <i>α</i><i>v</i> = ${fv(au)} + ${fv(av)} = ${fv(add(au, av))}</span>. Escalar la suma o sumar lo escalado da lo mismo.`,
+        inv: `<span class="m"><i>u</i> + (−<i>u</i>) = ${fv(u)} + ${fv(sc(-1, u))} = (0, 0)</span>, el neutro aditivo.`,
+      }[mode]; };
+    const upd = () => { cvs.draw(); say(); };
+    const lim = (p) => [clamp(p[0], -4, 4), clamp(p[1], -3.5, 3.5)];
+    dg = Drag($("#cv", r), () => V0, [{ get: () => u, set: (x, y) => { u = lim([x, y]); } }, { get: () => v, set: (x, y) => { v = lim([x, y]); } }], upd);
+    slider(r, "al", (x) => { al = x; upd(); });
+    choice(r, "#ax .b", (k) => { mode = k; upd(); }); $("#ax .b", r).click();
+    return () => cvs.dispose();
+  } });
+
+S.push({ id: "polinomios", title: "Polinomios como vectores", html: `
+<p class="kicker">4 · Ejemplos de espacios vectoriales</p>
+<h2>Un polinomio también es un <em>vector</em></h2>
+<div class="cols">
+  <div>
+    <p><span class="m"><i>P</i><sub>2</sub>(ℝ)</span>: polinomios de grado menor o igual a 2 con coeficientes reales. Se suman y se escalan coeficiente a coeficiente, igual que en <span class="m">ℝ³</span>. El ejemplo de las notas es <span class="m"><i>p</i>(<i>x</i>) = 3<i>x</i>² − <i>x</i> + 4</span>.</p>
+    <div class="ctl"><label for="q2"><i>q</i>: <i>x</i>²</label><input id="q2" type="range" min="-3" max="3" step="0.1" value="-1"><output for="q2"></output></div>
+    <div class="ctl"><label for="q1"><i>q</i>: <i>x</i></label><input id="q1" type="range" min="-3" max="3" step="0.1" value="2"><output for="q1"></output></div>
+    <div class="ctl"><label for="q0"><i>q</i>: 1</label><input id="q0" type="range" min="-3" max="3" step="0.1" value="1"><output for="q0"></output></div>
+    <div class="ctl"><label for="al"><i>α</i></label><input id="al" type="range" min="-2" max="2" step="0.05" value="0.5"><output for="al"></output></div>
+    <div class="box t" id="txt"></div>
+  </div>
+  <div class="panel"><canvas id="cv" aria-label="Gráficas de p, q y αp + q"></canvas>
+    <p class="small" style="margin:10px 0 0"><span style="color:var(--biomat)">━ <i>p</i></span> &nbsp; <span style="color:var(--violet)">━ <i>q</i></span> &nbsp; <span style="color:var(--puras)">━ <i>α</i><i>p</i> + <i>q</i></span></p></div>
+</div>`,
+  mount(r) {
+    const p = [3, -1, 4], q = [-1, 2, 1]; let al = .5;
+    const ev = (c) => (x) => c[0] * x * x + c[1] * x + c[2];
+    const comb = () => p.map((c, i) => al * c + q[i]);
+    const poly = (c) => { const t = [[c[0], "<i>x</i>²"], [c[1], "<i>x</i>"], [c[2], ""]].filter(([a]) => Math.abs(a) > 1e-9);
+      return t.length ? t.map(([a, s], i) => `${a < 0 ? (i ? " − " : "−") : i ? " + " : ""}${Math.abs(a) === 1 && s ? "" : fmt(Math.abs(a), Number.isInteger(+Math.abs(a).toFixed(2)) ? 0 : 2)}${s}`).join("") : "0"; };
+    const cvs = Canvas($("#cv", r), (ctx, w, h) => { const v = view(w, h, [-3, 3], [-10, 22]); axes(ctx, v);
+      plotFn(ctx, v, ev(p), C.teal, 2.5); plotFn(ctx, v, ev(q), C.violet, 2.5); plotFn(ctx, v, ev(comb()), C.gold, 3); });
+    const upd = () => { cvs.draw(); const c = comb();
+      $("#txt", r).innerHTML = `<span class="m"><i>p</i> = ${poly(p)} ↔ (3, −1, 4)</span><br><span class="m"><i>q</i> = ${poly(q)} ↔ (${q.map((x) => fmt(x, 1)).join(", ")})</span><br><span class="m"><i>α</i><i>p</i> + <i>q</i> = ${poly(c)} ↔ (${c.map((x) => fmt(x)).join(", ")})</span>`; };
+    ["q2", "q1", "q0"].forEach((id, i) => slider(r, id, (x) => { q[i] = x; upd(); }));
+    slider(r, "al", (x) => { al = x; upd(); });
+    return () => cvs.dispose();
+  } });
+
+S.push({ id: "base", title: "Base de un espacio vectorial", html: `
+<p class="kicker">4.1 · Base para un espacio vectorial</p>
+<h2>Cada vector, de <em>una sola</em> manera</h2>
+<div class="cols">
+  <div>
+    <p><span class="m"><i>B<sub>V</sub></i> = {<i>e</i><sub>1</sub>, … , <i>e<sub>n</sub></i>}</span> es una base de <i>V</i> si cumple:</p>
+    <ul class="chk" id="chk"></ul>
+    <p class="small muted">Así cualquier vector se representa de manera única como combinación lineal: sus coordenadas son los <i>α</i>.</p>
+    <div class="btns" id="pre" role="group" aria-label="Bases de ejemplo"><button class="b" data-k="can">Canónica</button><button class="b" data-k="obl">Oblicua</button><button class="b" data-k="dep">Dependientes</button></div>
+    <div class="box t" id="txt"></div>
+  </div>
+  <div class="panel"><canvas id="cv" aria-label="Base e1, e2 y un vector v"></canvas>
+    <p class="small muted" style="margin:8px 0 0">Arrastra <i>e</i><sub>1</sub>, <i>e</i><sub>2</sub> y <i>v</i>. La cuadrícula son las combinaciones con coeficientes enteros. Teclado: <kbd>Enter</kbd> cambia de punto, flechas lo mueven.</p></div>
+</div>`,
+  mount(r) {
+    let e1 = [1, 0], e2 = [0, 1], v = [2.2, 1.4], V0 = null, dg = null;
+    const P = { can: [[1, 0], [0, 1]], obl: [[1, .5], [-.5, 1]], dep: [[1, .5], [2, 1]] };
+    const det = () => e1[0] * e2[1] - e2[0] * e1[1];
+    const coords = () => { const d = det(); return [(v[0] * e2[1] - e2[0] * v[1]) / d, (e1[0] * v[1] - v[0] * e1[1]) / d]; };
+    const cvs = Canvas($("#cv", r), (ctx, w, h) => {
+      const vw = eqView(w, h, [-4, 4], [-3.5, 3.5]); V0 = vw; axes(ctx, vw, ["x₁", "x₂"]);
+      const ind = Math.abs(det()) > 1e-6;
+      if (ind) for (let k = -12; k <= 12; k++) {
+        polyline(ctx, vw, [[k * e1[0] - 30 * e2[0], k * e1[1] - 30 * e2[1]], [k * e1[0] + 30 * e2[0], k * e1[1] + 30 * e2[1]]], "#53d5cd22", 1);
+        polyline(ctx, vw, [[k * e2[0] - 30 * e1[0], k * e2[1] - 30 * e1[1]], [k * e2[0] + 30 * e1[0], k * e2[1] + 30 * e1[1]]], "#bda0ff22", 1);
+      } else { const d = Math.hypot(...e1) > 1e-9 ? e1 : e2; if (Math.hypot(...d) > 1e-9) polyline(ctx, vw, [[-30 * d[0], -30 * d[1]], [30 * d[0], 30 * d[1]]], "#ff819466", 3); }
+      if (ind) { const [a1, a2] = coords(), p = [a1 * e1[0], a1 * e1[1]];
+        vec(ctx, vw, [0, 0], p, "#53d5cdaa", 2, "", [6, 4]); vec(ctx, vw, p, v, "#bda0ffaa", 2, "", [6, 4]); }
+      vec(ctx, vw, [0, 0], v, C.gold, 3, "v"); vec(ctx, vw, [0, 0], e1, C.teal, 3, "e₁"); vec(ctx, vw, [0, 0], e2, C.violet, 3, "e₂");
+      [e1, e2, v].forEach((p, i) => { if (dg && dg.sel === i) ring(ctx, vw, p[0], p[1], C.gold, 11); });
+    });
+    const upd = () => { cvs.draw(); const ind = Math.abs(det()) > 1e-6;
+      let dep = ""; if (!ind) { if (Math.hypot(...e1) < 1e-9) dep = "1 · <i>e</i>₁ + 0 · <i>e</i>₂ = 0"; else { const l = Math.abs(e1[0]) > 1e-9 ? e2[0] / e1[0] : e2[1] / e1[1]; dep = `${fmt(l)} · <i>e</i>₁ − 1 · <i>e</i>₂ = 0`; } }
+      $("#chk", r).innerHTML = `<li>${mark(ind)}<span><b>Generación</b>: todo <span class="m"><i>v</i> = <i>α</i><sub>1</sub><i>e</i><sub>1</sub> + <i>α</i><sub>2</sub><i>e</i><sub>2</sub></span> con <span class="m"><i>α<sub>i</sub></i> ∈ 𝕂</span>${ind ? "" : `: <span class="no">solo se alcanza una recta</span>`}.</span></li>
+        <li>${mark(ind)}<span><b>Independencia lineal</b>: si <span class="m"><i>α</i><sub>1</sub><i>e</i><sub>1</sub> + <i>α</i><sub>2</sub><i>e</i><sub>2</sub> = 0<sub><i>V</i></sub></span>, entonces <span class="m"><i>α</i><sub>1</sub> = <i>α</i><sub>2</sub> = 0</span>${ind ? "" : `: <span class="no">falla, <span class="m">${dep}</span></span>`}.</span></li>`;
+      if (ind) { const [a1, a2] = coords(); $("#txt", r).innerHTML = `<span class="m"><i>v</i> = ${fv(v)} = <span style="color:var(--biomat)">${fmt(a1)}</span> <i>e</i><sub>1</sub> + <span style="color:var(--violet)">${fmt(a2)}</span> <i>e</i><sub>2</sub></span>. Las coordenadas de <i>v</i> en esta base son <span class="m">(${fmt(a1)}, ${fmt(a2)})</span>; en otra base son otras, pero el vector es el mismo.`; }
+      else $("#txt", r).innerHTML = `<b class="no">No es base.</b> <i>e</i><sub>1</sub> y <i>e</i><sub>2</sub> están sobre la misma recta: los vectores fuera de ella no se pueden escribir, y los de la recta se escriben de infinitas maneras.`;
+    };
+    const lim = (x, y) => [clamp(x, -4, 4), clamp(y, -3.5, 3.5)];
+    dg = Drag($("#cv", r), () => V0, [{ get: () => e1, set: (x, y) => { e1 = lim(x, y); } }, { get: () => e2, set: (x, y) => { e2 = lim(x, y); } }, { get: () => v, set: (x, y) => { v = lim(x, y); } }], upd, { snap: .25 });
+    choice(r, "#pre .b", (k) => { [e1, e2] = P[k].map((p) => [...p]); upd(); }); $("#pre .b", r).click();
+    return () => cvs.dispose();
+  } });
+
+S.push({ id: "lineales", title: "Funciones lineales", html: `
+<p class="kicker">5 · Funciones lineales</p>
+<h2>Una función lineal queda fija por lo que hace con la <em>base</em></h2>
+<p><span class="m"><i>f</i> : (<i>V</i>, +<sub><i>V</i></sub>, ·<sub><i>V</i></sub>) → (<i>U</i>, +<sub><i>U</i></sub>, ·<sub><i>U</i></sub>)</span> es lineal si <span class="m"><i>f</i>(<i>α</i><i>v</i><sub>1</sub> + <i>β</i><i>v</i><sub>2</sub>) = <i>α</i><i>f</i>(<i>v</i><sub>1</sub>) + <i>β</i><i>f</i>(<i>v</i><sub>2</sub>)</span>: preserva la suma (aditividad) y el producto por escalares (homogeneidad).</p>
+<div class="btns" id="modo" role="group" aria-label="Función"><button class="b" data-k="lin">lineal: arrastra f(e₁), f(e₂)</button><button class="b" data-k="tras"><span class="m"><i>f</i>(<i>x</i>, <i>y</i>) = (<i>x</i> + 1, <i>y</i>)</span></button><button class="b" data-k="cuad"><span class="m"><i>f</i>(<i>x</i>, <i>y</i>) = (<i>x</i> + <i>y</i>²/4, <i>y</i>)</span></button></div>
+<div class="cols even">
+  <div class="panel"><p class="small muted" style="margin:0 0 6px">Dominio <i>V</i> = ℝ²: arrastra <i>v</i><sub>1</sub> (dorado).</p><canvas id="dom" class="short" aria-label="Dominio: base canónica y el vector v1"></canvas>
+    <div class="ctl"><label for="al"><i>α</i></label><input id="al" type="range" min="-2" max="2" step="0.1" value="1"><output for="al"></output></div>
+    <div class="ctl"><label for="be"><i>β</i></label><input id="be" type="range" min="-2" max="2" step="0.1" value="1"><output for="be"></output></div></div>
+  <div class="panel"><p class="small muted" style="margin:0 0 6px">Codominio <i>U</i> = ℝ²: la cuadrícula transformada.</p><canvas id="cod" class="short" aria-label="Codominio: imagen de la cuadrícula"></canvas>
+    <div class="box t small" id="txt"></div></div>
+</div>`,
+  mount(r) {
+    let f1 = [1.2, .4], f2 = [-.4, 1], v1 = [1.5, 1], al = 1, be = 1, mode = "lin", VD = null, VC = null, dgD = null, dgC = null;
+    const v2 = [-1, 1];
+    const F = { lin: (p) => [p[0] * f1[0] + p[1] * f2[0], p[0] * f1[1] + p[1] * f2[1]], tras: (p) => [p[0] + 1, p[1]], cuad: (p) => [p[0] + p[1] * p[1] / 4, p[1]] };
+    const f = (p) => F[mode](p);
+    const add = (p, q) => [p[0] + q[0], p[1] + q[1]], sc = (a, p) => [a * p[0], a * p[1]];
+    const L = () => f(add(sc(al, v1), sc(be, v2))), R = () => add(sc(al, f(v1)), sc(be, f(v2)));
+    const grid = (ctx, vw, map, ca, cb) => { for (let k = -4; k <= 4; k++) {
+      const A = [], B = []; for (let t = -4; t <= 4.001; t += .1) { A.push(map([k, t])); B.push(map([t, k])); }
+      polyline(ctx, vw, A, k ? ca : "#ffffff55", 1); polyline(ctx, vw, B, k ? cb : "#ffffff55", 1); } };
+    const dom = Canvas($("#dom", r), (ctx, w, h) => { const vw = eqView(w, h, [-3, 3], [-3, 3]); VD = vw; axes(ctx, vw, ["x", "y"]);
+      grid(ctx, vw, (p) => p, "#53d5cd22", "#bda0ff22");
+      vec(ctx, vw, [0, 0], [1, 0], C.teal, 3, "e₁"); vec(ctx, vw, [0, 0], [0, 1], C.violet, 3, "e₂");
+      vec(ctx, vw, [0, 0], v2, "#a6bdcb", 2, "v₂"); vec(ctx, vw, [0, 0], v1, C.gold, 3, "v₁");
+      const c = add(sc(al, v1), sc(be, v2)); dot(ctx, vw, c[0], c[1], C.good, 5);
+      ctx.fillStyle = C.good; ctx.font = "italic 13px Georgia,serif"; ctx.fillText("αv₁ + βv₂", vw.X(c[0]) + 8, vw.Y(c[1]) + 14);
+      if (dgD && dgD.sel === 0) ring(ctx, vw, v1[0], v1[1], C.gold, 11); });
+    const cod = Canvas($("#cod", r), (ctx, w, h) => { const vw = eqView(w, h, [-4, 4], [-4, 4]); VC = vw; axes(ctx, vw, ["x", "y"]);
+      grid(ctx, vw, f, "#53d5cd33", "#bda0ff33");
+      const o = f([0, 0]); vec(ctx, vw, o, f([1, 0]), C.teal, 3, "f(e₁)"); vec(ctx, vw, o, f([0, 1]), C.violet, 3, "f(e₂)");
+      vec(ctx, vw, [0, 0], f(v1), C.gold, 2.5, "f(v₁)");
+      const l = L(), rr = R(); dot(ctx, vw, l[0], l[1], C.good, 6); ring(ctx, vw, rr[0], rr[1], C.bad, 9, 2.5);
+      if (mode === "lin" && dgC && dgC.sel >= 0) { const p = dgC.sel ? f2 : f1; ring(ctx, vw, p[0], p[1], C.gold, 11); } });
+    const upd = () => { dom.draw(); cod.draw(); const l = L(), rr = R(), ok = Math.hypot(l[0] - rr[0], l[1] - rr[1]) < 1e-6;
+      $("#txt", r).innerHTML = (mode === "lin" ? `Matriz con columnas <i>f</i>(<i>e</i>₁), <i>f</i>(<i>e</i>₂): <span class="m"><i>f</i>(<i>x</i>, <i>y</i>) = <i>x</i> ${fv(f1)} + <i>y</i> ${fv(f2)}</span>. Con eso basta para conocer <i>f</i> en todo ℝ².<br>` : "")
+        + `<span class="ok">●</span> <span class="m"><i>f</i>(<i>α</i><i>v</i><sub>1</sub> + <i>β</i><i>v</i><sub>2</sub>) = ${fv(l)}</span><br><span class="no">○</span> <span class="m"><i>α</i><i>f</i>(<i>v</i><sub>1</sub>) + <i>β</i><i>f</i>(<i>v</i><sub>2</sub>) = ${fv(rr)}</span><br>`
+        + (ok ? `<b class="ok">Coinciden: f preserva la combinación lineal.</b>` : `<b class="no">No coinciden: f no es lineal.</b> ${mode === "tras" ? "Ni siquiera manda 0 en 0." : "La cuadrícula se curva."}`); };
+    const lim = (x, y, m) => [clamp(x, -m, m), clamp(y, -m, m)];
+    dgD = Drag($("#dom", r), () => VD, [{ get: () => v1, set: (x, y) => { v1 = lim(x, y, 3); } }], upd, { free: 0 });
+    dgC = Drag($("#cod", r), () => VC, [{ get: () => f1, set: (x, y) => { if (mode === "lin") f1 = lim(x, y, 4); } }, { get: () => f2, set: (x, y) => { if (mode === "lin") f2 = lim(x, y, 4); } }], upd);
+    slider(r, "al", (x) => { al = x; upd(); }); slider(r, "be", (x) => { be = x; upd(); });
+    choice(r, "#modo .b", (k) => { mode = k; upd(); }); $("#modo .b", r).click();
+    return () => { dom.dispose(); cod.dispose(); };
+  } });
+
+S.push({ id: "dual", title: "Espacio dual", html: `
+<p class="kicker">6 · Espacio dual de un espacio vectorial</p>
+<h2>Un funcional es un <em>vector fila</em></h2>
+<div class="cols">
+  <div>
+    <p><span class="m"><i>V</i>* = { <i>f</i> | <i>f</i> : (<i>V</i>, +<sub><i>V</i></sub>, ·<sub><i>V</i></sub>) → (ℝ, +, ·) lineal }</span>. Para definir <i>f</i> basta su acción sobre una base <span class="m">{<i>v</i><sub>1</sub>, <i>v</i><sub>2</sub>}</span> (aquí la canónica): los escalares <span class="m"><i>f</i>(<i>v</i><sub>1</sub>), <i>f</i>(<i>v</i><sub>2</sub>)</span>.</p>
+    <div class="ctl"><label for="f1"><i>f</i>(<i>v</i><sub>1</sub>)</label><input id="f1" type="range" min="-2" max="2" step="0.1" value="1"><output for="f1"></output></div>
+    <div class="ctl"><label for="f2"><i>f</i>(<i>v</i><sub>2</sub>)</label><input id="f2" type="range" min="-2" max="2" step="0.1" value="0.5"><output for="f2"></output></div>
+    <div class="ctl"><label for="g1"><i>g</i>(<i>v</i><sub>1</sub>)</label><input id="g1" type="range" min="-2" max="2" step="0.1" value="-0.5"><output for="g1"></output></div>
+    <div class="ctl"><label for="g2"><i>g</i>(<i>v</i><sub>2</sub>)</label><input id="g2" type="range" min="-2" max="2" step="0.1" value="1"><output for="g2"></output></div>
+    <div class="btns" id="ver" role="group" aria-label="Funcional mostrado"><button class="b" data-k="f">ver f</button><button class="b" data-k="g">ver g</button><button class="b" data-k="fg">ver f + g</button></div>
+    <div class="box t" id="txt"></div>
+  </div>
+  <div class="panel"><canvas id="cv" aria-label="Valores del funcional en el plano y el vector v"></canvas>
+    <p class="small muted" style="margin:8px 0 0">El color es el valor del funcional (dorado positivo, turquesa negativo); las líneas son sus niveles enteros. Arrastra <i>v</i> o usa las flechas con el lienzo enfocado.</p></div>
+</div>`,
+  mount(r) {
+    const fr = [1, .5], gr = [-.5, 1]; let v = [1.5, 1], ver = "f", V0 = null, dg = null;
+    const row = () => (ver === "f" ? fr : ver === "g" ? gr : [fr[0] + gr[0], fr[1] + gr[1]]);
+    const cvs = Canvas($("#cv", r), (ctx, w, h) => {
+      const vw = eqView(w, h, [-3, 3], [-3, 3]); V0 = vw; const rw = row(), val = (x, y) => rw[0] * x + rw[1] * y, cs = 8;
+      for (let px = 0; px < w; px += cs) for (let py = 0; py < h; py += cs) {
+        const z = val(vw.ix(px + cs / 2), vw.iy(py + cs / 2)), a = Math.min(.42, Math.abs(z) / 8);
+        ctx.fillStyle = z >= 0 ? `rgba(245,201,111,${a})` : `rgba(83,213,205,${a})`; ctx.fillRect(px, py, cs, cs);
+      }
+      axes(ctx, vw, ["x₁", "x₂"]);
+      const n2 = rw[0] ** 2 + rw[1] ** 2;
+      if (n2 > 1e-9) { clip(ctx, vw); ctx.lineWidth = 1;
+        for (let c = -12; c <= 12; c++) { const p0 = [c * rw[0] / n2, c * rw[1] / n2], d = [-rw[1], rw[0]];
+          ctx.strokeStyle = c ? "#ffffff30" : "#ffffff70"; ctx.beginPath(); ctx.moveTo(vw.X(p0[0] - 20 * d[0]), vw.Y(p0[1] - 20 * d[1])); ctx.lineTo(vw.X(p0[0] + 20 * d[0]), vw.Y(p0[1] + 20 * d[1])); ctx.stroke(); }
+        ctx.restore(); }
+      vec(ctx, vw, [0, 0], [1, 0], "#ffffff99", 2, "v₁"); vec(ctx, vw, [0, 0], [0, 1], "#ffffff99", 2, "v₂");
+      vec(ctx, vw, [0, 0], v, C.ink, 3, "v");
+      if (dg && dg.sel === 0) ring(ctx, vw, v[0], v[1], C.gold, 11);
+    });
+    const upd = () => { cvs.draw(); const rw = row(), nm = ver === "f" ? "<i>f</i>" : ver === "g" ? "<i>g</i>" : "(<i>f</i> + <i>g</i>)";
+      $("#txt", r).innerHTML = `<span class="m"><i>v</i> = ${fmt(v[0])} <i>v</i><sub>1</sub> + ${fmt(v[1])} <i>v</i><sub>2</sub></span>, y por linealidad<div class="eq">${nm}(<i>v</i>) = [ ${fmt(rw[0], 1)} &nbsp; ${fmt(rw[1], 1)} ] · [ ${fmt(v[0])} ; ${fmt(v[1])} ]<sup>T</sup> = <b style="color:var(--puras)">${fmt(rw[0] * v[0] + rw[1] * v[1])}</b></div>`
+        + (ver === "fg" ? `Los funcionales se suman punto a punto, y su fila es la suma de las filas: <span class="m">[${fmt(fr[0], 1)} ${fmt(fr[1], 1)}] + [${fmt(gr[0], 1)} ${fmt(gr[1], 1)}]</span>. Por eso <i>V</i>* también es un espacio vectorial: las funciones son vectores.`
+          : `La fila no depende de <i>v</i>: está fija, sea cual sea el vector al que se aplique.`); };
+    dg = Drag($("#cv", r), () => V0, [{ get: () => v, set: (x, y) => { v = [clamp(x, -3, 3), clamp(y, -3, 3)]; } }], upd, { free: 0 });
+    ["f1", "f2"].forEach((id, i) => slider(r, id, (x) => { fr[i] = x; upd(); })); ["g1", "g2"].forEach((id, i) => slider(r, id, (x) => { gr[i] = x; upd(); }));
+    choice(r, "#ver .b", (k) => { ver = k; upd(); }); $("#ver .b", r).click();
+    return () => cvs.dispose();
+  } });
+
+S.push({ id: "diferenciable", title: "Diferenciabilidad en ℝ", html: `
+<p class="kicker">7 · Diferenciabilidad en ℝ</p>
+<h2>La diferencial: la mejor aproximación <em>lineal</em></h2>
+<div class="cols">
+  <div>
+    <p><span class="m"><i>f</i> : ℝ ⊇ <i>U</i> → ℝ</span>, con <i>U</i> abierto y <span class="m"><i>x</i> ∈ <i>U</i></span>, es <b>diferenciable en <i>x</i></b> si existe una función lineal en <i>h</i>, <span class="m"><i>A</i>(<i>x</i>, <i>h</i>)</span>, tal que</p>
+    <div class="eq"><i>f</i>(<i>x</i> + <i>h</i>) − <i>f</i>(<i>x</i>) = <i>A</i>(<i>x</i>, <i>h</i>) + <i>o</i>(<i>h</i>), &nbsp; lím<sub><i>h</i>→0</sub> <i>o</i>(<i>h</i>)/<i>h</i> = 0.</div>
+    <p class="small">Una función lineal de ℝ en ℝ es <span class="m"><i>h</i> ↦ <i>m</i> · <i>h</i></span>. Escoge <i>m</i> y mira si el resto <i>o</i>(<i>h</i>) es infinitesimal.</p>
+    <div class="btns" id="fn" role="group" aria-label="Función"><button class="b" data-k="x2"><span class="m"><i>x</i>²</span></button><button class="b" data-k="sin"><span class="m">sin <i>x</i></span></button><button class="b" data-k="exp"><span class="m"><i>e</i><sup><i>x</i></sup></span></button><button class="b" data-k="x3"><span class="m"><i>x</i>³</span></button><button class="b" data-k="abs"><span class="m">|<i>x</i>|</span></button></div>
+    <div class="ctl"><label for="x"><i>x</i></label><input id="x" type="range" min="-1.5" max="1.5" step="0.05" value="1"><output for="x"></output></div>
+    <div class="ctl"><label for="h"><i>h</i></label><input id="h" type="range" min="-1" max="1" step="0.01" value="0.6"><output for="h"></output></div>
+    <div class="ctl"><label for="m"><i>m</i></label><input id="m" type="range" min="-4" max="4" step="0.01" value="1"><output for="m"></output></div>
+    <div class="btns"><button class="b" id="best">Mejor m</button><button class="b" id="shrink">▶ h → 0</button></div>
+  </div>
+  <div>
+    <div class="panel"><canvas id="cv" class="short" aria-label="Gráfica de f con la aproximación lineal"></canvas>
+      <p class="small" style="margin:8px 0 0"><span style="color:var(--puras)">━ <i>A</i>(<i>x</i>, <i>h</i>) = <i>m</i><i>h</i></span> &nbsp; <span style="color:var(--bad)">━ <i>o</i>(<i>h</i>)</span> &nbsp; <span style="color:var(--muted)">━ <i>f</i></span></p></div>
+    <div class="panel" style="margin-top:12px"><canvas id="cv2" class="short" aria-label="El cociente o(h)/h como función de h"></canvas>
+      <div class="box" id="txt"></div></div>
+  </div>
+</div>`,
+  mount(r) {
+    const FN = { x2: { f: (x) => x * x, yr: [-1, 4] }, sin: { f: Math.sin, yr: [-2, 2] }, exp: { f: Math.exp, yr: [-.5, 6] }, x3: { f: (x) => x ** 3, yr: [-4, 4] }, abs: { f: Math.abs, yr: [-.8, 2.8] } };
+    let k = "x2", x = 1, h = .6, m = 1;
+    const der = () => { const f = FN[k].f, e = 1e-6, L = (f(x) - f(x - e)) / e, R = (f(x + e) - f(x)) / e; return [Math.abs(L - R) < 1e-3 ? (L + R) / 2 : null, L, R]; };
+    const q = (t) => (FN[k].f(x + t) - FN[k].f(x)) / t - m;
+    const c1 = Canvas($("#cv", r), (ctx, w, hh) => {
+      const { f, yr } = FN[k], v = view(w, hh, [-2.6, 2.6], yr); axes(ctx, v);
+      plotFn(ctx, v, f, "#a6bdcb", 2); plotFn(ctx, v, (t) => f(x) + m * (t - x), "#f5c96f88", 1.5, [6, 4]);
+      const y0 = f(x), y1 = f(x + h), ya = y0 + m * h; clip(ctx, v);
+      ctx.strokeStyle = "#ffffff55"; ctx.setLineDash([3, 4]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(v.X(x), v.Y(y0)); ctx.lineTo(v.X(x + h), v.Y(y0)); ctx.stroke(); ctx.setLineDash([]);
+      ctx.lineWidth = 4; ctx.strokeStyle = C.gold; ctx.beginPath(); ctx.moveTo(v.X(x + h), v.Y(y0)); ctx.lineTo(v.X(x + h), v.Y(ya)); ctx.stroke();
+      ctx.strokeStyle = C.bad; ctx.beginPath(); ctx.moveTo(v.X(x + h) + 5, v.Y(ya)); ctx.lineTo(v.X(x + h) + 5, v.Y(y1)); ctx.stroke(); ctx.restore();
+      dot(ctx, v, x, y0, C.ink, 5); dot(ctx, v, x + h, y1, C.bad, 5);
+      ctx.fillStyle = C.muted; ctx.font = "italic 13px Georgia,serif"; ctx.textAlign = "center"; ctx.fillText("h", v.X(x + h / 2), v.Y(y0) + (y1 >= y0 ? 16 : -8));
+    });
+    const c2 = Canvas($("#cv2", r), (ctx, w, hh) => {
+      const v = view(w, hh, [-1.1, 1.1], [-3, 3]); axes(ctx, v, ["h", "o(h)/h"]);
+      plotFn(ctx, v, q, C.bad, 2.5, [], -1.1, -1e-4); plotFn(ctx, v, q, C.bad, 2.5, [], 1e-4, 1.1);
+      const [, L, R] = der(); ring(ctx, v, 0, 0, C.gold, 7, 2);
+      if (Math.abs(R - m) < 3) hole(ctx, v, 0, R - m, C.bad, 4); if (Math.abs(L - m) < 3) hole(ctx, v, 0, L - m, C.bad, 4);
+      if (Math.abs(h) > 1e-9 && Math.abs(q(h)) < 3) dot(ctx, v, h, q(h), C.ink, 5);
+    });
+    const say = () => { const [d, L, R] = der(), f = FN[k].f, dl = f(x + h) - f(x), o = dl - m * h;
+      let t = `<span class="m">${fmt(dl, 3)} = ${fmt(m * h, 3)} ${o < 0 ? "−" : "+"} ${fmt(Math.abs(o), 3)}</span> &nbsp; (Δ<i>f</i> = <i>A</i> + <i>o</i>)${Math.abs(h) > 1e-9 ? `, &nbsp;<span class="m"><i>o</i>(<i>h</i>)/<i>h</i> = ${fmt(o / h, 3)}</span>` : ""}.<br>`;
+      if (d === null) t += `<b class="no">Ninguna m sirve.</b> Cuando <i>h</i> → 0, <i>o</i>(<i>h</i>)/<i>h</i> tiende a ${fmt(R - m)} por la derecha y a ${fmt(L - m)} por la izquierda: no se pueden anular ambos. <i>f</i> no es diferenciable en <i>x</i> = ${fmt(x)}.`;
+      else if (Math.abs(d - m) < .01) t += `<b class="ok">o(h)/h → 0.</b> <i>f</i> es diferenciable en <i>x</i> y <span class="m"><i>A</i>(<i>x</i>, <i>h</i>) = ${fmt(m)} · <i>h</i></span>. Esa <i>m</i> es la derivada <span class="m"><i>f</i>′(<i>x</i>)</span>; cualquier otra deja un resto que no es infinitesimal.`;
+      else t += `<b class="no">o(h)/h → ${fmt(d - m)} ≠ 0.</b> Con esta <i>m</i> el resto no es infinitesimal: acerca la recta dorada hasta que el círculo dorado y los del cociente coincidan.`;
+      $("#txt", r).innerHTML = t; $("#best", r).disabled = d === null; };
+    const upd = () => { c1.draw(); c2.draw(); say(); };
+    const sx = slider(r, "x", (z) => { x = Math.round(z * 100) / 100; upd(); }), sh = slider(r, "h", (z) => { h = z; upd(); }), sm = slider(r, "m", (z) => { m = z; upd(); });
+    $("#best", r).addEventListener("click", () => { const [d] = der(); if (d !== null) setR(sm, Math.round(d * 100) / 100); });
+    const loop = Loop((dt) => { const s = h < 0 ? -1 : 1, a = Math.max(.01, Math.abs(h) * Math.exp(-dt * 1.4)); setR(sh, s * a); if (a <= .01) { $("#shrink", r).textContent = "▶ h → 0"; return false; } });
+    $("#shrink", r).addEventListener("click", () => {
+      if (loop.on) { loop.stop(); $("#shrink", r).textContent = "▶ h → 0"; return; }
+      if (RM) { setR(sh, h < 0 ? -.01 : .01); return; }
+      if (Math.abs(h) <= .011) setR(sh, h < 0 ? -.8 : .8);
+      loop.start(); $("#shrink", r).textContent = "❚❚ Pausa";
+    });
+    choice(r, "#fn .b", (key) => { k = key; if (k === "abs") setR(sx, 0); upd(); }); $("#fn .b", r).click();
+    return () => { loop.stop(); c1.dispose(); c2.dispose(); };
+  } });
+
+S.push({ id: "diferencial-general", title: "Diferenciabilidad general", html: `
+<p class="kicker">8 · Diferenciabilidad general de una función</p>
+<h2>La misma definición sobre cualquier <em>campo</em></h2>
+<div class="cols">
+  <div>
+    <p><span class="m"><i>f</i> : (𝕂, +, ·) → (𝕂, +, ·)</span> es diferenciable en <span class="m"><i>x</i> ∈ <i>U</i> ⊂ 𝕂</span> si <span class="m"><i>f</i>(<i>x</i> + <i>h</i>) − <i>f</i>(<i>x</i>) = <i>A</i>(<i>x</i>, <i>h</i>) + <i>o</i>(<i>h</i>)</span>, con <i>A</i> lineal en <i>h</i> y <i>o</i>(<i>h</i>) infinitesimal. Lo que cambia es qué significa «lineal»: lineal <b>sobre 𝕂</b>.</p>
+    <p class="small">Ejemplo con <span class="m">𝕂 = ℂ</span>: una función lineal de ℂ en ℂ es <span class="m"><i>h</i> ↦ <i>c</i> · <i>h</i></span>, y multiplicar por un complejo <i>c</i> <b>rota y escala</b>. Miramos un círculo pequeño de radio <i>r</i> alrededor de <i>z</i><sub>0</sub> y su imagen, ampliados por 1/<i>r</i>.</p>
+    <div class="btns" id="fn" role="group" aria-label="Función"><button class="b" data-k="z2"><span class="m"><i>z</i>²</span></button><button class="b" data-k="z3"><span class="m"><i>z</i>³</span></button><button class="b" data-k="exp"><span class="m"><i>e</i><sup><i>z</i></sup></span></button><button class="b" data-k="conj"><span class="m"><math class="acc"><mover accent="true"><mi>z</mi><mo>¯</mo></mover></math> (conjugado)</span></button></div>
+    <div class="ctl"><label for="re">Re <i>z</i><sub>0</sub></label><input id="re" type="range" min="-1.5" max="1.5" step="0.05" value="0.6"><output for="re"></output></div>
+    <div class="ctl"><label for="im">Im <i>z</i><sub>0</sub></label><input id="im" type="range" min="-1.5" max="1.5" step="0.05" value="0.4"><output for="im"></output></div>
+    <div class="ctl"><label for="s"><i>r</i></label><input id="s" type="range" min="-2" max="0.2" step="0.02" value="0" data-fmt="pow10"><output for="s"></output></div>
+    <div class="btns"><button class="b" id="shrink">▶ r → 0</button></div>
+  </div>
+  <div class="panel"><canvas id="cv" aria-label="Imagen ampliada de un círculo pequeño alrededor de z0"></canvas>
+    <p class="small" style="margin:8px 0 0"><span style="color:var(--muted)">┈ <i>h</i>/<i>r</i></span> &nbsp; <span style="color:var(--biomat)">━ (<i>f</i>(<i>z</i><sub>0</sub> + <i>h</i>) − <i>f</i>(<i>z</i><sub>0</sub>))/<i>r</i></span> &nbsp; <span style="color:var(--puras)">┅ <i>c</i> · <i>h</i>/<i>r</i></span> &nbsp; ● <i>h</i> = <i>r</i> &nbsp; <span style="color:var(--violet)">●</span> <i>h</i> = <i>ir</i></p>
+    <div class="box" id="txt"></div></div>
+</div>`,
+  mount(r) {
+    const cm = (a, b) => [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]], ce = (z) => [Math.exp(z[0]) * Math.cos(z[1]), Math.exp(z[0]) * Math.sin(z[1])];
+    const FZ = { z2: [(z) => cm(z, z), (z) => [2 * z[0], 2 * z[1]]], z3: [(z) => cm(z, cm(z, z)), (z) => { const q = cm(z, z); return [3 * q[0], 3 * q[1]]; }], exp: [ce, ce], conj: [(z) => [z[0], -z[1]], null] };
+    let k = "z2", z0 = [.6, .4], s = 0;
+    const Q = (t) => { const rr = 10 ** s, f = FZ[k][0], a = f([z0[0] + rr * Math.cos(t), z0[1] + rr * Math.sin(t)]), b = f(z0); return [(a[0] - b[0]) / rr, (a[1] - b[1]) / rr]; };
+    const cOf = () => (FZ[k][1] ? FZ[k][1](z0) : null);
+    const cvs = Canvas($("#cv", r), (ctx, w, h) => {
+      const c = cOf(), N = 180, pts = [], cps = []; let R = 1.6;
+      for (let i = 0; i <= N; i++) { const t = 2 * Math.PI * i / N, p = Q(t); pts.push(p); R = Math.max(R, Math.hypot(...p) * 1.15); if (c) cps.push(cm(c, [Math.cos(t), Math.sin(t)])); }
+      R = Math.min(R, 14); const v = eqView(w, h, [-R, R], [-R, R]); axes(ctx, v, ["Re", "Im"]);
+      polyline(ctx, v, Array.from({ length: N + 1 }, (_, i) => [Math.cos(2 * Math.PI * i / N), Math.sin(2 * Math.PI * i / N)]), "#a6bdcb88", 1.5, [3, 4]);
+      if (c) polyline(ctx, v, cps, C.gold, 2, [7, 5]);
+      polyline(ctx, v, pts, C.teal, 2.5);
+      const tip = (p, q, col) => arrowPx(ctx, v.X(p[0]), v.Y(p[1]), v.X(q[0]), v.Y(q[1]), col, 2.5);
+      tip(pts[20], pts[24], C.teal); tip([Math.cos(.7), Math.sin(.7)], [Math.cos(.84), Math.sin(.84)], "#a6bdcb");
+      dot(ctx, v, 1, 0, C.ink, 4); dot(ctx, v, 0, 1, C.violet, 4);
+      if (c) { const ci = cm(c, [0, 1]); ring(ctx, v, c[0], c[1], C.gold, 8); ring(ctx, v, ci[0], ci[1], C.gold, 8); }
+      dot(ctx, v, pts[0][0], pts[0][1], C.ink, 6); dot(ctx, v, pts[N / 4][0], pts[N / 4][1], C.violet, 6);
+    });
+    const say = () => { const c = cOf(), rr = 10 ** s;
+      if (c) { let e = 0; for (let i = 0; i < 360; i++) { const t = 2 * Math.PI * i / 360, p = Q(t), q = cm(c, [Math.cos(t), Math.sin(t)]); e = Math.max(e, Math.hypot(p[0] - q[0], p[1] - q[1])); }
+        $("#txt", r).innerHTML = `Con <span class="m"><i>c</i> = ${fmt(c[0])} ${c[1] < 0 ? "−" : "+"} ${fmt(Math.abs(c[1]))}<i>i</i></span>: <span class="m">máx<sub>|<i>h</i>| = <i>r</i></sub> |<i>o</i>(<i>h</i>)/<i>h</i>| = ${fmt(e, 4)}</span> con <i>r</i> = ${fmt(rr, 3)}. Encoge <i>r</i>: el error tiende a 0 y la imagen se vuelve el círculo dorado, rotado y escalado. <b class="ok">Diferenciable sobre ℂ</b>, con <span class="m"><i>A</i>(<i>z</i><sub>0</sub>, <i>h</i>) = <i>c</i> · <i>h</i></span>.`; }
+      else $("#txt", r).innerHTML = `La imagen recorre el círculo <b>al revés</b>: el punto violeta queda a −90° del blanco, y eso no cambia al encoger <i>r</i>. Multiplicar por cualquier <i>c</i> conserva el sentido de giro, así que ninguna <span class="m"><i>h</i> ↦ <i>c</i> · <i>h</i></span> sirve: aquí <span class="m"><i>o</i>(<i>h</i>)/<i>h</i> = <i>h̄</i>/<i>h</i> − <i>c</i></span> y su máximo sobre el círculo es <span class="m">1 + |<i>c</i>| ≥ 1</span> para todo <i>r</i>. <b class="no">No es diferenciable sobre ℂ</b> (sobre ℝ², <i>h</i> ↦ <i>h̄</i> sí es lineal: una reflexión).`;
+    };
+    const upd = () => { cvs.draw(); say(); };
+    slider(r, "re", (x) => { z0[0] = x; upd(); }); slider(r, "im", (x) => { z0[1] = x; upd(); }); const ss = slider(r, "s", (x) => { s = x; upd(); });
+    const loop = Loop((dt) => { setR(ss, Math.max(-2, s - dt * .9)); if (s <= -2) { $("#shrink", r).textContent = "▶ r → 0"; return false; } });
+    $("#shrink", r).addEventListener("click", () => {
+      if (loop.on) { loop.stop(); $("#shrink", r).textContent = "▶ r → 0"; return; }
+      if (RM) { setR(ss, -2); return; }
+      if (s <= -1.99) setR(ss, 0);
+      loop.start(); $("#shrink", r).textContent = "❚❚ Pausa";
+    });
+    choice(r, "#fn .b", (key) => { k = key; upd(); }); $("#fn .b", r).click();
+    return () => { loop.stop(); cvs.dispose(); };
+  } });
+
+S.push({ id: "sintesis", title: "Lo que te llevas", html: `
+<p class="kicker">Síntesis</p>
+<h2>Lo que te <em>llevas</em></h2>
+<div class="cols even">
+  <div class="panel"><ul class="clean">
+    <li>Una <b>función</b> es un subconjunto de <i>A</i> × <i>B</i> con exactamente una pareja por cada elemento del dominio.</li>
+    <li>Una <b>topología</b> dice qué conjuntos son abiertos; una función es <b>continua</b> si la preimagen de todo abierto es abierta, y un <b>homeomorfismo</b> es una biyección continua con inversa continua.</li>
+    <li>El <b>límite</b> es el conjunto de los <i>b</i> tales que todo entorno de <i>b</i> contiene la imagen de algún entorno perforado de <i>a</i>.</li>
+  </ul></div>
+  <div class="panel"><ul class="clean">
+    <li>Un <b>campo</b> es un conjunto con suma y producto que cumplen cerradura, asociatividad, conmutatividad, identidades, inversos y distributividad.</li>
+    <li>En un <b>espacio vectorial</b> una <b>base</b> da coordenadas únicas, y una <b>función lineal</b> queda determinada por su acción sobre la base: un funcional del <b>dual</b> es un vector fila.</li>
+    <li>Ser <b>diferenciable</b> es admitir una aproximación lineal <i>A</i>(<i>x</i>, <i>h</i>) con un resto <i>o</i>(<i>h</i>) infinitesimal; «lineal» depende del campo.</li>
+  </ul></div>
+</div>
+<p class="muted small" style="margin-top:22px">Basado en las notas del Nivel 1 de Andrés Restrepo Botero y Felipe Arcila Palacio, Semilleros de matemáticas puras y de matemáticas, Universidad EAFIT.</p>` });
+
+/* ===================== motor de escenas ===================== */
+const stage = $("#stage"), prog = $("#prog"), lbl = $("#lbl");
+prog.max = S.length - 1;
+let cur = -1, dispose = null;
+function go(i, push = true) {
+  i = clamp(i | 0, 0, S.length - 1);
+  if (i === cur) return;
+  if (dispose) { try { dispose(); } catch (e) { console.error(e); } dispose = null; }
+  cur = i; const sc = S[i];
+  stage.innerHTML = sc.html;
+  dispose = sc.mount ? sc.mount(stage) || null : null;
+  prog.value = i; lbl.textContent = `${i + 1} / ${S.length} · ${sc.title}`;
+  $("#prev").disabled = i === 0; $("#next").disabled = i === S.length - 1;
+  document.title = i === 0 ? `${sc.title} · Semillero de Matemáticas` : `${sc.title} · Nivel 1`;
+  if (push && location.hash.slice(1) !== sc.id) history.replaceState(null, "", "#" + sc.id);
+  window.scrollTo(0, 0);
+}
+function fromHash() { const h = decodeURIComponent(location.hash.slice(1)); const n = S.findIndex((s) => s.id === h); return n >= 0 ? n : /^\d+$/.test(h) ? +h - 1 : 0; }
+$("#prev").addEventListener("click", () => go(cur - 1));
+$("#next").addEventListener("click", () => go(cur + 1));
+prog.addEventListener("input", () => go(+prog.value));
+$("#full").addEventListener("click", toggleFull);
+function toggleFull() { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.().catch(() => {}); }
+window.addEventListener("hashchange", () => go(fromHash(), false));
+window.addEventListener("keydown", (e) => {
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (e.defaultPrevented || tag === "input" || tag === "textarea" || tag === "select" || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (["ArrowRight", "PageDown"].includes(e.key) || (e.key === " " && tag !== "button")) { e.preventDefault(); go(cur + 1); }
+  else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+  else if (e.key === "Home") { e.preventDefault(); go(0); }
+  else if (e.key === "End") { e.preventDefault(); go(S.length - 1); }
+  else if (e.key === "f" || e.key === "F") toggleFull();
+});
+go(fromHash());
+</script>
+</body>
+</html>

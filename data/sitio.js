@@ -83,6 +83,13 @@ window.SEMILLERO = {
         "Construye la estructura y luego ponla a prueba: un laboratorio paso a paso, con estética de Manim, para graficar una función discreta y comprobar su continuidad en moldes.",
       enlace: "charlas/espacios-moldeados/funcion-discreta.html",
     },
+    {
+      titulo: "Nivel 1: de la función a la diferencial",
+      linea: "puras",
+      descripcion:
+        "El Nivel 1, interactivo: funciones, topología y continuidad, límite, campos, espacios vectoriales y bases, funciones lineales, el espacio dual y la diferencial como la mejor aproximación lineal.",
+      enlace: "cursos/nivel-1-diferencial/presentacion.html",
+    },
   ],
 
   // Curso de la toolbox GSUA-CSB (las páginas viven en el sitio de la toolbox).
@@ -99,6 +106,8 @@ window.SEMILLERO = {
       { n: 5, titulo: "Estimación e identificabilidad", tema: "Estimación multicomienzo, bootstrap e identificabilidad práctica" },
     ],
     enlaces: [
+      { texto: "Hands-on de epidemiología con datos reales (MATLAB y Python)", url: "cursos/Modelado epidemiológico/hands_on_epi/hands_on_epi.zip" },
+      { texto: "Instrucciones del hands-on", url: "https://github.com/drojasd/semillero-matematicas-eafit/blob/main/cursos/Modelado%20epidemiol%C3%B3gico/hands_on_epi/README.md" },
       { texto: "Guía de usuario", url: "https://drojasd.github.io/GSUA-CSB/gsua_userguide.html" },
       { texto: "Descargar la toolbox (.mltbx)", url: "https://github.com/drojasd/GSUA-CSB/releases/latest" },
       { texto: "Repositorio GSUA-CSB", url: "https://github.com/drojasd/GSUA-CSB" },

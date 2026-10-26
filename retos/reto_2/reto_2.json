@@ -2,6 +2,7 @@
   "reto": 2,
   "titulo": "SIR discreto con pérdida de inmunidad (HandsOn SIR)",
   "modelo": "SIRSemilleroSV",
+  "modelo_version": "exponencial-2026-10-25",
   "dominio": [0, 100],
   "salidas": ["S", "I", "R"],
   "nivel": 0.95,
@@ -82,6 +83,6 @@
     }
   ],
   "datos": "reto_2_datos.csv",
-  "sha256_datos": "785faba8a6266dd5d8b2a8f0e681bb672464028710c1f83000b216620c20232e",
-  "sha256_verdad": "52a744b2d6838082360ccf8d49105ff59abe8ececf70cad3f34ebf20c34f2934"
+  "sha256_datos": "c87daed77da0951d0a13525ee7a3fc2f29500612c06cae7856861f427a6f23a8",
+  "sha256_verdad": "a08e80c5516c8e2f0108f8eb641fe9a324264d5b0555b8f2ae3fa626d7cdd89e"
 }

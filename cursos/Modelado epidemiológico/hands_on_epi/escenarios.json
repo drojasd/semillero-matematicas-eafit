@@ -1,0 +1,208 @@
+[
+  {
+    "id": "covid_colombia_ola1",
+    "nombre": "COVID-19 en Colombia, primera ola (activos diarios)",
+    "transmision": "humano-humano",
+    "datos": "covid19_colombia_jhu.csv",
+    "columna": "activos",
+    "filtro": {
+      "columna": "fecha",
+      "desde": "2020-03-06",
+      "hasta": "2020-11-30"
+    },
+    "salidas": [
+      "activos",
+      "activos_detectados"
+    ],
+    "opt": {
+      "N": 50372424
+    },
+    "rangos": {},
+    "modelos_sugeridos": [
+      "sir_continuo",
+      "sir_discreto",
+      "sir_discreto_G1",
+      "sir_cuarentena_cl"
+    ],
+    "notas": "Población de Colombia según Cataño-López et al. (2023). Activos = confirmados − muertes − recuperados (JHU). En sir_cuarentena_cl los activos reportados se comparan con los detectados Ij."
+  },
+  {
+    "id": "dengue_bello_2009_2011",
+    "nombre": "Dengue en Bello, SE 49/2009 – SE 7/2011 (casos semanales)",
+    "transmision": "vectorial",
+    "datos": "dengue_bello_lizarralde.csv",
+    "columna": "casos",
+    "filtro": {
+      "columna": "t",
+      "desde": 0,
+      "hasta": 64
+    },
+    "salidas": [
+      "casos_semanales"
+    ],
+    "opt": {},
+    "rangos": {},
+    "modelos_sugeridos": [
+      "dengue_lizarralde",
+      "dengue_cl_discreto"
+    ],
+    "notas": "Ventana de Lizarralde-Bejarano et al. (2020). Los rangos del catálogo ya son los de Bello."
+  },
+  {
+    "id": "dengue_bello_acumulado",
+    "nombre": "Dengue en Bello, SE 49/2009 – SE 7/2011 (casos acumulados, como en el paper)",
+    "transmision": "vectorial",
+    "datos": "dengue_bello_lizarralde.csv",
+    "columna": "casos",
+    "acumular": true,
+    "filtro": {
+      "columna": "t",
+      "desde": 0,
+      "hasta": 64
+    },
+    "salidas": [
+      "casos_acumulados"
+    ],
+    "opt": {},
+    "rangos": {},
+    "modelos_sugeridos": [
+      "dengue_lizarralde",
+      "dengue_cl_discreto"
+    ],
+    "notas": "Lizarralde-Bejarano et al. (2020) ajustan los casos acumulados. Compara con el ajuste de casos semanales: ¿cambia la identificabilidad?"
+  },
+  {
+    "id": "dengue_medellin_2010",
+    "nombre": "Dengue en Medellín, 2010 (SE 1–52, SIVIGILA)",
+    "transmision": "vectorial",
+    "datos": "dengue_medellin_sivigila.csv",
+    "columna": "casos",
+    "filtro": {
+      "columna": "anio",
+      "desde": 2010,
+      "hasta": 2010
+    },
+    "salidas": [
+      "casos_semanales"
+    ],
+    "opt": {},
+    "rangos": {
+      "dengue_lizarralde": {
+        "Lambda": [
+          9600,
+          218000
+        ],
+        "Ms0": [
+          0,
+          6100000
+        ],
+        "Hs0": [
+          1250000,
+          1650000
+        ],
+        "He0": [
+          90,
+          370
+        ],
+        "Hi0": [
+          30,
+          125
+        ],
+        "Hr0": [
+          415000,
+          810000
+        ]
+      },
+      "dengue_cl_discreto": {
+        "Hs0": [
+          2311185,
+          2311185
+        ],
+        "Hi0": [
+          30,
+          30
+        ],
+        "Hr0": [
+          0,
+          0
+        ],
+        "C": [
+          5000,
+          1800000
+        ],
+        "Ms0": [
+          25000,
+          2500000
+        ]
+      }
+    },
+    "notas": "Medellín tiene unas 5,1 veces la población de Bello (2 311 185 en 2010). Rangos de humanos y mosquitos escalados por población desde los de Bello: es una ELECCIÓN DEL CURSO, no un valor publicado. Hi0 = casos de la SE 1 de 2010.",
+    "modelos_sugeridos": [
+      "dengue_lizarralde",
+      "dengue_cl_discreto"
+    ]
+  },
+  {
+    "id": "dengue_itagui_2010",
+    "nombre": "Dengue en Itagüí, brote de 2010 (70 semanas)",
+    "transmision": "vectorial",
+    "datos": "dengue_itagui_2010.csv",
+    "columna": "casos",
+    "filtro": {
+      "columna": "t",
+      "desde": 0,
+      "hasta": 69
+    },
+    "salidas": [
+      "casos_semanales"
+    ],
+    "opt": {},
+    "rangos": {
+      "dengue_lizarralde": {
+        "Lambda": [
+          1170,
+          26500
+        ],
+        "Ms0": [
+          0,
+          745000
+        ],
+        "Hs0": [
+          152000,
+          200000
+        ],
+        "He0": [
+          11,
+          45
+        ],
+        "Hi0": [
+          4,
+          15
+        ],
+        "Hr0": [
+          50600,
+          98600
+        ]
+      },
+      "dengue_cl_discreto": {
+        "Hs0": [
+          280000,
+          280000
+        ],
+        "Hi0": [
+          17,
+          17
+        ],
+        "Hr0": [
+          0,
+          0
+        ]
+      }
+    },
+    "notas": "Población usada por los autores: 280 000. Rangos de Lizarralde escalados desde Bello por población (elección del curso); el repositorio del CSB usa otros rangos para Itagüí (ver catalogo_vectores.json, notas).",
+    "modelos_sugeridos": [
+      "dengue_lizarralde",
+      "dengue_cl_discreto"
+    ]
+  }
+]

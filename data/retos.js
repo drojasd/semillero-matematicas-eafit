@@ -7,7 +7,7 @@ window.SEMILLERO_RETOS = [
     "modelo": "SIRSemilleroSV",
     "casos": 6,
     "parametros": ["S(0)", "I(0)", "R(0)", "\\beta", "\\gamma", "\\alpha"],
-    "sha256_verdad": "52a744b2d6838082360ccf8d49105ff59abe8ececf70cad3f34ebf20c34f2934",
+    "sha256_verdad": "a08e80c5516c8e2f0108f8eb641fe9a324264d5b0555b8f2ae3fa626d7cdd89e",
     "posiciones": [],
     "kit": "retos/reto_2/kit_reto_2.zip",
     "instrucciones": "https://github.com/drojasd/semillero-matematicas-eafit/blob/main/retos/reto_2/README.md"

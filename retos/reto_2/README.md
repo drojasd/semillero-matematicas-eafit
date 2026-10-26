@@ -3,14 +3,21 @@
 Es el [hands-on SIR](../../cursos/Modelado%20epidemiológico/HandsOn_SIR/README.md) convertido
 en competencia. Reglas generales y calificación: [`../README.md`](../README.md).
 
+> **Relanzado el 25 de octubre de 2026** con la probabilidad de contagio exponencial
+> (`modelo_version` = `exponencial-2026-10-25` en `reto_2.json`). Los datos, el modelo y el sello
+> SHA-256 cambiaron: las entregas hechas con la versión anterior no son válidas y hay que
+> rehacerlas con este kit.
+
 ## El modelo
 
 `SIRSemilleroSV` (en `../modelos/`, también en Python: `sir_semillero_sv.py`). Población
-`N = S + I + R` constante:
+`N = S + I + R` constante. En cada paso, cada susceptible se contagia con probabilidad
+`P(k) = 1 − exp(−β·I(k)/N)`:
 
 ```
-S(k+1) = S(k)·(1 − β·I(k)/N) + α·R(k)
-I(k+1) = S(k)·β·I(k)/N + (1−γ)·I(k)
+P(k)   = 1 − exp(−β·I(k)/N)
+S(k+1) = S(k)·(1 − P(k)) + α·R(k)
+I(k+1) = S(k)·P(k) + (1−γ)·I(k)
 R(k+1) = (1−α)·R(k) + γ·I(k)
 ```
 

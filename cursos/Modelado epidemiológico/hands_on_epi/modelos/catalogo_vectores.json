@@ -1,0 +1,83 @@
+[
+  {
+    "id": "dengue_lizarralde",
+    "nombre": "Dengue vector-huésped SEI-SEIR con reclutamiento constante (Lizarralde-Bejarano et al. 2020, modelo 3)",
+    "tipo": "continuo",
+    "unidad_tiempo": "semana",
+    "transmision": "vector-huésped",
+    "parametros": [
+      {"id": "Lambda", "nombre": "Λ", "descripcion": "Tasa de reclutamiento de mosquitos hembra adultos susceptibles", "rango": [1881, 42694], "unidad": "mosquitos/semana", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 1 (p. 7), valores por semana, modelo (3)"},
+      {"id": "mu_m", "nombre": "μm", "descripcion": "Tasa de mortalidad de los mosquitos adultos", "rango": [0.16, 0.20], "unidad": "1/semana", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 1 (p. 7), valores por semana"},
+      {"id": "beta_h", "nombre": "βh", "descripcion": "Tasa de transmisión de mosquito a humano", "rango": [0, 4], "unidad": "1/semana", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 1 (p. 7), valores por semana"},
+      {"id": "beta_m", "nombre": "βm", "descripcion": "Tasa de transmisión de humano a mosquito", "rango": [0, 4], "unidad": "1/semana", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 1 (p. 7), valores por semana"},
+      {"id": "theta_m", "nombre": "θm", "descripcion": "Tasa de paso de mosquito expuesto a infeccioso (1/θm = periodo de incubación extrínseco)", "rango": [0.58, 0.88], "unidad": "1/semana", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 1 (p. 7), valores por semana"},
+      {"id": "theta_h", "nombre": "θh", "descripcion": "Tasa de paso de humano expuesto a infeccioso (1/θh = periodo de incubación intrínseco)", "rango": [0.7, 1.75], "unidad": "1/semana", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 1 (p. 7), valores por semana"},
+      {"id": "gamma_h", "nombre": "γh", "descripcion": "Tasa de recuperación de los humanos", "rango": [0.5, 1.75], "unidad": "1/semana", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 1 (p. 7), valores por semana"}
+    ],
+    "condiciones_iniciales": [
+      {"id": "Ms0", "nombre": "Ms(0)", "descripcion": "Mosquitos susceptibles iniciales", "rango": [0, 1200000], "unidad": "mosquitos", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 2 (p. 8)"},
+      {"id": "Me0", "nombre": "Me(0)", "descripcion": "Mosquitos expuestos iniciales", "rango": [0, 100], "unidad": "mosquitos", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 2 (p. 8)"},
+      {"id": "Mi0", "nombre": "Mi(0)", "descripcion": "Mosquitos infecciosos iniciales", "rango": [0, 100], "unidad": "mosquitos", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 2 (p. 8)"},
+      {"id": "Hs0", "nombre": "Hs(0)", "descripcion": "Humanos susceptibles iniciales", "rango": [244402, 321734], "unidad": "personas", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 2 (p. 8)"},
+      {"id": "He0", "nombre": "He(0)", "descripcion": "Humanos expuestos iniciales", "rango": [18, 72], "unidad": "personas", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 2 (p. 8)"},
+      {"id": "Hi0", "nombre": "Hi(0)", "descripcion": "Humanos infecciosos iniciales (también es el valor inicial de los casos acumulados)", "rango": [6, 24], "unidad": "personas", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 2 (p. 8)"},
+      {"id": "Hr0", "nombre": "Hr(0)", "descripcion": "Humanos recuperados iniciales", "rango": [81405, 158809], "unidad": "personas", "fuente": "Lizarralde-Bejarano et al. 2020, Tabla 2 (p. 8)"}
+    ],
+    "estados": ["Ms", "Me", "Mi", "Hs", "He", "Hi", "Hr"],
+    "salidas": [
+      {"id": "casos_semanales", "fila": 8, "descripcion": "C(t) − C(t−1): humanos que pasan a infecciosos en la semana que termina en t (en t0 vale Hi0)"},
+      {"id": "casos_acumulados", "fila": 9, "descripcion": "C(t), con C' = θh·He y C(t0) = Hi0; es la salida que ajusta el artículo (ec. 4)"}
+    ],
+    "opt_defecto": {"mu_h": 0.0004},
+    "fuente": "Lizarralde-Bejarano DP, Rojas-Díaz D, Arboleda-Sánchez S, Puerta-Yepes ME (2020). PLOS ONE 15(3): e0229668. doi:10.1371/journal.pone.0229668. Modelo (3), p. 6.",
+    "notas": [
+      "μh = 0.0004 por semana (Tabla 1, fijo) va en opt.mu_h y no se estima. Con natalidad = mortalidad la población humana H se conserva exactamente.",
+      "Rangos del curso = rangos del artículo para Bello (Tablas 1 y 2). El guion de los autores PaperCSB/Repositorio/Dengue/MainEstimations.mlx ajustó Itagüí 2010 con otros rangos: Λ [0, 42694], μm [0.01, 0.6], γh [0.4, 1.8], βh [0, 4], βm [0, 4], θh [0.7, 1.75], θm [0.58, 0.88], μh = 0.0004 fijo; Hs0 [50000, 250000], He0 [0, 1000], Hr0 [0, 100], Ms0 [0, 120000], Me0 [0, 100], Mi0 [0, 100], Hi0 = Hit0 = 17 (fijos), y como salida usó el estado auxiliar Hit (C' = θh·He) con Hit0 = Hi0.",
+      "En la Tabla 1 la conversión día→semana no es exacta en todos los renglones (p. ej. μm [0.019, 0.023]/día daría [0.133, 0.161]/semana, pero la tabla dice [0.16, 0.20]; Λ [278, 6110]/día daría [1946, 42770]). Se usan los valores por semana tal como aparecen en la tabla.",
+      "Model.m (forma simbólica de los autores) contiene las mismas ecuaciones con el término de natalidad humana escrito como (He+Hi+Hr)·μh, que es equivalente a μh·H − μh·Hs.",
+      "Si Ms = Me = Mi = 0, el cociente Mi/M se toma como 0 para evitar 0/0."
+    ]
+  },
+  {
+    "id": "dengue_cl_discreto",
+    "nombre": "Dengue discreto vector-huésped con contagio heterogéneo ℵ y reclutamiento Ricker con retardo (Cataño-López et al. 2022)",
+    "tipo": "discreto",
+    "unidad_tiempo": "semana",
+    "transmision": "vector-huésped",
+    "parametros": [
+      {"id": "gamma", "nombre": "γ", "descripcion": "Probabilidad semanal de recuperación de los humanos", "rango": [0.1, 1], "unidad": "1/semana", "fuente": "Estiamtions_dengue.mlx (CHIMERITApaper/Repository/Dengue), Range2"},
+      {"id": "mu_m", "nombre": "μm", "descripcion": "Probabilidad semanal de muerte de los mosquitos", "rango": [0, 0.4], "unidad": "1/semana", "fuente": "Estiamtions_dengue.mlx, Range2"},
+      {"id": "z", "nombre": "z", "descripcion": "Número de interacciones (picaduras) por mosquito y semana", "rango": [1, 10], "unidad": "interacciones/semana", "fuente": "Estiamtions_dengue.mlx, Range2"},
+      {"id": "r", "nombre": "r", "descripcion": "Tasa de reproducción de los mosquitos (Ricker)", "rango": [0, 60], "unidad": "1/semana", "fuente": "Estiamtions_dengue.mlx, Range2"},
+      {"id": "C", "nombre": "C", "descripcion": "Capacidad de carga de mosquitos (Ricker)", "rango": [1000, 350000], "unidad": "mosquitos", "fuente": "Estiamtions_dengue.mlx, Range2"},
+      {"id": "beta_mh", "nombre": "βmh", "descripcion": "Probabilidad de infección de mosquito a humano por interacción efectiva", "rango": [0, 1], "unidad": "adimensional", "fuente": "Estiamtions_dengue.mlx, Range2"},
+      {"id": "beta_hm", "nombre": "βhm", "descripcion": "Probabilidad de infección de humano a mosquito por interacción efectiva", "rango": [0, 1], "unidad": "adimensional", "fuente": "Estiamtions_dengue.mlx, Range2"},
+      {"id": "nu_m", "nombre": "νm", "descripcion": "Heterogeneidad ℵM = 1 + νm·Im/(Sm+Im), exponente de la prevalencia humana en el contagio humano→mosquito", "rango": [0, 10000], "unidad": "adimensional", "fuente": "Estiamtions_dengue.mlx, Range2"},
+      {"id": "nu_h", "nombre": "νh", "descripcion": "Heterogeneidad ℵH = 1 + νh·Ih/(Sh+Ih), exponente de la fracción susceptible en el contagio mosquito→humano", "rango": [0, 30000], "unidad": "adimensional", "fuente": "Estiamtions_dengue.mlx, Range2"}
+    ],
+    "condiciones_iniciales": [
+      {"id": "Hs0", "nombre": "Sh(0)", "descripcion": "Humanos susceptibles iniciales (población de Bello, fijo)", "rango": [450000, 450000], "unidad": "personas", "fuente": "Estiamtions_dengue.mlx, Range1 y Population (Bello)"},
+      {"id": "Hi0", "nombre": "Ih(0)", "descripcion": "Humanos infectados iniciales = casos de la primera semana de Bello (fijo)", "rango": [8, 8], "unidad": "personas", "fuente": "Estiamtions_dengue.mlx, Range1 = RealData(1); Data/Bello.mat, Cases(1) = 8"},
+      {"id": "Hr0", "nombre": "Rh(0)", "descripcion": "Humanos recuperados iniciales (fijo)", "rango": [0, 0], "unidad": "personas", "fuente": "Estiamtions_dengue.mlx, Range1"},
+      {"id": "Ms0", "nombre": "Sm(0)", "descripcion": "Mosquitos susceptibles iniciales", "rango": [5000, 500000], "unidad": "mosquitos", "fuente": "Estiamtions_dengue.mlx, Range1"},
+      {"id": "Mi0", "nombre": "Im(0)", "descripcion": "Mosquitos infectados iniciales", "rango": [0, 100], "unidad": "mosquitos", "fuente": "Estiamtions_dengue.mlx, Range1"}
+    ],
+    "estados": ["Sm", "Im", "Sh", "Ih", "Rh"],
+    "salidas": [
+      {"id": "casos_semanales", "fila": 6, "descripcion": "Casos instantáneos Ih_ins(t+1) = Sh(t)·φ(t)·(1−μh), ec. (10); en t0 vale Ih0"},
+      {"id": "casos_acumulados", "fila": 7, "descripcion": "Suma de los casos instantáneos desde t0 (empieza en Ih0)"}
+    ],
+    "opt_defecto": {"mu_h": 0},
+    "fuente": "Cataño-López A, Rojas-Díaz D, Lizarralde DP, Puerta Yepes ME (2022). Discrete Models in Epidemiology: New Contagion Probability Functions Based on Real Data Behavior. Bull Math Biol 84:127. doi:10.1007/s11538-022-01076-6. Ec. (9)–(10). Implementación de referencia: CHIMERITApaper/Repository/Dengue/CHIMERA_Vector.m.",
+    "notas": [
+      "Se sigue el código de los autores (CHIMERA_Vector.m). Contagio humano→mosquito: ψ = βhm·[1 − (1 − (Ih/NH)^ℵM)^z], con ℵM = 1 + νm·Im/(Sm+Im) (la heterogeneidad depende de la prevalencia en mosquitos aunque se aplica a la prevalencia humana). Contagio mosquito→humano: φ = βmh·[1 − (1 − 1/Sh)^(z·Im·(Sh/NH)^ℵH)], con ℵH = 1 + νh·Ih/(Sh+Ih), y φ = 0 si Sh < 1.",
+      "La descripción del modelo en Estiamtions_dengue.mlx no incluye ℵ (equivale a ℵ = 1): Ψh = 1 − [(NH − Ih)/NH]^z y φm = 1 − [(Hs−1)/Hs]^(z·Mi·Hs/NH). El código sí usa ℵM y ℵH. El artículo (ec. 9–10, Sec. 3.2.2) solo dice que se usan «ambas» probabilidades G̃hm y G̃mh con ℵ, sin escribirlas; ℵ(S,I) = 1 + ν·I/(S+I) está definido en la ec. (3)–(5). La asignación concreta (forma G2 con ℵM para humano→mosquito y forma G1 con ℵH para mosquito→humano) sale del código, que es lo que sigue el curso.",
+      "Ricker con retardo de 2 pasos: A(t) = r·NM(t−2)·exp(1 − NM(t)/C). En los dos primeros pasos (t = t0 y t0+1) se usa A = r·NM(t0)·exp(1 − NM(t0)/C), igual que el código de los autores: en t0+1 también la población actual se reemplaza por NM(t0).",
+      "Orden de pars: primero los parámetros y luego las condiciones iniciales (CONTRATO.md); dentro de cada bloque se conserva el orden del código de los autores, que pone las condiciones iniciales primero. Se eliminan Md0 (mosquitos muertos, no entra en la dinámica) y μh (fijo en 0 por Range2, va en opt.mu_h).",
+      "Los rangos fijos (Hs0, Hi0, Hr0) son los del ajuste de Bello en el guion (Population = 450000, RealData(1) = 8, Hr0 = 0); para Itagüí el guion usa Hs0 = 280000 y Hi0 = casos de la semana 5. GSUA trata como fijo un parámetro con límites iguales.",
+      "Si Sm+Im = 0 o Sh+Ih = 0, el ℵ correspondiente se toma como 1 (el código original daría NaN).",
+      "Diferencias entre la Tabla 3 del artículo y Range1/Range2 del guion (el curso usa el guion): Sm(0) [1e4, 5e5] en la tabla y [5000, 500000] en el guion; C [1e3, 3.5e4] en la tabla (pero los estimados publicados, 325590 y 348490, solo caben en [1000, 350000] del guion: errata de la tabla); la tabla asigna νh [0, 1e4] y νm [0, 3e4], el guion al revés (νm [0, 1e4], νh [0, 3e4]). Coinciden μm [0, 0.4], γ [0.1, 1], z [1, 10], βhm y βmh [0, 1], r [0, 60], Im(0) [0, 100] y los fijos de Bello (Sh = 4.5e5, Ih = 8, Rh = 0, μh = 0).",
+      "Estimados publicados para Bello (Tabla 3): Sm(0) = 28030, Im(0) = 4, μm = 0.35, γ = 1, z = 8, βhm = 0.87, βmh = 0.28, r = 0.12, C = 325590, νh = 0.0006, νm = 0.8."
+    ]
+  }
+]

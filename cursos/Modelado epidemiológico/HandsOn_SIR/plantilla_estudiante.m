@@ -7,9 +7,11 @@
 %  tu objetivo es ESTIMARLOS a partir de los datos y decidir CUALES se
 %  pueden determinar con confianza (analisis de identificabilidad).
 %
-%  Modelo (poblacion N = S+I+R constante):
-%     S(k+1) = S(k)*(1 - beta*I(k)/N) + alpha*R(k)
-%     I(k+1) = S(k)*beta*I(k)/N + (1-gamma)*I(k)
+%  Modelo (poblacion N = S+I+R constante). Probabilidad de contagio
+%  exponencial en cada paso:
+%     P(k)   = 1 - exp(-beta*I(k)/N)
+%     S(k+1) = S(k)*(1 - P(k)) + alpha*R(k)
+%     I(k+1) = S(k)*P(k) + (1-gamma)*I(k)
 %     R(k+1) = (1-alpha)*R(k) + gamma*I(k)
 %  Parametros a estimar: S(0), I(0), R(0), beta, gamma, alpha
 %

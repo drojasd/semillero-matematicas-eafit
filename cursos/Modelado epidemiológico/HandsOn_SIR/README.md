@@ -14,11 +14,13 @@ sesión se revelan los valores con los que se generaron los datos.
 
 ## El modelo
 
-Población `N = S + I + R` constante (sin nacimientos ni muertes):
+Población `N = S + I + R` constante (sin nacimientos ni muertes). En cada paso, cada
+susceptible se contagia con probabilidad `P(k) = 1 − exp(−β·I(k)/N)` (siempre entre 0 y 1):
 
 ```
-S(k+1) = S(k)·(1 − β·I(k)/N) + α·R(k)
-I(k+1) = S(k)·β·I(k)/N + (1−γ)·I(k)
+P(k)   = 1 − exp(−β·I(k)/N)
+S(k+1) = S(k)·(1 − P(k)) + α·R(k)
+I(k+1) = S(k)·P(k) + (1−γ)·I(k)
 R(k+1) = (1−α)·R(k) + γ·I(k)
 ```
 

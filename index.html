@@ -15,16 +15,15 @@
       <a href="#inicio">Inicio</a>
       <a href="#investigacion">Investigación</a>
       <a href="#semestre" data-semestre>2026-2</a>
-      <a href="#cronograma">Cronograma</a>
       <a href="#presentaciones">Presentaciones</a>
       <a href="#curso">Curso GSUA</a>
       <a href="#retos">Retos</a>
-      <a href="#documentos">Documentos</a>
-      <a href="#contacto">Contacto</a>
     </nav>
   </header>
 
   <main>
+    <!-- Cada .pestana es una pestaña; se elige por el #hash (assets/main.js). -->
+    <div class="pestana" data-pestana="inicio">
     <section id="inicio" class="hero">
       <p class="eyebrow">Semillero de Investigación · Universidad EAFIT</p>
       <h1>Semillero de <em>Matemáticas</em></h1>
@@ -77,12 +76,18 @@
       </article>
     </section>
 
+    </div>
+
+    <div class="pestana" data-pestana="investigacion">
     <section id="investigacion">
       <p class="spaced center">i n v e s t i g a c i ó n</p>
       <p class="muted center">Además de las sesiones, el semillero tiene líneas de investigación activas.</p>
       <div class="cards" id="lista-investigacion"></div>
     </section>
 
+    </div>
+
+    <div class="pestana" data-pestana="semestre">
     <section id="semestre">
       <p class="spaced center" data-semestre-spaced></p>
       <div class="curso">
@@ -115,11 +120,22 @@
       <ol class="sesiones" id="lista-sesiones"></ol>
     </section>
 
+    </div>
+
+    <div class="pestana" data-pestana="presentaciones">
     <section id="presentaciones">
       <p class="spaced center">p r e s e n t a c i o n e s</p>
       <div class="cards" id="lista-presentaciones"></div>
     </section>
 
+    <section id="documentos">
+      <p class="spaced center">d o c u m e n t o s</p>
+      <div class="cards" id="lista-documentos"></div>
+    </section>
+
+    </div>
+
+    <div class="pestana" data-pestana="curso">
     <section id="curso">
       <p class="spaced center">c u r s o &nbsp; g s u a - c s b</p>
       <p class="muted center retos-intro" data-curso-desc></p>
@@ -127,6 +143,9 @@
       <p class="center curso-enlaces" id="curso-enlaces"></p>
     </section>
 
+    </div>
+
+    <div class="pestana" data-pestana="retos">
     <section id="retos">
       <p class="spaced center">r e t o s</p>
       <p class="muted center retos-intro">
@@ -140,10 +159,8 @@
       <div id="lista-retos"></div>
     </section>
 
-    <section id="documentos">
-      <p class="spaced center">d o c u m e n t o s</p>
-      <div class="cards" id="lista-documentos"></div>
-    </section>
+    </div>
+
     <section id="contacto">
       <p class="spaced center">c o o r d i n a c i ó n</p>
       <p class="muted center">Para mayor información comunícate con nuestros coordinadores.</p>

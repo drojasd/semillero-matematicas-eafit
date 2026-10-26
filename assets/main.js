@@ -65,12 +65,9 @@
     .join("");
   $("#lista-presentaciones").innerHTML = S.presentaciones.map((p) => card(p, "Abrir presentación")).join("");
   $("#lista-documentos").innerHTML = S.documentos.map((p) => card(p, "Abrir documento")).join("");
-  // Una sección sin contenido se oculta, junto con su enlace en el menú.
+  // Una sección sin contenido se oculta (su pestaña también, si queda vacía).
   ["presentaciones", "documentos"].forEach((id) => {
-    if (S[id].length) return;
-    $("#" + id).hidden = true;
-    const a = document.querySelector(`.nav a[href="#${id}"]`);
-    if (a) a.hidden = true;
+    if (!S[id].length) $("#" + id).hidden = true;
   });
 
   // Curso GSUA-CSB: cada módulo enlaza a su página en MATLAB y en Python.
@@ -94,7 +91,6 @@
       .join(" · ");
   } else {
     $("#curso").hidden = true;
-    document.querySelector('.nav a[href="#curso"]').hidden = true;
   }
 
   // Retos de identificabilidad (data/retos.js, generado por retos/calificar.py --sitio).
@@ -125,7 +121,6 @@
   }).join("");
   if (!R.length) {
     $("#retos").hidden = true;
-    document.querySelector('.nav a[href="#retos"]').hidden = true;
   }
 
   document.querySelectorAll("[data-filter]").forEach((btn) =>
@@ -138,4 +133,30 @@
       });
     })
   );
+
+  // Pestañas: el #hash elige cuál se muestra. Un #hash de una sección interna
+  // (por ejemplo #cronograma o #documentos) abre su pestaña y baja hasta ella.
+  const pestanas = [...document.querySelectorAll(".pestana")];
+  const nombres = [...new Set(pestanas.map((p) => p.dataset.pestana))];
+  nombres.forEach((n) => {
+    const vacia = pestanas.filter((p) => p.dataset.pestana === n).every((p) => [...p.querySelectorAll("section")].every((x) => x.hidden));
+    const a = document.querySelector(`.nav a[href="#${n}"]`);
+    if (vacia && a) a.hidden = true;
+  });
+  function mostrar() {
+    const id = decodeURIComponent(location.hash.slice(1));
+    const destino = id && document.getElementById(id);
+    const caja = destino && destino.closest(".pestana");
+    const n = caja ? caja.dataset.pestana : nombres.includes(id) ? id : "inicio";
+    pestanas.forEach((p) => (p.hidden = p.dataset.pestana !== n));
+    document.querySelectorAll(".nav nav a").forEach((a) => {
+      if (a.getAttribute("href") === "#" + n) a.setAttribute("aria-current", "page");
+      else a.removeAttribute("aria-current");
+    });
+    const primera = caja && caja.querySelector("section:not([hidden])");
+    if (destino && destino !== primera) destino.scrollIntoView({ behavior: "instant", block: "start" });
+    else window.scrollTo({ top: 0, behavior: "instant" });
+  }
+  window.addEventListener("hashchange", mostrar);
+  mostrar();
 })();

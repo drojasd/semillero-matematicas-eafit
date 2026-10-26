@@ -104,3 +104,13 @@ de los guiones de los autores, y cada uno cita de dónde sale.
    Python y compara con `pruebas/salidas_matlab_<id>.csv`, que genera `pruebas/generar_paridad_<familia>.m`.
 3. Cada modelo se construye con la toolbox (`gsua_dataprep` / `UserFunctionModel`) y un
    `gsua_pe` / `parameter_estimation` corto (N=2) termina sin error.
+4. **Paridad de escenarios:** para cada escenario de `escenarios.json` y cada modelo sugerido,
+   `pruebas/generar_paridad_escenarios.m` corre las secciones 1 y 2 de `matlab/handson.m`
+   (`SOLO_PREPARAR = true`) y guarda `pruebas/paridad_escenarios_matlab.json`;
+   `pruebas/paridad_escenarios.py` arma lo mismo con `python/handson.py` y exige la misma ventana de
+   datos, los mismos rangos, `opt` y salida, y la misma simulación nominal (tolerancias de arriba).
+   Hay que regenerar el JSON cada vez que cambie `escenarios.json`.
+5. **Paridad de la preparación de datos:** `datos/preparar_datos.py` y `datos/preparar_datos.m`
+   hacen lo mismo. `pruebas/generar_paridad_datos.m` escribe la salida de MATLAB en
+   `pruebas/paridad_datos_matlab/` (no se versiona) y `pruebas/paridad_datos.py` la compara con los
+   CSV y el `escenarios.json` versionados, que salen de Python.

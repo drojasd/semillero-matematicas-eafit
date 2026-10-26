@@ -27,6 +27,122 @@
     "notas": "Población de Colombia según Cataño-López et al. (2023). Activos = confirmados − muertes − recuperados (JHU). En sir_cuarentena_cl los activos reportados se comparan con los detectados Ij."
   },
   {
+    "id": "covid_colombia_ola2",
+    "nombre": "COVID-19 en Colombia, 2020-11-16 a 2021-03-10 (activos diarios)",
+    "transmision": "humano-humano",
+    "datos": "covid19_colombia_jhu.csv",
+    "columna": "activos",
+    "filtro": {
+      "columna": "fecha",
+      "desde": "2020-11-16",
+      "hasta": "2021-03-10"
+    },
+    "salidas": [
+      "activos",
+      "activos_detectados"
+    ],
+    "opt": {
+      "N": 50372424
+    },
+    "rangos": {
+      "sir_continuo": {
+        "I0": [
+          29600,
+          88700
+        ],
+        "R0": [
+          1111867,
+          25200000
+        ]
+      },
+      "sir_discreto": {
+        "I0": [
+          29600,
+          88700
+        ],
+        "R0": [
+          1111867,
+          25200000
+        ]
+      },
+      "sir_cuarentena_cl": {
+        "Ij0": [
+          29600,
+          88700
+        ],
+        "If0": [
+          0,
+          591000
+        ]
+      }
+    },
+    "modelos_sugeridos": [
+      "sir_continuo",
+      "sir_discreto",
+      "sir_discreto_G1",
+      "sir_cuarentena_cl"
+    ],
+    "notas": "115 días; pico de 131943 activos el 2021-01-24. Segunda ola. Al empezar hay 59127 activos y 1111867 recuperados reportados: I0 va de 0,5 a 1,5 veces los activos y R0 de los recuperados reportados a media población (los reportados son un mínimo: falta la inmunidad no detectada). En sir_cuarentena_cl, Ij0 va de 0,5 a 1,5 veces los activos e If0 hasta 10 veces; ese modelo no tiene R0 libre. Rangos: ELECCIÓN DEL CURSO. Población de Colombia según Cataño-López et al. (2023)."
+  },
+  {
+    "id": "covid_colombia_ola3",
+    "nombre": "COVID-19 en Colombia, 2021-03-10 a 2021-08-04 (activos diarios)",
+    "transmision": "humano-humano",
+    "datos": "covid19_colombia_jhu.csv",
+    "columna": "activos",
+    "filtro": {
+      "columna": "fecha",
+      "desde": "2021-03-10",
+      "hasta": "2021-08-04"
+    },
+    "salidas": [
+      "activos",
+      "activos_detectados"
+    ],
+    "opt": {
+      "N": 50372424
+    },
+    "rangos": {
+      "sir_continuo": {
+        "I0": [
+          18900,
+          56600
+        ],
+        "R0": [
+          2187473,
+          25200000
+        ]
+      },
+      "sir_discreto": {
+        "I0": [
+          18900,
+          56600
+        ],
+        "R0": [
+          2187473,
+          25200000
+        ]
+      },
+      "sir_cuarentena_cl": {
+        "Ij0": [
+          18900,
+          56600
+        ],
+        "If0": [
+          0,
+          377000
+        ]
+      }
+    },
+    "modelos_sugeridos": [
+      "sir_continuo",
+      "sir_discreto",
+      "sir_discreto_G1",
+      "sir_cuarentena_cl"
+    ],
+    "notas": "148 días; pico de 201607 activos el 2021-06-28. Tercera ola, la mayor; la serie termina cuando JHU dejó de reportar recuperados, antes del final de la bajada. Al empezar hay 37714 activos y 2187473 recuperados reportados: I0 va de 0,5 a 1,5 veces los activos y R0 de los recuperados reportados a media población (los reportados son un mínimo: falta la inmunidad no detectada). En sir_cuarentena_cl, Ij0 va de 0,5 a 1,5 veces los activos e If0 hasta 10 veces; ese modelo no tiene R0 libre. Rangos: ELECCIÓN DEL CURSO. Población de Colombia según Cataño-López et al. (2023)."
+  },
+  {
     "id": "dengue_bello_2009_2011",
     "nombre": "Dengue en Bello, SE 49/2009 – SE 7/2011 (casos semanales)",
     "transmision": "vectorial",

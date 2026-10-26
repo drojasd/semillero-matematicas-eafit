@@ -10,7 +10,7 @@
 % Resultados (JSON y figuras): ../resultados/
 
 %% 0. Configuración (cambia aquí)
-if ~exist('ESCENARIO', 'var'), ESCENARIO = 'covid_colombia_ola1'; end  % covid_colombia_ola1 | dengue_bello_2009_2011 | dengue_bello_acumulado | dengue_medellin_2010 | dengue_itagui_2010
+if ~exist('ESCENARIO', 'var'), ESCENARIO = 'covid_colombia_ola1'; end  % un id de escenarios.json: covid_colombia_ola1..3 | dengue_bello_2009_2011 | dengue_medellin_2010 | dengue_itagui_2010 | ...
 if ~exist('MODELO', 'var'),    MODELO    = 'sir_discreto';        end  % sir_continuo | sir_discreto(_G1|_G2|_G3) | sir_cuarentena_cl(_G2|_G3) | dengue_lizarralde | dengue_cl_discreto
 N_UA      = 200;                    % muestras para incertidumbre
 N_SA      = 200;                    % muestras para sensibilidad
@@ -99,6 +99,7 @@ fprintf('[2] Modelo: %s; salida comparada: %s\n', ent.nombre, salida);
 fprintf('    Factores libres (%d): %s\n', numel(libres), strjoin(libres, ', '));
 fprintf('    Estimación con %d arranques; bootstrap de %d re-ajustes\n', N_MULTI, N_BOOT);
 simular = @(p) reshape(squeeze(gsua_eval(p(:), T, x, [], false, false, false)), 1, []);
+if exist('SOLO_PREPARAR', 'var') && SOLO_PREPARAR, return; end  % pruebas de paridad: solo datos y modelo
 
 %% 3. Simulación nominal
 y_nom = simular(T.Nominal);

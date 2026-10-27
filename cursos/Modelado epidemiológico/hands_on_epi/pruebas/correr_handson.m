@@ -28,4 +28,5 @@ function uno(guion, ESCENARIO, MODELO) %#ok<INUSD>
     % Cada combinación corre en su propio espacio de trabajo.
     RAPIDO = true; HACER_SA = false; %#ok<NASGU>
     evalc('run(guion)');
+    close all force   % no acumular figuras entre combinaciones
 end

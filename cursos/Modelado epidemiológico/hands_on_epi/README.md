@@ -5,8 +5,8 @@ Semillero de Investigación en Matemáticas · Universidad EAFIT
 Ajustamos modelos epidemiológicos a **datos reales** y nos preguntamos qué tanto se puede saber
 de sus parámetros. Hay dos tipos de transmisión:
 
-- **Entre personas:** COVID-19 en Colombia: primera, segunda y tercera ola.
-- **Por vectores:** dengue en Bello, Medellín e Itagüí.
+- **Entre personas:** COVID-19 en Colombia, con sus tres olas.
+- **Por vectores:** dengue en Bello, Medellín, Itagüí y Cali, con varios brotes.
 
 Cada uno se puede estudiar con modelos discretos o continuos. Todo funciona igual en **MATLAB** y
 en **Python**.
@@ -62,16 +62,26 @@ todos.
 | `covid_colombia_ola1` | COVID-19 Colombia, 2020-03-06 a 2020-11-30, activos diarios (JHU) | activos (detectados en el modelo con cuarentena) | `sir_continuo`, `sir_discreto`, `sir_discreto_G1`, `sir_cuarentena_cl` |
 | `covid_colombia_ola2` | Segunda ola, 2020-11-16 a 2021-03-10 | igual | los mismos |
 | `covid_colombia_ola3` | Tercera ola, 2021-03-10 a 2021-08-04 | igual | los mismos |
+| `covid_colombia_tres_olas` | Las tres olas, 2020-03-06 a 2021-08-04 | igual | los mismos |
 | `dengue_bello_2009_2011` | Dengue Bello, SE 49/2009 – SE 7/2011 | casos semanales | `dengue_lizarralde`, `dengue_cl_discreto` |
 | `dengue_bello_acumulado` | La misma ventana, en casos acumulados como en el paper | casos acumulados | los mismos |
 | `dengue_medellin_2010` | Dengue Medellín 2010, SIVIGILA | casos semanales | los mismos |
+| `dengue_medellin_2014` | Medellín, SE 13/2014 – SE 20/2015 (brote pequeño) | casos semanales | los mismos |
+| `dengue_medellin_2016` | Medellín, SE 17/2015 – SE 13/2017 | casos semanales | los mismos |
+| `dengue_medellin_2024` | Medellín, SE 21/2023 – SE 52/2024 | casos semanales | los mismos |
 | `dengue_itagui_2010` | Dengue Itagüí, brote de 2010 | casos semanales | los mismos |
+| `dengue_cali_2010` | Cali, SE 1/2010 – SE 13/2011 | casos semanales | los mismos |
+| `dengue_cali_2013` | Cali, SE 37/2012 – SE 13/2014 | casos semanales | los mismos |
+| `dengue_cali_2015` | Cali, SE 33/2014 – SE 41/2015 | casos semanales | los mismos |
+| `dengue_cali_2015_2016` | Cali, los dos brotes seguidos | casos semanales | los mismos |
+| `dengue_cali_2016` | Cali, SE 41/2015 – SE 13/2017 | casos semanales | los mismos |
+| `dengue_cali_2020` | Cali, SE 21/2019 – SE 52/2020 | casos semanales | los mismos |
+| `dengue_cali_2024` | Cali, SE 13/2023 – SE 52/2024, el brote más grande | casos semanales | los mismos |
 
-**Pendientes:** ya están identificados y definidos otros 11 brotes (Medellín 2014, 2016 y 2024;
-Cali 2010, 2013, 2015, 2016, 2015–2016, 2020 y 2024; las tres olas de COVID-19 juntas), con la
-serie de Cali en `datos/dengue_cali_sivigila.csv`. Entran a `escenarios.json` cuando su corrida
-completa quede comprobada en MATLAB y en Python. La lista, con sus ventanas y picos, está en
-[`datos/FUENTES.md`](datos/FUENTES.md).
+El pico de cada ventana, cómo se eligió y de dónde salen los rangos de cada localidad están en
+[`datos/FUENTES.md`](datos/FUENTES.md) y en las notas de `escenarios.json`. Los escenarios
+`dengue_cali_2015_2016` y `covid_colombia_tres_olas` tienen más de un pico a propósito: un modelo
+de un solo brote no los puede reproducir.
 
 Procedencia y licencias de cada serie, y **dónde descargar más datos reales** (SIVIGILA, INS,
 datos.gov.co, OPS, JHU, Our World in Data): [`datos/FUENTES.md`](datos/FUENTES.md).
@@ -129,10 +139,11 @@ En un portátil, con los tamaños por omisión:
 4. `dengue_cl_discreto` con 10 arranques frente a 60. ¿Qué te dice sobre los mínimos locales?
 5. ¿Qué parámetros de los mosquitos son identificables solo con casos humanos? ¿Qué dato de campo
    ayudaría?
-6. Los rangos de Medellín se escalaron desde Bello por población. ¿Qué tan sensibles son
+6. Los rangos de Medellín y Cali se escalaron desde Bello por población. ¿Qué tan sensibles son
    tus conclusiones a esa elección?
-7. Ajusta el mismo modelo a dos olas de COVID-19 (`covid_colombia_ola2` y `covid_colombia_ola3`).
-   ¿Salen los mismos parámetros? ¿Qué papel juega R0, la inmunidad que dejó la ola anterior?
+7. Ajusta el mismo modelo a dos brotes de la misma ciudad (por ejemplo `dengue_cali_2015` y
+   `dengue_cali_2016`) o a dos olas de COVID-19 (`covid_colombia_ola2` y `covid_colombia_ola3`).
+   ¿Salen los mismos parámetros? ¿Qué pasa con `dengue_cali_2015_2016` y con `tres_olas`?
 
 ## Para la coordinación
 

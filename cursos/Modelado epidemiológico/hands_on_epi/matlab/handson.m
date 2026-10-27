@@ -112,8 +112,10 @@ fprintf('[3] Simulación nominal guardada\n');
 
 %% 4. Incertidumbre: ¿los datos caen dentro de lo que el modelo puede producir?
 M = gsua_dmatrix(T, N_UA, 'Method', 'LatinHypercube');
+figs0 = findall(groot, 'Type', 'figure');   % gsua_ua abre sus propias figuras siempre
 Y = squeeze(gsua_ua(M, T, 'xdata', x, 'ynom', y, 'parallel', false, 'verbose', false));
 if size(Y, 2) ~= numel(x), Y = Y.'; end
+close(setdiff(findall(groot, 'Type', 'figure'), figs0));   % se cierran: aquí se grafica aparte
 P = prctile(Y, [5 50 95], 1);
 dentro = mean(y >= P(1, :) & y <= P(3, :));
 f = figure('Name', 'Incertidumbre', 'Visible', 'off');

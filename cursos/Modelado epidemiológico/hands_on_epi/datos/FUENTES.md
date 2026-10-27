@@ -23,29 +23,26 @@ el pico y escala los rangos de los modelos de dengue desde los de Bello: por pob
 Hs0, Hr0, C) y por los casos de la primera semana (He0, Hi0). Ese escalamiento es una **elección
 del curso**, no un valor publicado.
 
-En `escenarios.json` están hoy los que tienen la corrida completa comprobada en MATLAB y en
-Python; los marcados **pendiente** están definidos en `preparar_datos` (`PENDIENTES`) y entran
-cuando se comprueben.
-
 | Escenario | Ventana | Duración | Pico |
 |---|---|---|---|
 | `dengue_medellin_2010` | 2010, SE 1–52 | 52 semanas | 819 casos, SE 23 de 2010 |
-| `dengue_medellin_2014` (**pendiente**) | SE 13/2014 – SE 20/2015 | 60 semanas | 124 casos, SE 36 de 2014 (brote pequeño sobre una endemia alta) |
-| `dengue_medellin_2016` (**pendiente**) | SE 17/2015 – SE 13/2017 | 101 semanas | 589 casos, SE 27 de 2016 |
-| `dengue_medellin_2024` (**pendiente**) | SE 21/2023 – SE 52/2024 | 84 semanas | 176 casos, SE 34 de 2024 (la serie termina antes de que el brote baje del todo) |
-| `dengue_cali_2010` (**pendiente**) | SE 1/2010 – SE 13/2011 | 65 semanas | 557 casos, SE 7 de 2010 (la serie empieza cerca del pico) |
-| `dengue_cali_2013` (**pendiente**) | SE 37/2012 – SE 13/2014 | 81 semanas | 478 casos, SE 16 de 2013 (salto en la SE 1 de 2013 y meseta) |
-| `dengue_cali_2015` (**pendiente**) | SE 33/2014 – SE 41/2015 | 61 semanas | 575 casos, SE 14 de 2015 |
-| `dengue_cali_2016` (**pendiente**) | SE 41/2015 – SE 13/2017 | 77 semanas | 834 casos, SE 6 de 2016 |
-| `dengue_cali_2015_2016` (**pendiente**) | SE 33/2014 – SE 13/2017 | 137 semanas | Los dos anteriores en una sola ventana |
-| `dengue_cali_2020` (**pendiente**) | SE 21/2019 – SE 52/2020 | 84 semanas | 676 casos, SE 10 de 2020 (coincide con el inicio de la pandemia) |
-| `dengue_cali_2024` (**pendiente**) | SE 13/2023 – SE 52/2024 | 92 semanas | 1295 casos, SE 21 de 2024, el mayor de la serie |
+| `dengue_medellin_2014` | SE 13/2014 – SE 20/2015 | 60 semanas | 124 casos, SE 36 de 2014 (brote pequeño sobre una endemia alta) |
+| `dengue_medellin_2016` | SE 17/2015 – SE 13/2017 | 101 semanas | 589 casos, SE 27 de 2016 |
+| `dengue_medellin_2024` | SE 21/2023 – SE 52/2024 | 84 semanas | 176 casos, SE 34 de 2024 (la serie termina antes de que el brote baje del todo) |
+| `dengue_cali_2010` | SE 1/2010 – SE 13/2011 | 65 semanas | 557 casos, SE 7 de 2010 (la serie empieza cerca del pico) |
+| `dengue_cali_2013` | SE 37/2012 – SE 13/2014 | 81 semanas | 478 casos, SE 16 de 2013 (salto en la SE 1 de 2013 y meseta) |
+| `dengue_cali_2015` | SE 33/2014 – SE 41/2015 | 61 semanas | 575 casos, SE 14 de 2015 |
+| `dengue_cali_2016` | SE 41/2015 – SE 13/2017 | 77 semanas | 834 casos, SE 6 de 2016 |
+| `dengue_cali_2015_2016` | SE 33/2014 – SE 13/2017 | 137 semanas | Los dos anteriores en una sola ventana |
+| `dengue_cali_2020` | SE 21/2019 – SE 52/2020 | 84 semanas | 676 casos, SE 10 de 2020 (coincide con el inicio de la pandemia) |
+| `dengue_cali_2024` | SE 13/2023 – SE 52/2024 | 92 semanas | 1295 casos, SE 21 de 2024, el mayor de la serie |
 | `dengue_bello_2009_2011` | `t = 0…64` (SE 49/2009 – SE 7/2011) | 65 semanas | La ventana de Lizarralde et al. (2020): permite comparar con el paper |
+| `dengue_bello_acumulado` | La misma ventana, en casos acumulados | 65 semanas | Como ajusta el paper |
 | `dengue_itagui_2010` | `t = 0…69` | 70 semanas | El brote de 2010 del paper del CSB |
 | `covid_colombia_ola1` | 2020-03-06 a 2020-11-30 | 270 días | 169 326 activos, 2020-08-14 |
 | `covid_colombia_ola2` | 2020-11-16 a 2021-03-10 | 115 días | 131 943 activos, 2021-01-24 |
 | `covid_colombia_ola3` | 2021-03-10 a 2021-08-04 | 148 días | 201 607 activos, 2021-06-28 |
-| `covid_colombia_tres_olas` (**pendiente**) | 2020-03-06 a 2021-08-04 | 517 días | Las tres olas juntas |
+| `covid_colombia_tres_olas` | 2020-03-06 a 2021-08-04 | 517 días | Las tres olas juntas |
 
 En las olas 2 y 3 de COVID-19 ya hay infectados y recuperados al empezar: I0 y R0 parten de los
 activos y recuperados reportados el primer día (detalle en las notas de cada escenario).

@@ -86,9 +86,58 @@
     </article>`;
       })
       .join("");
-    $("#curso-enlaces").innerHTML = K.enlaces
-      .map((e) => `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.texto)}</a>`)
-      .join(" · ");
+    // Hands-on destacado, con el tablero de vista previa de los datos.
+    const H = K.handson;
+    $("#curso-handson").innerHTML = `<div>
+        <p class="tag">Hands-on · MATLAB y Python</p>
+        <h3>${esc(H.titulo)}</h3>
+        <p class="muted">${esc(H.texto)}</p>
+        <div class="botones">
+          <a class="boton" href="${esc(H.tablero)}">Ver el tablero de datos →</a>
+          <a class="boton sec" href="${esc(H.zip)}">Descargar (.zip)</a>
+          <a class="boton sec" href="${esc(H.instrucciones)}" target="_blank" rel="noopener">Instrucciones</a>
+          <a class="boton sec" href="${esc(H.fuentes)}" target="_blank" rel="noopener">Fuentes de los datos</a>
+        </div>
+      </div>
+      <a href="${esc(H.tablero)}" class="vista-datos" aria-label="Abrir el tablero"></a>`;
+    // Vista previa: casos semanales de dengue en Medellín y Cali (SIVIGILA), leídos de los CSV del hands-on.
+    const carpeta = H.tablero.replace(/[^/]+$/, "datos/");
+    Promise.all(["dengue_medellin_sivigila.csv", "dengue_cali_sivigila.csv"].map((f) =>
+      fetch(carpeta + f).then((r) => (r.ok ? r.text() : Promise.reject(f)))))
+      .then((txt) => {
+        const ys = txt.map((t) => t.trim().split(/\r?\n/).slice(1).map((l) => +l.split(",")[3]));
+        const W = 420, Hh = 190, top = Math.max(...ys.flat());
+        const ruta = (y) => y.map((v, i) => `${i ? "L" : "M"}${((i / (y.length - 1)) * W).toFixed(1)},${(Hh - 22 - (v / top) * (Hh - 40)).toFixed(1)}`).join("");
+        const anios = [2010, 2014, 2018, 2022].map((a) => `<text x="${((a - 2010) * 52 / (ys[0].length - 1)) * W}" y="${Hh - 4}">${a}</text>`).join("");
+        $(".vista-datos").innerHTML = `<svg viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Casos semanales de dengue en Medellín y Cali, 2010 a 2024">
+          <path d="${ruta(ys[0])}" fill="none" stroke="var(--biomat)" stroke-width="1.4"/>
+          <path d="${ruta(ys[1])}" fill="none" stroke="var(--puras)" stroke-width="1.4" opacity=".85"/>
+          <g class="ejes">${anios}</g>
+          <text x="0" y="12" style="fill:var(--biomat);font-weight:600">Medellín</text><text x="70" y="12" style="fill:var(--puras);font-weight:600">Cali</text>
+          <text x="${W}" y="12" text-anchor="end">dengue, casos por semana</text></svg>`;
+      })
+      .catch(() => {});
+    // Papers de los modelos, con su diagrama de compartimientos.
+    const D = window.DIAGRAMAS;
+    $("#curso-papers").innerHTML = K.papers
+      .map((p) => `<article class="paper">
+      <p class="tag">${p.anio} · ${esc(p.revista)}</p>
+      <h3>${esc(p.titulo)}</h3>
+      <p class="autores">${esc(p.autores)}</p>
+      <p>${esc(p.aporte)}</p>
+      ${D ? p.diagramas.map((d) => D.dibujar(d) + `<p class="nota">${esc(D.specs[d].titulo)}. ${esc(D.specs[d].nota || "")}</p>`).join("") : ""}
+      <p class="usa">En el hands-on: ${p.modelos.map((m) => `<code>${esc(m)}</code>`).join(", ")}</p>
+      <p class="cta-par" style="margin-top:auto"><a class="cta" href="https://doi.org/${esc(p.doi)}" target="_blank" rel="noopener">Leer el paper (doi:${esc(p.doi)}) →</a></p>
+    </article>`)
+      .join("");
+    // Resto de enlaces, agrupados.
+    const grupos = [...new Set(K.enlaces.map((e) => e.grupo))];
+    $("#curso-enlaces").innerHTML = grupos
+      .map((g) => `<div><h4>${esc(g)}</h4><ul>${K.enlaces
+        .filter((e) => e.grupo === g)
+        .map((e) => `<li><a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.texto)}</a></li>`)
+        .join("")}</ul></div>`)
+      .join("");
   } else {
     $("#curso").hidden = true;
   }

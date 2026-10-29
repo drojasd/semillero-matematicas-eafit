@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablero del hands-on de epidemiología</title>
+<meta name="description" content="Vista previa de los datos reales y los 18 escenarios del hands-on de epidemiología del Semillero de Matemáticas EAFIT.">
+<style>
+  :root { --bg: #07121f; --surface: #0d2033; --line: #29465d; --ink: #eef7fb; --muted: #a6bdcb;
+    --puras: #f5c96f; --biomat: #53d5cd; --violet: #bda0ff; --rosa: #ff8194; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 Inter, system-ui, "Segoe UI", sans-serif; }
+  a { color: var(--biomat); }
+  main { max-width: 1180px; margin: 0 auto; padding: 28px 16px 60px; }
+  header p.volver { margin: 0 0 18px; font-size: .9rem; }
+  h1 { font: 500 clamp(1.8rem, 4vw, 2.6rem)/1.1 Georgia, serif; margin: 0 0 8px; }
+  h2 { font: 500 1.6rem/1.2 Georgia, serif; margin: 0 0 4px; }
+  h3 { font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 22px 0 8px; font-weight: 600; }
+  .muted { color: var(--muted); }
+  .filtros { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 14px; }
+  .filtros button, .alternar { background: transparent; color: var(--muted); border: 1px solid var(--line); border-radius: 999px;
+    padding: 6px 14px; font: inherit; font-size: .88rem; cursor: pointer; }
+  .filtros button[aria-pressed="true"] { color: var(--bg); background: var(--biomat); border-color: var(--biomat); }
+  .rejilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr)); gap: 12px; }
+  .mini { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px 10px;
+    color: var(--ink); font: inherit; cursor: pointer; border-top: 3px solid var(--c); }
+  .mini:hover, .mini[aria-current="true"] { border-color: var(--c); background: #12304a; }
+  .mini b { display: block; font-size: .92rem; line-height: 1.3; min-height: 2.6em; }
+  .mini small { color: var(--muted); font-size: .78rem; }
+  .mini svg { width: 100%; height: 46px; display: block; margin: 6px 0 2px; }
+  #detalle { margin-top: 34px; padding: 24px; border: 1px solid var(--line); border-radius: 20px; background: #091827; scroll-margin-top: 12px; }
+  .etiq { display: inline-block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; padding: 2px 10px;
+    border-radius: 999px; border: 1px solid var(--c); color: var(--c); margin-right: 6px; }
+  .grafica { width: 100%; height: auto; display: block; margin-top: 10px; }
+  .grafica text { fill: var(--muted); font-size: 12px; }
+  .cifras { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-top: 14px; }
+  .cifras div { background: var(--surface); border-radius: 12px; padding: 10px 14px; }
+  .cifras span { display: block; font-size: .75rem; color: var(--muted); }
+  .cifras strong { font: 500 1.3rem Georgia, serif; }
+  .modelos { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 14px; }
+  .modelo { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; }
+  .modelo p { margin: 4px 0; font-size: .88rem; }
+  .modelo code { color: var(--puras); }
+  pre { background: #050d17; border: 1px solid #ffffff14; border-radius: 10px; padding: 10px 12px; overflow-x: auto;
+    font-size: .82rem; margin: 6px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .diagrama { width: 100%; height: auto; display: block; background: #050d17; border-radius: 10px; margin: 8px 0; }
+  .diagrama .dg-f { fill: none; stroke: #a6bdcb; stroke-width: 1.6; }
+  .diagrama .dg-c { fill: none; stroke: #ff8194; stroke-width: 1.4; stroke-dasharray: 5 4; }
+  .diagrama .dg-n { fill: var(--ink); font: 600 20px Georgia, serif; text-anchor: middle; }
+  .diagrama .dg-t { fill: #cfe0ea; font: 17px Inter, system-ui, sans-serif; }
+  .diagrama .dg-tc { fill: #ff8194; }
+  .diagrama .dg-fuente { fill: var(--muted); font: italic 20px Georgia, serif; text-anchor: middle; }
+  #error { color: var(--rosa); }
+  @media (max-width: 600px) { #detalle { padding: 16px; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="volver"><a href="../../../index.html#curso">← Semillero de Matemáticas EAFIT</a></p>
+    <h1>Tablero del hands-on de epidemiología</h1>
+    <p class="muted">Los datos reales del hands-on y sus <span id="n-esc">18</span> escenarios: un brote por escenario,
+      con su ventana, su pico y los modelos sugeridos. Elige uno para ver el detalle y cómo correrlo en MATLAB o en Python.
+      <a href="hands_on_epi.zip">Descargar el hands-on (.zip)</a> · <a href="https://github.com/drojasd/semillero-matematicas-eafit/blob/main/cursos/Modelado%20epidemiol%C3%B3gico/hands_on_epi/datos/FUENTES.md">Fuentes de los datos</a></p>
+  </header>
+  <p id="error" hidden></p>
+  <div class="filtros" role="group" aria-label="Filtrar escenarios">
+    <button data-f="todos" aria-pressed="true">Todos</button>
+    <button data-f="dengue" aria-pressed="false">Dengue</button>
+    <button data-f="covid" aria-pressed="false">COVID-19</button>
+  </div>
+  <div class="rejilla" id="rejilla"></div>
+  <section id="detalle" hidden></section>
+</main>
+<script src="../../../assets/diagramas.js"></script>
+<script>
+(async function () {
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  const fmt = (x) => Math.round(x).toLocaleString("es-CO");
+  const color = (e) => e.id.startsWith("covid") ? "var(--violet)" : e.id.includes("cali") ? "var(--puras)" : "var(--biomat)";
+
+  let escenarios, catalogo;
+  const series = {};
+  try {
+    const leer = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u); return u.endsWith(".json") ? r.json() : r.text(); });
+    const [e, h, v] = await Promise.all(["escenarios.json", "modelos/catalogo_humanos.json", "modelos/catalogo_vectores.json"].map(leer));
+    escenarios = e;
+    catalogo = Object.fromEntries([...h, ...v].map((m) => [m.id, m]));
+    const archivos = [...new Set(e.map((x) => x.datos))];
+    const textos = await Promise.all(archivos.map((a) => leer("datos/" + a)));
+    archivos.forEach((a, i) => {
+      const [cab, ...filas] = textos[i].trim().split(/\r?\n/);
+      const cols = cab.split(",");
+      series[a] = filas.map((f) => Object.fromEntries(f.split(",").map((v, j) => [cols[j], isNaN(+v) || cols[j] === "fecha" ? v : +v])));
+    });
+  } catch (err) {
+    $("#error").hidden = false;
+    $("#error").textContent = "No se pudieron cargar los datos (" + err.message + "). Si abriste el archivo directamente desde la carpeta, " +
+      "el navegador bloquea la lectura: ábrelo desde el sitio web o con un servidor local (python -m http.server).";
+    return;
+  }
+  $("#n-esc").textContent = escenarios.length;
+
+  // Ventana de un escenario: filas del CSV dentro del filtro y, si toca, acumuladas.
+  function ventana(e) {
+    const filas = series[e.datos], f = e.filtro;
+    const dentro = (r) => !f || (r[f.columna] >= f.desde && r[f.columna] <= f.hasta);
+    const idx = filas.map((r, i) => (dentro(r) ? i : -1)).filter((i) => i >= 0);
+    let y = idx.map((i) => filas[i][e.columna]);
+    if (e.acumular) { let s = 0; y = y.map((v) => (s += v)); }
+    return { idx, y, filas };
+  }
+  const etiquetaX = (r) => r.fecha ? r.fecha : r.semana_epi ? `SE ${r.semana_epi}/${r.anio}` : `t = ${r.t}`;
+
+  function linea(y, W, H, pad, ymax, x0 = 0, n = y.length) {
+    const sx = (i) => pad.l + ((i + x0) / Math.max(n - 1, 1)) * (W - pad.l - pad.r);
+    const sy = (v) => H - pad.b - (v / (ymax || 1)) * (H - pad.t - pad.b);
+    return y.map((v, i) => `${i ? "L" : "M"}${sx(i).toFixed(1)},${sy(v).toFixed(1)}`).join("");
+  }
+
+  // Rejilla de escenarios con una miniatura de cada brote.
+  function rejilla(filtro) {
+    const lista = escenarios.filter((e) => filtro === "todos" || e.id.startsWith(filtro));
+    $("#rejilla").innerHTML = lista.map((e) => {
+      const { y } = ventana(e);
+      const max = Math.max(...y), ip = y.indexOf(max);
+      const unidad = e.datos.startsWith("covid") ? "días" : "semanas";
+      return `<button class="mini" style="--c:${color(e)}" data-id="${e.id}">
+        <b>${esc(e.nombre)}</b>
+        <svg viewBox="0 0 240 46" preserveAspectRatio="none" aria-hidden="true">
+          <path d="${linea(y, 240, 46, { l: 2, r: 2, t: 4, b: 2 }, max)}" fill="none" stroke="${color(e)}" stroke-width="1.6" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <small>${y.length} ${unidad} · ${e.acumular ? "total" : "pico"} ${fmt(max)}${e.acumular ? "" : " (paso " + ip + ")"}</small>
+      </button>`;
+    }).join("");
+    document.querySelectorAll(".mini").forEach((b) => b.addEventListener("click", () => {
+      history.replaceState(null, "", "#" + b.dataset.id);
+      detalle(b.dataset.id, true);
+    }));
+    marcar();
+  }
+  const marcar = () => document.querySelectorAll(".mini").forEach((b) => b.setAttribute("aria-current", b.dataset.id === location.hash.slice(1)));
+
+  // Gráfica grande: la serie completa del archivo con la ventana sombreada, o solo la ventana.
+  function grafica(e, completa) {
+    const { idx, y, filas } = ventana(e);
+    // El ancho sigue al de la caja, para que el texto no se encoja en el celular.
+    const W = Math.min(900, Math.max(320, $("#detalle").clientWidth - 40)), H = W < 600 ? 240 : 300;
+    const pad = { l: 56, r: 12, t: 14, b: 40 };
+    const todo = filas.map((r) => r[e.columna]);
+    const yy = completa && !e.acumular ? todo : y;
+    const filasX = completa && !e.acumular ? filas : idx.map((i) => filas[i]);
+    // Eje y con un paso redondo (1, 2 o 5 por una potencia de 10).
+    const crudo = Math.max(...yy) / 4, p10 = 10 ** Math.floor(Math.log10(crudo || 1));
+    const paso = [1, 2, 5, 10].map((m) => m * p10).find((v) => v >= crudo);
+    const ymax = Math.ceil((Math.max(...yy) * 1.06) / paso) * paso;
+    const sx = (i) => pad.l + (i / Math.max(yy.length - 1, 1)) * (W - pad.l - pad.r);
+    const sy = (v) => H - pad.b - (v / ymax) * (H - pad.t - pad.b);
+    let g = "";
+    for (let v = 0; v <= ymax + 1e-9; v += paso) {
+      g += `<line x1="${pad.l}" x2="${W - pad.r}" y1="${sy(v)}" y2="${sy(v)}" stroke="#ffffff14"/>` +
+        `<text x="${pad.l - 8}" y="${sy(v) + 4}" text-anchor="end">${fmt(v)}</text>`;
+    }
+    const nt = Math.min(W < 600 ? 3 : 6, yy.length);
+    for (let k = 0; k < nt; k++) {
+      const i = Math.round((k / Math.max(nt - 1, 1)) * (yy.length - 1));
+      const ancla = k === 0 ? "start" : k === nt - 1 ? "end" : "middle";
+      g += `<text x="${sx(i)}" y="${H - 14}" text-anchor="${ancla}">${esc(etiquetaX(filasX[i]))}</text>`;
+    }
+    if (completa && !e.acumular) {
+      g += `<rect x="${sx(idx[0])}" y="${pad.t}" width="${sx(idx[idx.length - 1]) - sx(idx[0])}" height="${H - pad.t - pad.b}" fill="${color(e)}" opacity=".12"/>`;
+    }
+    g += `<path d="${linea(yy, W, H, pad, ymax)}" fill="none" stroke="${color(e)}" stroke-width="2"/>`;
+    const max = Math.max(...y), ip = y.indexOf(max), xp = completa && !e.acumular ? idx[ip] : ip;
+    g += `<circle cx="${sx(xp)}" cy="${sy(max)}" r="5" fill="${color(e)}" stroke="var(--bg)" stroke-width="2"/>` +
+      `<text x="${sx(xp) + (sx(xp) > W * 0.8 ? -8 : 8)}" y="${sy(max) - 8}" text-anchor="${sx(xp) > W * 0.8 ? "end" : "start"}" style="fill:var(--ink)">${e.acumular ? "total " : "pico "}${fmt(max)}</text>`;
+    return `<svg viewBox="0 0 ${W} ${H}" class="grafica" role="img" aria-label="Serie de ${esc(e.nombre)}">${g}</svg>`;
+  }
+
+  function detalle(id, desplazar) {
+    const e = escenarios.find((x) => x.id === id);
+    const caja = $("#detalle");
+    if (!e) { caja.hidden = true; return; }
+    marcar();
+    const { idx, y, filas } = ventana(e);
+    const max = Math.max(...y), ip = y.indexOf(max);
+    const unidad = e.datos.startsWith("covid") ? "días" : "semanas";
+    const pob = e.opt?.N ?? filas[idx[0]].poblacion;
+    const modelos = e.modelos_sugeridos.map((m) => {
+      const c = catalogo[m] || { nombre: m };
+      const dg = window.DIAGRAMAS?.dibujar(window.DIAGRAMAS.porModelo[m]) || "";
+      return `<div class="modelo">
+        <p><code>${esc(m)}</code> · ${esc(c.tipo || "")}, paso en ${esc(c.unidad_tiempo || "")}</p>
+        <p><b>${esc(c.nombre)}</b></p>${dg}
+        <pre>cd python\npython handson.py --escenario ${esc(e.id)} --modelo ${esc(m)}</pre>
+        <pre>% MATLAB, sección 0 de matlab/handson.m\nESCENARIO = '${esc(e.id)}';\nMODELO = '${esc(m)}';</pre>
+      </div>`;
+    }).join("");
+    caja.hidden = false;
+    caja.style.setProperty("--c", color(e));
+    caja.innerHTML = `
+      <span class="etiq">${esc(e.transmision)}</span><span class="etiq" style="--c:var(--muted)">${esc(e.datos)}</span>
+      <h2>${esc(e.nombre)}</h2>
+      <p class="muted"><code>${esc(e.id)}</code> · columna <code>${esc(e.columna)}</code>${e.acumular ? " (acumulada)" : ""}
+        · del ${esc(etiquetaX(filas[idx[0]]))} al ${esc(etiquetaX(filas[idx[idx.length - 1]]))}</p>
+      ${e.acumular ? "" : `<button class="alternar" aria-pressed="false">Ver la serie completa del archivo</button>`}
+      <div id="graf">${grafica(e, false)}</div>
+      <div class="cifras">
+        <div><span>Duración</span><strong>${y.length} ${unidad}</strong></div>
+        <div><span>${e.acumular ? "Total acumulado" : "Pico"}</span><strong>${fmt(max)}</strong></div>
+        ${e.acumular ? "" : `<div><span>Fecha del pico</span><strong>${esc(etiquetaX(filas[idx[ip]]))}</strong></div>
+        ${e.columna === "casos" ? `<div><span>Casos en la ventana</span><strong>${fmt(y.reduce((a, b) => a + b, 0))}</strong></div>` : ""}`}
+        <div><span>Población</span><strong>${pob ? fmt(pob) : "—"}</strong></div>
+      </div>
+      ${e.notas ? `<h3>Notas</h3><p>${esc(e.notas)}</p>` : ""}
+      <h3>Modelos sugeridos y cómo correrlos</h3>
+      <div class="modelos">${modelos}</div>`;
+    const bt = caja.querySelector(".alternar");
+    if (bt) bt.addEventListener("click", () => {
+      const on = bt.getAttribute("aria-pressed") !== "true";
+      bt.setAttribute("aria-pressed", on);
+      bt.textContent = on ? "Ver solo la ventana del escenario" : "Ver la serie completa del archivo";
+      $("#graf").innerHTML = grafica(e, on);
+    });
+    if (desplazar) caja.scrollIntoView({ behavior: "smooth" });
+  }
+
+  document.querySelectorAll(".filtros button").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll(".filtros button").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    rejilla(b.dataset.f);
+  }));
+  addEventListener("hashchange", () => detalle(location.hash.slice(1), false));
+  rejilla("todos");
+  detalle(location.hash.slice(1) || escenarios[0].id, false);
+  if (!location.hash) history.replaceState(null, "", "#" + escenarios[0].id), marcar();
+})();
+</script>
+</body>
+</html>

@@ -140,4 +140,35 @@ footer { margin-top: 80px; padding: 32px 16px; text-align: center; color: var(--
 /* Curso GSUA-CSB */
 .cta-par { display: flex; flex-wrap: wrap; gap: 18px; margin: auto 0 0; }
 .cta-par .cta { margin-top: 0; }
-.curso-enlaces { margin-top: 22px; font-size: .92rem; }
+
+/* Diagramas de modelos (assets/diagramas.js) */
+.diagrama { width: 100%; height: auto; display: block; }
+.diagrama .dg-f { fill: none; stroke: #a6bdcb; stroke-width: 1.6; }
+.diagrama .dg-c { fill: none; stroke: #ff8194; stroke-width: 1.4; stroke-dasharray: 5 4; }
+.diagrama .dg-n { fill: var(--ink); font: 600 20px Georgia, serif; text-anchor: middle; }
+.diagrama .dg-t { fill: #cfe0ea; font: 17px Inter, system-ui, sans-serif; }
+.diagrama .dg-tc { fill: #ff8194; }
+.diagrama .dg-fuente { fill: var(--muted); font: italic 20px Georgia, serif; text-anchor: middle; }
+
+/* Curso: hands-on destacado, papers con diagrama, enlaces agrupados */
+.destacado { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 22px; align-items: center;
+  margin: 26px 0 34px; padding: 26px; border: 1px solid var(--line); border-radius: 20px; background: #091827dc; border-top: 3px solid var(--biomat); }
+.destacado h3 { margin: 4px 0 8px; font: 500 1.7rem/1.15 Georgia, serif; }
+.destacado .botones { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.boton.sec { background: transparent; color: var(--biomat); border: 1px solid var(--biomat); }
+.papers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 18px; margin-top: 18px; }
+.paper { padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: #091827dc; display: flex; flex-direction: column; }
+.paper h3 { margin: 6px 0 4px; font: 500 1.3rem/1.25 Georgia, serif; }
+.paper .autores { color: var(--muted); font-size: .88rem; margin: 0 0 10px; }
+.paper .diagrama { margin: 8px 0; background: #050d17; border-radius: 12px; border: 1px solid #ffffff10; }
+.paper .nota { font-size: .8rem; color: var(--muted); margin: 0 0 8px; }
+.paper .usa { font-size: .85rem; margin: 6px 0 12px; }
+.paper code { font-size: .85em; color: var(--puras); }
+.grupos-enlaces { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 18px; margin-top: 26px; }
+.grupos-enlaces div { padding: 16px 18px; border: 1px solid var(--line); border-radius: 14px; background: #0d2033aa; }
+.grupos-enlaces h4 { margin: 0 0 8px; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.grupos-enlaces ul { margin: 0; padding-left: 18px; }
+.grupos-enlaces li { margin: 5px 0; font-size: .9rem; }
+@media (max-width: 700px) { .destacado { grid-template-columns: 1fr; } }
+.vista-datos svg { width: 100%; height: auto; display: block; }
+.vista-datos text { fill: var(--muted); font-size: 11px; }

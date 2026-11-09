@@ -1,0 +1,812 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07121f">
+<title>Filtro de Kalman · Semillero de Matemáticas</title>
+<style>
+:root{
+  --bg:#07121f; --surface:#0d2033; --surface2:#102a40; --line:#29465d;
+  --ink:#eef7fb; --muted:#a6bdcb; --dim:#587386;
+  --puras:#f5c96f; --biomat:#53d5cd; --violet:#bda0ff; --bad:#ff8194; --good:#68e3a0;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+math.acc{font-family:"Cambria Math","STIX Two Math",serif;font-size:1.05em}
+.par{font-size:1.75em;vertical-align:-.12em;font-weight:300}
+html,body{height:100%}
+body{margin:0;color:var(--ink);font:16px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  background:radial-gradient(1000px 620px at 0 -15%,#16495b8a,transparent 58%),radial-gradient(1000px 640px at 100% 110%,#54266566,transparent 59%),var(--bg);
+  display:flex;flex-direction:column;min-height:100vh}
+a{color:var(--biomat)}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px max(16px,calc((100% - 1180px)/2));border-bottom:1px solid #ffffff14}
+.top a{font-size:.75rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--muted)}
+.top span{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+main{flex:1;width:min(1180px,calc(100% - 32px));margin:0 auto;padding:22px 0 110px}
+.kicker{margin:0 0 6px;color:var(--biomat);font-size:.72rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+h1{margin:0;font:500 clamp(2.4rem,6.5vw,5.2rem)/.95 Georgia,"Times New Roman",serif;letter-spacing:-.04em}
+h1 em,h2 em{color:var(--puras);font-weight:400}
+h2{margin:0 0 14px;font:500 clamp(1.6rem,3.4vw,2.5rem)/1.08 Georgia,serif;letter-spacing:-.02em}
+p{margin:0 0 12px}
+.lead{color:#bfd0db;font:1.08rem/1.6 Georgia,serif;max-width:62ch}
+.muted{color:var(--muted)} .small{font-size:.86rem}
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:26px;align-items:start}
+.cols.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.panel{border:1px solid var(--line);border-radius:16px;background:#091827dc;padding:16px}
+canvas{display:block;width:100%;height:360px;border-radius:12px;background:#050d17;border:1px solid #ffffff12;touch-action:none;cursor:crosshair}
+canvas.short{height:300px}
+.ctl{display:grid;grid-template-columns:auto 1fr 3.4em;gap:8px 10px;align-items:center;margin:10px 0}
+.ctl label{font-size:.85rem;color:var(--muted)} .ctl output{font:600 .9rem ui-monospace,Consolas,monospace;text-align:right}
+input[type=range]{width:100%;accent-color:var(--biomat)}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+button.b{padding:7px 13px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--muted);font:inherit;font-size:.85rem;cursor:pointer}
+button.b:hover{color:var(--ink);border-color:var(--muted)}
+button.b.on{background:var(--surface2);color:var(--ink);border-color:var(--biomat)}
+button.b:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--puras);outline-offset:2px}
+.m{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:1.06em;white-space:nowrap}
+.m i,.eq i{font-style:italic}
+.eq{font-family:"Cambria Math","STIX Two Math",Georgia,serif;font-size:1.25rem;line-height:2.2;text-align:center;margin:10px 0;overflow-x:auto;overflow-y:hidden;white-space:nowrap}
+.eq.big{font-size:clamp(1.15rem,2.6vw,1.9rem)}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;line-height:1.15;margin:0 .1em}
+.fr>span:first-child{border-bottom:1px solid currentColor;padding:0 .15em}
+.mat{display:inline-grid;vertical-align:middle;gap:2px 14px;padding:2px 8px;border-left:2px solid var(--muted);border-right:2px solid var(--muted);border-radius:4px;line-height:1.3;text-align:center}
+[data-p]{border-radius:6px;padding:0 2px;transition:background .2s,color .2s}
+[data-p].hl{background:#f5c96f33;color:var(--puras)}
+.box{border-left:3px solid var(--puras);background:#f5c96f12;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+.box.t{border-color:var(--biomat);background:#53d5cd12}
+.box.v{border-color:var(--violet);background:#bda0ff12}
+.tag{display:inline-block;padding:1px 9px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:#ffffff12}
+.ok{color:var(--good)} .no{color:var(--bad)}
+ul.clean{padding-left:18px;margin:6px 0} ul.clean li{margin:4px 0}
+.form{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:.85rem;color:var(--muted)}
+.form input[type=number]{width:5.2em;padding:4px 6px;border-radius:8px;border:1px solid var(--line);background:#050d17;color:var(--ink);font:inherit}
+svg text{font-family:Inter,system-ui,sans-serif}
+.cover{min-height:58vh;display:flex;flex-direction:column;justify-content:center}
+.keys{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;color:var(--muted);font-size:.85rem}
+kbd{border:1px solid var(--line);border-bottom-width:2px;border-radius:6px;padding:1px 7px;font:600 .8rem ui-monospace,Consolas,monospace;color:var(--ink)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;background:#07121fee;backdrop-filter:blur(10px);border-top:1px solid #ffffff14}
+.dock .in{width:min(1180px,calc(100% - 32px));margin:0 auto;display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;padding:10px 0}
+.dock .lbl{grid-column:1/-1;font-size:.78rem;color:var(--muted);letter-spacing:.06em;margin-top:-4px}
+.dock button{width:42px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:1.1rem;cursor:pointer}
+.dock button:disabled{opacity:.35;cursor:default}
+@media (max-width:820px){
+  .cols,.cols.even{grid-template-columns:minmax(0,1fr)}
+  .m{white-space:normal}
+  .top span{display:none}
+  .dock .in{grid-template-columns:auto minmax(0,1fr) auto auto}
+  canvas{height:280px} canvas.short{height:240px}
+  main{padding-bottom:130px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+canvas.mini{height:210px}
+.read{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.85rem;margin:10px 0}
+.read b{font:600 .9rem ui-monospace,Consolas,monospace;color:var(--ink);text-align:right}
+.read span{color:var(--muted)}
+.leg{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.78rem;color:var(--muted);margin:6px 0}
+.leg i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:5px}
+.leg i.pt{width:6px;height:6px;border-radius:50%}
+pre.code{margin:8px 0;padding:12px 14px;border-radius:12px;background:#050d17;border:1px solid #ffffff12;overflow-x:auto;font:12.5px/1.5 ui-monospace,Consolas,monospace;color:#cfe3ee}
+pre.code .c{color:var(--dim)} pre.code .k{color:var(--biomat)}
+.steps{counter-reset:p;list-style:none;padding:0;margin:8px 0}
+.steps li{counter-increment:p;position:relative;padding-left:30px;margin:8px 0}
+.steps li::before{content:counter(p);position:absolute;left:0;top:1px;width:21px;height:21px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);font-size:.72rem;display:grid;place-items:center;color:var(--puras)}
+.cols.lab{grid-template-columns:minmax(0,.72fr) minmax(0,1.5fr)}
+@media (max-width:820px){.grid2,.cols.lab{grid-template-columns:minmax(0,1fr)} canvas.mini{height:190px}}
+</style>
+</head>
+<body>
+<header class="top">
+  <a href="../../index.html">← Semillero de Matemáticas</a>
+  <span>Modelación experimental · Filtro de Kalman</span>
+</header>
+<main id="stage" tabindex="-1" aria-live="polite"></main>
+<nav class="dock" aria-label="Navegación de la presentación">
+  <div class="in">
+    <button id="prev" aria-label="Escena anterior">←</button>
+    <input id="prog" type="range" min="0" value="0" aria-label="Progreso de la presentación">
+    <button id="next" aria-label="Escena siguiente">→</button>
+    <button id="full" aria-label="Pantalla completa" title="Pantalla completa (F)">⛶</button>
+    <div class="lbl" id="lbl"></div>
+  </div>
+</nav>
+<script>
+"use strict";
+/* ===================== utilidades ===================== */
+const RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const css = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C = { ink: css("--ink"), muted: css("--muted"), dim: css("--dim"), line: css("--line"), teal: css("--biomat"), gold: css("--puras"), violet: css("--violet"), bad: css("--bad"), good: css("--good") };
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+const fmt = (x, d = 2) => (Math.abs(x) < 1e-12 ? 0 : x).toFixed(d).replace("-", "−");
+
+function fitCanvas(cv) {
+  const r = cv.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+  cv.width = Math.max(1, Math.round(r.width * dpr));
+  cv.height = Math.max(1, Math.round(r.height * dpr));
+  const ctx = cv.getContext("2d");
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, w: r.width, h: r.height };
+}
+function view(w, h, xr, yr, pad = 30) {
+  const sx = (w - 2 * pad) / (xr[1] - xr[0]), sy = (h - 2 * pad) / (yr[1] - yr[0]);
+  return { w, h, pad, xr, yr,
+    X: (x) => pad + (x - xr[0]) * sx, Y: (y) => h - pad - (y - yr[0]) * sy,
+    ix: (px) => xr[0] + (px - pad) / sx, iy: (py) => yr[0] + (h - pad - py) / sy };
+}
+/* Misma escala en ambos ejes: amplía el rango del eje con más espacio. */
+function equalize(w, h, xr, yr, pad = 30) {
+  const pw = w - 2 * pad, ph = h - 2 * pad, s = Math.max((xr[1] - xr[0]) / pw, (yr[1] - yr[0]) / ph);
+  const cx = (xr[0] + xr[1]) / 2, cy = (yr[0] + yr[1]) / 2;
+  return [[cx - s * pw / 2, cx + s * pw / 2], [cy - s * ph / 2, cy + s * ph / 2]];
+}
+function clip(ctx, v) { ctx.save(); ctx.beginPath(); ctx.rect(v.pad, v.pad, v.w - 2 * v.pad, v.h - 2 * v.pad); ctx.clip(); }
+function step(span, n = 8) { const raw = span / n, p = Math.pow(10, Math.floor(Math.log10(raw))); const m = raw / p; return (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p; }
+function axes(ctx, v, lab = ["t", "y"]) {
+  ctx.lineWidth = 1; ctx.font = "11px Inter,system-ui,sans-serif"; ctx.fillStyle = C.dim;
+  const gx = step(v.xr[1] - v.xr[0], clamp((v.w - 2 * v.pad) / 60, 3, 8)), gy = step(v.yr[1] - v.yr[0], clamp((v.h - 2 * v.pad) / 34, 3, 8));
+  ctx.strokeStyle = "#ffffff0d";
+  for (let x = Math.ceil(v.xr[0] / gx) * gx; x <= v.xr[1] + 1e-9; x += gx) { ctx.beginPath(); ctx.moveTo(v.X(x), v.pad); ctx.lineTo(v.X(x), v.h - v.pad); ctx.stroke(); }
+  for (let y = Math.ceil(v.yr[0] / gy) * gy; y <= v.yr[1] + 1e-9; y += gy) { ctx.beginPath(); ctx.moveTo(v.pad, v.Y(y)); ctx.lineTo(v.w - v.pad, v.Y(y)); ctx.stroke(); }
+  ctx.strokeStyle = "#ffffff40";
+  const x0 = clamp(0, v.xr[0], v.xr[1]), y0 = clamp(0, v.yr[0], v.yr[1]);
+  ctx.beginPath(); ctx.moveTo(v.pad, v.Y(y0)); ctx.lineTo(v.w - v.pad, v.Y(y0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(v.X(x0), v.pad); ctx.lineTo(v.X(x0), v.h - v.pad); ctx.stroke();
+  ctx.textAlign = "center";
+  for (let x = Math.ceil(v.xr[0] / gx) * gx; x <= v.xr[1] + 1e-9; x += gx) if (Math.abs(x) > 1e-9) ctx.fillText(+x.toFixed(6), v.X(x), Math.min(v.h - 8, v.Y(y0) + 14));
+  ctx.textAlign = "right";
+  for (let y = Math.ceil(v.yr[0] / gy) * gy; y <= v.yr[1] + 1e-9; y += gy) if (Math.abs(y) > 1e-9) ctx.fillText(+y.toFixed(6), Math.max(26, v.X(x0) - 5), v.Y(y) + 4);
+  ctx.fillStyle = C.muted; ctx.font = "italic 13px Georgia,serif";
+  ctx.textAlign = "right"; ctx.fillText(lab[0], v.w - v.pad, v.Y(y0) - 6);
+  ctx.textAlign = "left"; ctx.fillText(lab[1], v.X(x0) + 6, v.pad + 10);
+}
+function plotFn(ctx, v, f, color, lw = 2, dash = [], from = v.xr[0], to = v.xr[1]) {
+  clip(ctx, v); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash); ctx.beginPath();
+  let pen = false; const N = 500;
+  for (let i = 0; i <= N; i++) {
+    const t = from + (to - from) * i / N, y = f(t);
+    if (!isFinite(y) || Math.abs(y) > 1e4) { pen = false; continue; }
+    pen ? ctx.lineTo(v.X(t), v.Y(y)) : ctx.moveTo(v.X(t), v.Y(y)); pen = true;
+  }
+  ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+}
+function polyline(ctx, v, pts, color, lw = 2, dash = []) {
+  clip(ctx, v); ctx.strokeStyle = color; ctx.lineWidth = lw; ctx.setLineDash(dash); ctx.beginPath();
+  pts.forEach(([x, y], i) => (i ? ctx.lineTo(v.X(x), v.Y(y)) : ctx.moveTo(v.X(x), v.Y(y))));
+  ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+}
+function dot(ctx, v, x, y, color, r = 5) { ctx.fillStyle = color; ctx.beginPath(); ctx.arc(v.X(x), v.Y(y), r, 0, 7); ctx.fill(); }
+function rk4(f, t, s, h) {
+  const k1 = f(t, s), k2 = f(t + h / 2, s.map((x, i) => x + h / 2 * k1[i]));
+  const k3 = f(t + h / 2, s.map((x, i) => x + h / 2 * k2[i])), k4 = f(t + h, s.map((x, i) => x + h * k3[i]));
+  return s.map((x, i) => x + h / 6 * (k1[i] + 2 * k2[i] + 2 * k3[i] + k4[i]));
+}
+function drawField(ctx, v, F, n = 17) {
+  clip(ctx, v);
+  const cw = (v.w - 2 * v.pad) / n, ch = (v.h - 2 * v.pad) / n, L = Math.min(cw, ch) * 0.42;
+  for (let i = 0; i < n; i++) for (let j = 0; j < n; j++) {
+    const px = v.pad + (i + .5) * cw, py = v.pad + (j + .5) * ch;
+    const [dx, dy] = F(v.ix(px), v.iy(py)); const m = Math.hypot(dx, dy);
+    if (!isFinite(m) || m < 1e-9) { ctx.fillStyle = "#ffffff30"; ctx.fillRect(px - 1, py - 1, 2, 2); continue; }
+    const ux = dx / m, uy = -dy / m * ((v.Y(1) - v.Y(0)) < 0 ? 1 : -1);
+    const ax = px + ux * L / 2, ay = py + uy * L / 2, bx = px - ux * L / 2, by = py - uy * L / 2;
+    ctx.strokeStyle = `rgba(166,189,203,${clamp(.25 + .25 * Math.log10(1 + m), .25, .7)})`; ctx.lineWidth = 1.1;
+    ctx.beginPath(); ctx.moveTo(bx, by); ctx.lineTo(ax, ay);
+    const a = Math.atan2(ay - by, ax - bx); ctx.lineTo(ax - 4 * Math.cos(a - .5), ay - 4 * Math.sin(a - .5));
+    ctx.moveTo(ax, ay); ctx.lineTo(ax - 4 * Math.cos(a + .5), ay - 4 * Math.sin(a + .5)); ctx.stroke();
+  }
+  ctx.restore();
+}
+/* Plano de fase reutilizable: campo + trayectorias por clic o por formulario. */
+function PhasePlane(cv, o) {
+  const st = { trajs: [], v: null };
+  const ro = new ResizeObserver(() => draw()); ro.observe(cv);
+  function integrate(x0, y0) {
+    const f = (t, s) => o.field(s[0], s[1], t), H = o.h || 0.02, N = o.steps || 1500, B = 4;
+    const inside = (s) => Math.abs(s[0]) < B * Math.max(...o.xr.map(Math.abs)) && Math.abs(s[1]) < B * Math.max(...o.yr.map(Math.abs));
+    const fw = [[x0, y0]]; let s = [x0, y0], t = o.t0 ? o.t0() : 0;
+    for (let k = 0; k < N && inside(s); k++) { s = rk4(f, t, s, H); t += H; fw.push(s); }
+    if (o.autonomous === false) return fw;
+    const bw = []; s = [x0, y0]; t = 0;
+    for (let k = 0; k < N && inside(s); k++) { s = rk4(f, t, s, -H); t -= H; bw.push(s); }
+    return bw.reverse().concat(fw);
+  }
+  function draw() {
+    if (!cv.isConnected) return;
+    const { ctx, w, h } = fitCanvas(cv); const [xr, yr] = o.equal ? equalize(w, h, o.xr, o.yr) : [o.xr, o.yr]; const v = view(w, h, xr, yr); st.v = v;
+    ctx.clearRect(0, 0, w, h); axes(ctx, v, o.labels || ["x", "y"]);
+    drawField(ctx, v, (x, y) => o.field(x, y, o.fieldTime ? o.fieldTime() : 0));
+    if (o.under) o.under(ctx, v);
+    st.trajs.forEach((tr, i) => { polyline(ctx, v, tr.pts, i === st.trajs.length - 1 ? C.teal : "#53d5cd88", 2); dot(ctx, v, tr.x0, tr.y0, C.gold, 4); });
+    if (o.over) o.over(ctx, v);
+  }
+  function add(x, y) { st.trajs.push({ x0: x, y0: y, pts: integrate(x, y) }); if (st.trajs.length > 8) st.trajs.shift(); draw(); o.onAdd && o.onAdd(st.trajs[st.trajs.length - 1]); }
+  cv.addEventListener("pointerdown", (e) => { if (!st.v) return; const r = cv.getBoundingClientRect(); add(st.v.ix(e.clientX - r.left), st.v.iy(e.clientY - r.top)); });
+  return { draw, add, st, recompute() { st.trajs = st.trajs.map((t) => ({ ...t, pts: integrate(t.x0, t.y0) })); draw(); }, clear() { st.trajs = []; draw(); }, dispose() { ro.disconnect(); } };
+}
+/* Lienzo simple con redibujado al cambiar de tamaño. */
+function Canvas(cv, render) {
+  const ro = new ResizeObserver(() => draw()); ro.observe(cv);
+  function draw() { if (!cv.isConnected) return; const { ctx, w, h } = fitCanvas(cv); ctx.clearRect(0, 0, w, h); render(ctx, w, h); }
+  return { draw, dispose() { ro.disconnect(); } };
+}
+/* Animación que se cancela al salir de la escena (window.__loops cuenta las vivas). */
+window.__loops = 0;
+function Loop(tick) {
+  let id = 0, last = 0;
+  const run = (ts) => { const dt = last ? Math.min(.05, (ts - last) / 1000) : 0; last = ts; if (tick(dt) === false) return stop(); id = requestAnimationFrame(run); };
+  function start() { if (id) return; window.__loops++; last = 0; id = requestAnimationFrame(run); }
+  function stop() { if (!id) return; cancelAnimationFrame(id); id = 0; window.__loops--; }
+  return { start, stop, get on() { return !!id; } };
+}
+function slider(root, id, cb) { const el = $("#" + id, root), out = $(`output[for=${id}]`, root); const up = () => { if (out) out.value = fmt(+el.value, +(el.dataset.d || 2)); cb(+el.value); }; el.addEventListener("input", up); up(); return el; }
+function choice(root, sel, cb) { const bs = $$(sel, root); bs.forEach((b) => b.addEventListener("click", () => { bs.forEach((x) => x.classList.toggle("on", x === b)); x_aria(bs, b); cb(b.dataset.k, b); })); }
+function x_aria(bs, b) { bs.forEach((x) => x.setAttribute("aria-pressed", x === b)); }
+function trajForm(root, pp) { const f = $(".form", root); if (!f) return; f.addEventListener("submit", (e) => { e.preventDefault(); pp.add(+$("[name=x0]", f).value, +$("[name=y0]", f).value); }); }
+
+/* ===================== numérica del filtro ===================== */
+/* Generador reproducible (mulberry32) y normal estándar (Box–Muller). */
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function gauss(r) { let u = 0; while (!u) u = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * r()); }
+const Mx = {
+  mul: (A, B) => A.map((r) => B[0].map((_, j) => r.reduce((s, a, k) => s + a * B[k][j], 0))),
+  T: (A) => A[0].map((_, j) => A.map((r) => r[j])),
+  add: (A, B) => A.map((r, i) => r.map((a, j) => a + B[i][j])),
+  eye: (n) => Array.from({ length: n }, (_, i) => Array.from({ length: n }, (_, j) => +(i === j))),
+  diag: (v) => v.map((a, i) => v.map((_, j) => (i === j ? a : 0))),
+};
+/* Un paso del filtro de Kalman extendido con una sola medición y = h·x + v.
+   f(x) devuelve [x(k|k-1), F]. Con f lineal es el filtro de Kalman clásico. */
+function ekfStep(x, P, y, f, h, Q, R) {
+  const [xp, F] = f(x);
+  const Pp = Mx.add(Mx.mul(Mx.mul(F, P), Mx.T(F)), Q);
+  if (!isFinite(y)) return { x: xp, P: Pp, e: NaN, S: NaN, K: x.map(() => 0) };
+  const PH = Pp.map((r) => r.reduce((s, a, k) => s + a * h[k], 0));
+  const S = h.reduce((s, a, k) => s + a * PH[k], 0) + R;
+  const K = PH.map((v) => v / S);
+  const e = y - h.reduce((s, a, k) => s + a * xp[k], 0);
+  const xn = xp.map((v, i) => v + K[i] * e);
+  const IKH = Mx.eye(x.length).map((r, i) => r.map((v, j) => v - K[i] * h[j]));
+  const Pn = Mx.add(Mx.mul(Mx.mul(IKH, Pp), Mx.T(IKH)), K.map((a) => K.map((b) => a * b * R)));   // forma de Joseph
+  return { x: xn, P: Pn, e, S, K };
+}
+/* SIRS discreto del semillero con estado aumentado x = [s, i, β, γ] (N = 1). */
+function sirsF(x, alpha) {
+  const [s, i, b, g] = x, E = Math.exp(-b * i), r = 1 - s - i;
+  return [[s * E + alpha * r, s * (1 - E) + (1 - g) * i, b, g],
+    [[E - alpha, -s * b * E - alpha, -s * i * E, 0], [1 - E, s * b * E + 1 - g, s * i * E, -i], [0, 0, 1, 0], [0, 0, 0, 1]]];
+}
+const SIRS0 = { dias: 240, s0: 0.999, i0: 0.001, beta: 0.5, gamma: 0.2, alpha: 0.01, rel: 0.05, abs: 5e-4 };
+function simularSIRS(o = {}) {
+  o = { ...SIRS0, diaCambio: Infinity, betaDespues: 0.3, seed: 7, ...o };
+  const r = rng(o.seed), x = [[o.s0, o.i0, o.beta, o.gamma]], y = [];
+  for (let k = 0; k < o.dias; k++) { const n = sirsF(x[k], o.alpha)[0]; if (k + 1 >= o.diaCambio) n[2] = o.betaDespues; x.push(n); }
+  x.forEach((xk) => y.push(Math.max(0, xk[1] + (o.rel * xk[1] + o.abs) * gauss(r))));
+  return { t: x.map((_, k) => k), x, y, o };
+}
+/* Observabilidad acumulada del SIRS aumentado (como observabilidadLocal.m): coseno entre
+   las columnas de β y γ de O(k) = [h; hΦ(1); …; hΦ(k)], filas pesadas por el ruido. */
+function cosBetaGamma(d) {
+  const n = d.x.length, rows = []; let Phi = Mx.eye(4);
+  for (let j = 0; j < n; j++) {
+    const sg = d.o.rel * d.x[j][1] + d.o.abs;
+    rows.push(Phi[1].map((v, c) => (v / sg) * d.x[0][c]));
+    Phi = Mx.mul(sirsF(d.x[j], d.o.alpha)[1], Phi);
+  }
+  const out = []; let bb = 0, gg = 0, bg = 0;
+  rows.forEach((r, k) => { bb += r[2] * r[2]; gg += r[3] * r[3]; bg += r[2] * r[3]; out.push(k < 3 ? NaN : bg / Math.sqrt(bb * gg)); });
+  return out;
+}
+/* Panel de series de tiempo: bandas, puntos, líneas y marcas verticales. */
+function panel(ctx, w, h, o) {
+  const v = view(w, h, o.xr, o.yr, 30); axes(ctx, v, o.labels || ["t", ""]);
+  (o.bands || []).forEach((b) => {
+    if (b.t.length < 2) return; clip(ctx, v); ctx.fillStyle = b.color; ctx.beginPath();
+    b.t.forEach((t, i) => (i ? ctx.lineTo(v.X(t), v.Y(b.hi[i])) : ctx.moveTo(v.X(t), v.Y(b.hi[i]))));
+    for (let i = b.t.length - 1; i >= 0; i--) ctx.lineTo(v.X(b.t[i]), v.Y(b.lo[i]));
+    ctx.closePath(); ctx.fill(); ctx.restore();
+  });
+  (o.vlines || []).forEach((l) => { ctx.strokeStyle = l.color; ctx.setLineDash([4, 4]); ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(v.X(l.x), v.pad); ctx.lineTo(v.X(l.x), v.h - v.pad); ctx.stroke(); ctx.setLineDash([]); if (l.label) { ctx.fillStyle = l.color; ctx.font = "11px Inter,system-ui"; ctx.textAlign = "left"; ctx.fillText(l.label, v.X(l.x) + 4, v.pad + 12); } });
+  (o.points || []).forEach((p) => { clip(ctx, v); ctx.fillStyle = p.color; p.t.forEach((t, i) => { ctx.beginPath(); ctx.arc(v.X(t), v.Y(p.y[i]), p.r || 2, 0, 7); ctx.fill(); }); ctx.restore(); });
+  (o.series || []).forEach((s) => polyline(ctx, v, s.t.map((t, i) => [t, s.y[i]]), s.color, s.lw || 2, s.dash || []));
+  if (o.title) { ctx.fillStyle = C.muted; ctx.font = "600 12px Inter,system-ui,sans-serif"; ctx.textAlign = "left"; ctx.fillText(o.title, v.pad + 4, 18); }
+  return v;
+}
+const range = (n) => Array.from({ length: n }, (_, k) => k);
+const col = (X, c) => X.map((x) => x[c]);
+const hexA = (hex, a) => hex + Math.round(a * 255).toString(16).padStart(2, "0");
+
+/* ===================== escenas ===================== */
+const S = [];
+
+S.push({ id: "portada", title: "Filtro de Kalman", html: `
+<section class="cover">
+  <p class="kicker">Modelación experimental · Semillero de Matemáticas EAFIT</p>
+  <h1>Filtro de <em>Kalman</em></h1>
+  <p class="lead" style="margin-top:18px">Estimar lo que no se mide, mientras llegan los datos. De la observabilidad al filtro extendido, con un brote <b>SIRS</b> en el que solo vemos (con ruido) a los infectados y queremos los susceptibles y las tasas de transmisión y recuperación.</p>
+  <div class="keys"><span><kbd>←</kbd> <kbd>→</kbd> escenas</span><span><kbd>F</kbd> pantalla completa</span><span>Escenas interactivas: mueve los controles.</span></div>
+</section>` });
+
+S.push({ id: "problema", title: "Lo que vemos y lo que queremos", html: `
+<p class="kicker">El problema</p>
+<h2>Vemos <em>puntos</em>; queremos el estado y los parámetros</h2>
+<div class="cols">
+  <div>
+    <p>Un brote SIRS, día a día. Solo se reporta la fracción de infectados <span class="m"><i>i</i>(<i>k</i>)</span>, con ruido. Lo demás está oculto:</p>
+    <ul class="clean">
+      <li>los <b>susceptibles</b> <span class="m"><i>s</i>(<i>k</i>)</span>, un estado que nadie mide;</li>
+      <li>las <b>tasas</b> <span class="m">β</span> (transmisión) y <span class="m">γ</span> (recuperación), parámetros.</li>
+    </ul>
+    <p>En identificación usamos todos los datos a la vez. El <b>filtro de Kalman</b> trabaja <b>en línea</b>: con cada medición nueva corrige su estimación y su incertidumbre.</p>
+    <div class="box t">Dos preguntas guían la clase: <b>¿las mediciones alcanzan?</b> (observabilidad) y <b>¿cómo combinar modelo y medición?</b> (Kalman).</div>
+    <div class="btns"><button class="b" id="ver">Mostrar lo oculto</button></div>
+  </div>
+  <div class="panel"><canvas id="cv"></canvas>
+    <div class="leg"><span><i class="pt" style="background:${C.gold}"></i>medición de i</span><span id="leg2" hidden><i style="background:${C.teal}"></i>i verdadero <i style="background:${C.violet};margin-left:10px"></i>s verdadero</span></div>
+  </div>
+</div>`,
+  mount(root) {
+    const d = simularSIRS(); let ver = false;
+    const cv = Canvas($("#cv", root), (ctx, w, h) => panel(ctx, w, h, {
+      xr: [0, 240], yr: [0, 1], labels: ["día", "fracción"],
+      points: [{ t: d.t, y: d.y, color: C.gold, r: 2.2 }],
+      series: ver ? [{ t: d.t, y: col(d.x, 1), color: C.teal }, { t: d.t, y: col(d.x, 0), color: C.violet }] : [] }));
+    $("#ver", root).addEventListener("click", (e) => { ver = !ver; e.target.classList.toggle("on", ver); e.target.textContent = ver ? "Ocultar" : "Mostrar lo oculto"; $("#leg2", root).hidden = !ver; cv.draw(); });
+    return () => cv.dispose();
+  } });
+
+S.push({ id: "observabilidad", title: "Observabilidad", html: `
+<p class="kicker">Observabilidad</p>
+<h2>¿Las mediciones <em>determinan</em> el estado?</h2>
+<div class="cols">
+  <div>
+    <p>Para <span class="m"><i>x</i>(<i>k</i>+1) = <i>A x</i>(<i>k</i>)</span>, <span class="m"><i>y</i>(<i>k</i>) = <i>C x</i>(<i>k</i>)</span>, las primeras <i>n</i> mediciones son</p>
+    <div class="eq"><i>y</i> = 𝒪 <i>x</i>(0), &nbsp; 𝒪 = <span class="mat" style="grid-template-columns:auto"><span><i>C</i></span><span><i>CA</i></span><span>⋮</span><span><i>CA</i><sup><i>n</i>−1</sup></span></span></div>
+    <p>El estado inicial se recupera <b>si y solo si rango 𝒪 = <i>n</i></b>. Si no, los estados que difieren en el núcleo de 𝒪 dan <b>exactamente</b> las mismas mediciones: ningún filtro los distingue.</p>
+    <p class="small muted">Carrito con posición <i>p</i> y velocidad <i>v</i>, muestreado cada <i>T</i> = 0.5: <span class="m"><i>A</i> = [1 <i>T</i>; 0 1]</span>. Dos carritos, <b style="color:${C.teal}">a</b> y <b style="color:${C.gold}">b</b>.</p>
+    <div class="btns"><button class="b on" data-k="p">medir posición</button><button class="b" data-k="v">medir velocidad</button></div>
+    <div class="ctl"><label for="dp">Δ posición inicial</label><input id="dp" type="range" min="0" max="3" step="0.1" value="2"><output for="dp"></output>
+    <label for="dv">Δ velocidad inicial</label><input id="dv" type="range" min="0" max="1" step="0.05" value="0"><output for="dv"></output></div>
+    <div class="box" id="msg"></div>
+  </div>
+  <div class="panel">
+    <div class="eq" id="omat"></div>
+    <canvas id="c1" class="mini"></canvas><canvas id="c2" class="mini" style="margin-top:10px"></canvas>
+  </div>
+</div>`,
+  mount(root) {
+    const T = 0.5, K = range(11); let mide = "p", dp = 2, dv = 0;
+    const traj = (p0, v0) => ({ p: K.map((k) => p0 + v0 * T * k), v: K.map(() => v0) });
+    const draw = () => {
+      const a = traj(0, 1), b = traj(dp, 1 + dv), m = mide, o = m === "p" ? "v" : "p";
+      const nm = { p: "posición", v: "velocidad" };
+      const yr = (q) => q === "p" ? [-1, 12] : [0, 2.5];
+      c1.render = (ctx, w, h) => panel(ctx, w, h, { xr: [0, 10], yr: yr(m), labels: ["k", ""], title: `Se mide: ${nm[m]}`,
+        series: [{ t: K, y: a[m], color: C.teal, lw: 2.5 }, { t: K, y: b[m], color: C.gold, lw: 2, dash: [6, 5] }] });
+      c2.render = (ctx, w, h) => panel(ctx, w, h, { xr: [0, 10], yr: yr(o), labels: ["k", ""], title: `Oculto: ${nm[o]}`,
+        series: [{ t: K, y: a[o], color: C.teal, lw: 2.5 }, { t: K, y: b[o], color: C.gold, lw: 2, dash: [6, 5] }] });
+      c1.draw(); c2.draw();
+      const igual = a[m].every((y, k) => Math.abs(y - b[m][k]) < 1e-9), distintos = dp > 0 || dv > 0;
+      $("#omat", root).innerHTML = m === "p"
+        ? `𝒪 = <span class="mat" style="grid-template-columns:auto auto"><span>1</span><span>0</span><span>1</span><span><i>T</i></span></span> &nbsp; rango 2 <span class="ok">✓</span>`
+        : `𝒪 = <span class="mat" style="grid-template-columns:auto auto"><span>0</span><span>1</span><span>0</span><span>1</span></span> &nbsp; rango 1 <span class="no">✗</span>`;
+      $("#msg", root).innerHTML = !distintos ? "Los dos carritos son iguales. Separa sus estados iniciales."
+        : igual ? `<b class="no">Mismas mediciones, estados distintos.</b> La diferencia está en el núcleo de 𝒪, la dirección (1, 0): con la velocidad no se puede saber dónde empezó el carrito.`
+        : `<b class="ok">Las mediciones distinguen a de b.</b> ${m === "p" ? "Midiendo la posición, la velocidad se deduce de dos posiciones seguidas: el sistema es observable." : "La diferencia de velocidad sí se ve. Prueba a mover solo la posición."}`;
+    };
+    const mk = (id) => { const o = { render: () => {} }; const c = Canvas($("#" + id, root), (ctx, w, h) => o.render(ctx, w, h)); o.draw = c.draw; o.dispose = c.dispose; return o; };
+    const c1 = mk("c1"), c2 = mk("c2");
+    choice(root, "[data-k]", (k) => { mide = k; draw(); });
+    slider(root, "dp", (v) => { dp = v; draw(); }); slider(root, "dv", (v) => { dv = v; draw(); });
+    return () => { c1.dispose(); c2.dispose(); };
+  } });
+
+S.push({ id: "beta-gamma", title: "Observabilidad del SIRS", html: `
+<p class="kicker">Parámetros como estados</p>
+<h2>Al principio solo se ve <em>β − γ</em></h2>
+<div class="cols">
+  <div>
+    <p>Para estimar parámetros los volvemos estados que no cambian: <span class="m"><i>x</i> = (<i>s</i>, <i>i</i>, β, γ)</span> con <span class="m">β(<i>k</i>+1) = β(<i>k</i>)</span>, <span class="m">γ(<i>k</i>+1) = γ(<i>k</i>)</span>.</p>
+    <div class="eq" style="font-size:1.05rem;line-height:1.9"><i>s</i>(<i>k</i>+1) = <i>s</i> e<sup>−β<i>i</i></sup> + α(1 − <i>s</i> − <i>i</i>)<br><i>i</i>(<i>k</i>+1) = <i>s</i>(1 − e<sup>−β<i>i</i></sup>) + (1 − γ)<i>i</i></div>
+    <div class="box t"><b>Identificar parámetros = observar el estado aumentado.</b></div>
+    <p>Al inicio, <span class="m"><i>s</i> ≈ 1</span> e <span class="m"><i>i</i></span> pequeño: <span class="m"><i>i</i>(<i>k</i>+1) ≈ (1 + β − γ) <i>i</i>(<i>k</i>)</span>. Sube β y γ en la misma cantidad δ: las curvas coinciden hasta que se agotan los susceptibles.</p>
+    <div class="ctl"><label for="dl">δ</label><input id="dl" type="range" min="-0.15" max="0.15" step="0.01" value="0.1"><output for="dl"></output></div>
+    <p class="small muted" id="sep"></p>
+  </div>
+  <div class="panel">
+    <canvas id="c1" class="mini"></canvas>
+    <div class="leg"><span><i style="background:${C.teal}"></i>β = 0.5, γ = 0.2</span><span><i style="background:${C.gold}"></i>β = 0.5 + δ, γ = 0.2 + δ</span></div>
+    <canvas id="c2" class="mini"></canvas>
+    <p class="small muted" style="margin:6px 0 0">Coseno entre las columnas de β y γ de la matriz de observabilidad con los días 0…<i>k</i>. En −1 son paralelas: solo se ve β − γ.</p>
+  </div>
+</div>`,
+  mount(root) {
+    const base = simularSIRS({ dias: 120 }), cs = cosBetaGamma(simularSIRS());
+    const pico = col(base.x, 1).indexOf(Math.max(...col(base.x, 1)));
+    let dl = 0.1;
+    const c1 = Canvas($("#c1", root), (ctx, w, h) => {
+      const alt = simularSIRS({ dias: 120, beta: 0.5 + dl, gamma: 0.2 + dl });
+      const ia = col(base.x, 1), ib = col(alt.x, 1), M = Math.max(...ia);
+      const k = ia.findIndex((v, j) => Math.abs(v - ib[j]) > 0.02 * M);
+      $("#sep", root).textContent = dl === 0 ? "δ = 0: son el mismo modelo." : `Las curvas se separan (más de 2 % del pico) en el día ${k}; el pico es el día ${pico}.`;
+      panel(ctx, w, h, { xr: [0, 120], yr: [0, 0.32], labels: ["día", "i"], vlines: [{ x: pico, color: C.dim, label: "pico" }],
+        series: [{ t: base.t, y: ia, color: C.teal, lw: 2.5 }, { t: alt.t, y: ib, color: C.gold, lw: 2, dash: [6, 5] }] });
+    });
+    const c2 = Canvas($("#c2", root), (ctx, w, h) => panel(ctx, w, h, { xr: [0, 240], yr: [-1.05, 0], labels: ["k", "cos"], vlines: [{ x: pico, color: C.dim, label: "pico" }],
+      series: [{ t: range(cs.length), y: cs, color: C.violet, lw: 2.2 }] }));
+    slider(root, "dl", (v) => { dl = v; c1.draw(); });
+    return () => { c1.dispose(); c2.dispose(); };
+  } });
+
+S.push({ id: "observador", title: "Predecir y corregir", html: `
+<p class="kicker">De observador a Kalman</p>
+<h2>Predecir con el modelo, <em>corregir</em> con la medición</h2>
+<div class="cols">
+  <div>
+    <p>Un observador mezcla las dos fuentes con una ganancia <i>K</i>:</p>
+    <div class="eq"><i>x̂</i><sup>+</sup> = <i>x̂</i><sup>−</sup> + <i>K</i> (<i>y</i> − <i>x̂</i><sup>−</sup>)</div>
+    <p><i>K</i> pequeña: confía en el modelo, filtra el ruido pero llega tarde. <i>K</i> grande: sigue rápido, pero copia el ruido. Aquí un nivel que deriva al azar se mide con ruido. Mueve <i>K</i> e intenta ganarle al <b style="color:${C.teal}">filtro de Kalman</b>, que escoge <i>K</i>(<i>k</i>) en cada paso.</p>
+    <div class="ctl"><label for="kf">K fija</label><input id="kf" type="range" min="0.02" max="1" step="0.02" value="0.6"><output for="kf"></output>
+    <label for="rr">ruido de medición σ<sub>v</sub></label><input id="rr" type="range" min="0.1" max="1.5" step="0.05" value="0.6"><output for="rr"></output></div>
+    <div class="read"><span>error RMS con K fija</span><b id="e1">–</b><span>error RMS con Kalman</span><b id="e2">–</b><span>ganancia de Kalman K(k)</span><b id="kk">–</b></div>
+    <div class="btns"><button class="b" id="pp">⏸ pausa</button><button class="b" id="rs">reiniciar</button></div>
+  </div>
+  <div class="panel"><canvas id="cv"></canvas>
+    <div class="leg"><span><i class="pt" style="background:${C.dim}"></i>medición</span><span><i style="background:${C.ink}"></i>verdad</span><span><i style="background:${C.violet}"></i>K fija</span><span><i style="background:${C.teal}"></i>Kalman</span></div>
+  </div>
+</div>`,
+  mount(root) {
+    const q = 0.08, W = 120; let Kf = 0.6, r = 0.6, st, acc = 0;
+    const reset = () => { st = { R: rng(11), k: 0, x: 2, xf: 0, xk: 0, P: 4, Kk: 1, t: [], y: [], xs: [], f: [], kal: [], e1: 0, e2: 0 }; };
+    const stepOnce = () => {
+      st.k++; st.x += q * gauss(st.R); const y = st.x + r * gauss(st.R);
+      st.xf += Kf * (y - st.xf);
+      const Pp = st.P + q * q; st.Kk = Pp / (Pp + r * r); st.xk += st.Kk * (y - st.xk); st.P = (1 - st.Kk) * Pp;
+      st.t.push(st.k); st.y.push(y); st.xs.push(st.x); st.f.push(st.xf); st.kal.push(st.xk);
+      if (st.k > 20) { st.e1 += (st.xf - st.x) ** 2; st.e2 += (st.xk - st.x) ** 2; }
+      if (st.t.length > W) ["t", "y", "xs", "f", "kal"].forEach((n) => st[n].shift());
+    };
+    const cv = Canvas($("#cv", root), (ctx, w, h) => {
+      const lo = Math.min(...st.xs, 0) - 1.5, hi = Math.max(...st.xs, 2) + 1.5, t0 = st.t.length ? st.t[0] : 0;
+      panel(ctx, w, h, { xr: [t0, t0 + W], yr: [lo, hi], labels: ["k", ""],
+        points: [{ t: st.t, y: st.y, color: C.dim, r: 2 }],
+        series: [{ t: st.t, y: st.xs, color: C.ink, lw: 1.5 }, { t: st.t, y: st.f, color: C.violet, lw: 2 }, { t: st.t, y: st.kal, color: C.teal, lw: 2.4 }] });
+      const n = Math.max(1, st.k - 20);
+      $("#e1", root).textContent = st.k > 20 ? fmt(Math.sqrt(st.e1 / n), 3) : "–";
+      $("#e2", root).textContent = st.k > 20 ? fmt(Math.sqrt(st.e2 / n), 3) : "–";
+      $("#kk", root).textContent = fmt(st.Kk, 3);
+    });
+    const loop = Loop((dt) => { acc += dt * 18; while (acc >= 1) { stepOnce(); acc--; } cv.draw(); });
+    reset();
+    slider(root, "kf", (v) => { Kf = v; reset(); cv.draw(); });
+    slider(root, "rr", (v) => { r = v; reset(); cv.draw(); });
+    $("#rs", root).addEventListener("click", () => { reset(); cv.draw(); });
+    $("#pp", root).addEventListener("click", (e) => { if (loop.on) { loop.stop(); e.target.textContent = "▶ seguir"; } else { loop.start(); e.target.textContent = "⏸ pausa"; } });
+    if (RM) { for (let i = 0; i < 200; i++) stepOnce(); cv.draw(); $("#pp", root).textContent = "▶ seguir"; } else loop.start();
+    return () => { loop.stop(); cv.dispose(); };
+  } });
+
+S.push({ id: "fusion", title: "La ganancia óptima", html: `
+<p class="kicker">Una dimensión</p>
+<h2>La ganancia de Kalman <em>pesa</em> dos incertidumbres</h2>
+<div class="cols">
+  <div>
+    <p>Antes de medir, el filtro cree <span class="m"><i>x</i> ~ 𝒩(<i>x̂</i><sup>−</sup>, <i>P</i><sup>−</sup>)</span>. La medición dice <span class="m"><i>y</i> ~ 𝒩(<i>x</i>, <i>R</i>)</span>. La combinación de mínima varianza es</p>
+    <div class="eq"><i>K</i> = <span class="fr"><span><i>P</i><sup>−</sup></span><span><i>P</i><sup>−</sup> + <i>R</i></span></span></div>
+    <div class="eq"><i>x̂</i><sup>+</sup> = <i>x̂</i><sup>−</sup> + <i>K</i>(<i>y</i> − <i>x̂</i><sup>−</sup>), &nbsp; <i>P</i><sup>+</sup> = (1 − <i>K</i>)<i>P</i><sup>−</sup></div>
+    <div class="ctl"><label for="sp">√P⁻ (modelo)</label><input id="sp" type="range" min="0.2" max="3" step="0.05" value="1.5"><output for="sp"></output>
+    <label for="sr">√R (medición)</label><input id="sr" type="range" min="0.2" max="3" step="0.05" value="1"><output for="sr"></output>
+    <label for="yy">medición y</label><input id="yy" type="range" min="-4" max="4" step="0.1" value="2.5"><output for="yy"></output></div>
+    <div class="read"><span>K</span><b id="k">–</b><span>x̂⁺</span><b id="xm">–</b><span>√P⁺</span><b id="sd">–</b></div>
+    <div class="box">La campana corregida siempre es <b>más angosta que las dos</b>: medir nunca empeora la estimación, si el modelo del ruido es correcto.</div>
+  </div>
+  <div class="panel"><canvas id="cv"></canvas>
+    <div class="leg"><span><i style="background:${C.gold}"></i>predicción del modelo</span><span><i style="background:${C.violet}"></i>medición</span><span><i style="background:${C.teal}"></i>estimación corregida</span></div>
+  </div>
+</div>`,
+  mount(root) {
+    let sp = 1.5, sr = 1, y = 2.5;
+    const pdf = (m, s) => (x) => Math.exp(-0.5 * ((x - m) / s) ** 2) / (s * Math.sqrt(2 * Math.PI));
+    const cv = Canvas($("#cv", root), (ctx, w, h) => {
+      const P = sp * sp, R = sr * sr, K = P / (P + R), m = K * y, s = Math.sqrt((1 - K) * P);
+      $("#k", root).textContent = fmt(K, 3); $("#xm", root).textContent = fmt(m, 3); $("#sd", root).textContent = fmt(s, 3);
+      const top = Math.max(pdf(0, sp)(0), pdf(y, sr)(y), pdf(m, s)(m)) * 1.15;
+      const v = view(w, h, [-6, 6], [0, top], 30); axes(ctx, v, ["x", ""]);
+      const fill = (f, c) => { clip(ctx, v); ctx.fillStyle = hexA(c, 0.16); ctx.beginPath(); ctx.moveTo(v.X(-6), v.Y(0)); for (let i = 0; i <= 300; i++) { const x = -6 + 12 * i / 300; ctx.lineTo(v.X(x), v.Y(f(x))); } ctx.lineTo(v.X(6), v.Y(0)); ctx.fill(); ctx.restore(); plotFn(ctx, v, f, c, 2.2); };
+      fill(pdf(0, sp), C.gold); fill(pdf(y, sr), C.violet); fill(pdf(m, s), C.teal);
+      dot(ctx, v, m, 0, C.teal, 5);
+    });
+    slider(root, "sp", (v) => { sp = v; cv.draw(); }); slider(root, "sr", (v) => { sr = v; cv.draw(); }); slider(root, "yy", (v) => { y = v; cv.draw(); });
+    return () => cv.dispose();
+  } });
+
+S.push({ id: "ecuaciones", title: "El filtro de Kalman", html: `
+<p class="kicker">El algoritmo</p>
+<h2>El filtro de <em>Kalman</em>, en dos tiempos</h2>
+<p class="muted">Modelo: <span class="m"><i>x</i>(<i>k</i>+1) = <i>A x</i>(<i>k</i>) + <i>B u</i>(<i>k</i>) + <i>w</i>(<i>k</i>)</span>, <span class="m"><i>y</i>(<i>k</i>) = <i>C x</i>(<i>k</i>) + <i>v</i>(<i>k</i>)</span>, ruidos blancos con covarianzas <i>Q</i> y <i>R</i>.</p>
+<div class="cols even">
+  <div class="panel"><span class="tag" style="color:${C.gold}">Predicción</span>
+    <div class="eq"><i>x̂</i>(<i>k</i>|<i>k</i>−1) = <i>A x̂</i>(<i>k</i>−1|<i>k</i>−1) + <i>B u</i>(<i>k</i>−1)</div>
+    <div class="eq"><i>P</i>(<i>k</i>|<i>k</i>−1) = <i>A P</i>(<i>k</i>−1|<i>k</i>−1) <i>A</i><sup>T</sup> + <i>Q</i></div>
+    <p class="small muted">El modelo avanza la estimación; la incertidumbre crece con <i>Q</i>.</p>
+  </div>
+  <div class="panel"><span class="tag" style="color:${C.teal}">Corrección</span>
+    <div class="eq"><i>K</i>(<i>k</i>) = <i>P</i>(<i>k</i>|<i>k</i>−1) <i>C</i><sup>T</sup> [<i>C P</i>(<i>k</i>|<i>k</i>−1) <i>C</i><sup>T</sup> + <i>R</i>]<sup>−1</sup></div>
+    <div class="eq"><i>x̂</i>(<i>k</i>|<i>k</i>) = <i>x̂</i>(<i>k</i>|<i>k</i>−1) + <i>K</i>(<i>k</i>) [<i>y</i>(<i>k</i>) − <i>C x̂</i>(<i>k</i>|<i>k</i>−1)]</div>
+    <div class="eq"><i>P</i>(<i>k</i>|<i>k</i>) = [<i>I</i> − <i>K</i>(<i>k</i>) <i>C</i>] <i>P</i>(<i>k</i>|<i>k</i>−1)</div>
+    <p class="small muted">La innovación <span class="m"><i>e</i> = <i>y</i> − <i>C x̂</i></span> corrige; la incertidumbre baja.</p>
+  </div>
+</div>
+<div class="cols even" style="margin-top:14px">
+  <div class="box"><b><i>P</i> es la confianza del filtro.</b> Sus diagonales dan las bandas ±2σ que verás en las escenas siguientes. Si el sistema es observable, <i>P</i> deja de crecer.</div>
+  <div class="box t"><b>Óptimo</b> (mínima varianza del error) si el modelo es lineal y los ruidos son gaussianos, blancos y con <i>Q</i>, <i>R</i> conocidas. En la práctica <i>Q</i> y <i>R</i> son perillas de sintonía.</div>
+</div>` });
+
+S.push({ id: "carrito", title: "Kalman y observabilidad", html: `
+<p class="kicker">En tiempo real</p>
+<h2>Estimar la velocidad <em>sin medirla</em></h2>
+<div class="cols">
+  <div>
+    <p>El carrito otra vez, ahora con una velocidad que cambia al azar. Empieza en <span class="m"><i>p</i> = 3</span>, pero el filtro supone <span class="m"><i>p̂</i> = 0</span>, <span class="m"><i>v̂</i> = 0</span>. Recibe una medición ruidosa cada paso y estima posición y velocidad, con sus bandas ±2σ sacadas de <i>P</i>.</p>
+    <div class="btns"><button class="b on" data-k="p">medir posición</button><button class="b" data-k="v">medir velocidad</button></div>
+    <div class="read"><span>σ de la posición</span><b id="sp">–</b><span>σ de la velocidad</span><b id="sv">–</b></div>
+    <div class="box" id="msg"></div>
+    <div class="btns"><button class="b" id="pp">⏸ pausa</button><button class="b" id="rs">reiniciar</button></div>
+  </div>
+  <div class="panel"><canvas id="c1" class="mini"></canvas><canvas id="c2" class="mini" style="margin-top:10px"></canvas>
+    <div class="leg"><span><i style="background:${C.ink}"></i>verdad</span><span><i style="background:${C.teal}"></i>estimación ±2σ</span><span><i class="pt" style="background:${C.gold}"></i>medición</span></div>
+  </div>
+</div>`,
+  mount(root) {
+    const T = 0.1, N = 300, q = 0.06; let mide = "p", st, acc = 0;
+    const A = [[1, T], [0, 1]], f = (x) => [[x[0] + T * x[1], x[1]], A], Q = [[1e-6, 0], [0, q * q]];
+    const reset = () => {
+      const R = rng(5); const xs = [[3, 1]];   /* el carrito real empieza en p = 3; el filtro supone 0 */ for (let k = 1; k <= N; k++) xs.push([xs[k - 1][0] + T * xs[k - 1][1], xs[k - 1][1] + q * gauss(R)]);
+      const r = mide === "p" ? 0.4 : 0.15, h = mide === "p" ? [1, 0] : [0, 1];
+      st = { xs, r, h, k: 0, x: [0, 0], P: [[1, 0], [0, 1]], est: [[0, 0]], sd: [[1, 1]], y: [NaN], R };
+      $("#msg", root).innerHTML = mide === "p" ? "Observable: las dos bandas se cierran. La velocidad sale de cómo cambian las posiciones." : "<b class='no'>No observable:</b> el error inicial de la posición nunca se corrige y su banda nunca se cierra. El filtro no tiene cómo saber dónde empezó el carrito.";
+    };
+    const stepOnce = () => {
+      if (st.k >= N) return false; st.k++;
+      const xt = st.xs[st.k], y = st.h[0] * xt[0] + st.h[1] * xt[1] + st.r * gauss(st.R);
+      const o = ekfStep(st.x, st.P, y, f, st.h, Q, st.r * st.r); st.x = o.x; st.P = o.P;
+      st.est.push(o.x); st.sd.push([Math.sqrt(o.P[0][0]), Math.sqrt(o.P[1][1])]); st.y.push(y);
+    };
+    const pl = (c, ctx, w, h) => {
+      const t = range(st.k + 1).map((k) => k * T), tr = col(st.xs, c).slice(0, st.k + 1), e = col(st.est, c), s = col(st.sd, c);
+      const all = col(st.xs, c), lo = Math.min(...all) - 1, hi = Math.max(...all) + 1;
+      panel(ctx, w, h, { xr: [0, N * T], yr: [lo, hi], labels: ["t", ""], title: c ? "velocidad" : "posición",
+        bands: [{ t, hi: e.map((v, i) => v + 2 * s[i]), lo: e.map((v, i) => v - 2 * s[i]), color: hexA(C.teal, 0.2) }],
+        points: (mide === "p") === (c === 0) ? [{ t, y: st.y, color: C.gold, r: 1.6 }] : [],
+        series: [{ t, y: tr, color: C.ink, lw: 1.4 }, { t, y: e, color: C.teal, lw: 2.2 }] });
+      $("#sp", root).textContent = fmt(st.sd[st.k][0], 3); $("#sv", root).textContent = fmt(st.sd[st.k][1], 3);
+    };
+    const c1 = Canvas($("#c1", root), (ctx, w, h) => pl(0, ctx, w, h)), c2 = Canvas($("#c2", root), (ctx, w, h) => pl(1, ctx, w, h));
+    const draw = () => { c1.draw(); c2.draw(); };
+    const loop = Loop((dt) => { acc += dt * 40; let alive = true; while (acc >= 1) { if (stepOnce() === false) alive = false; acc--; } draw(); if (!alive) { $("#pp", root).textContent = "▶ seguir"; return false; } });
+    const restart = () => { reset(); acc = 0; if (RM) { while (stepOnce() !== false); draw(); } else { draw(); loop.start(); $("#pp", root).textContent = "⏸ pausa"; } };
+    choice(root, "[data-k]", (k) => { mide = k; restart(); });
+    $("#rs", root).addEventListener("click", restart);
+    $("#pp", root).addEventListener("click", (e) => { if (loop.on) { loop.stop(); e.target.textContent = "▶ seguir"; } else if (st.k < N) { loop.start(); e.target.textContent = "⏸ pausa"; } });
+    restart();
+    return () => { loop.stop(); c1.dispose(); c2.dispose(); };
+  } });
+
+S.push({ id: "ekf", title: "El filtro extendido", html: `
+<p class="kicker">Modelos no lineales</p>
+<h2>El filtro de Kalman <em>extendido</em></h2>
+<div class="cols">
+  <div>
+    <p>Modelo: <span class="m"><i>x</i>(<i>k</i>+1) = <i>f</i>(<i>x</i>(<i>k</i>)) + <i>w</i>(<i>k</i>)</span>, <span class="m"><i>y</i>(<i>k</i>) = <i>h</i>(<i>x</i>(<i>k</i>)) + <i>v</i>(<i>k</i>)</span>. El EKF cambia solo dos cosas:</p>
+    <ol class="steps">
+      <li><b>Predice con el modelo no lineal:</b> <span class="m"><i>x̂</i>(<i>k</i>|<i>k</i>−1) = <i>f</i>(<i>x̂</i>(<i>k</i>−1|<i>k</i>−1))</span>.</li>
+      <li><b>Propaga la covarianza con el jacobiano</b> evaluado en la estimación actual: <span class="m"><i>F</i>(<i>k</i>) = ∂<i>f</i>/∂<i>x</i></span>, <span class="m"><i>H</i>(<i>k</i>) = ∂<i>h</i>/∂<i>x</i></span>, que reemplazan a <i>A</i> y a <i>C</i>.</li>
+    </ol>
+    <p>Lo demás (ganancia, corrección, <i>P</i>) es igual. Es una linealización que se rehace en cada paso, así que funciona si la estimación no está demasiado lejos y si el sistema linealizado es observable.</p>
+    <div class="box v">Para el SIRS medimos <i>i</i>: <span class="m"><i>H</i> = [0 1 0 0]</span>. Con el estado aumentado, el filtro estima <b>a la vez</b> el estado oculto <i>s</i> y los parámetros β, γ.</div>
+  </div>
+  <div class="panel">
+    <p class="small muted" style="margin-bottom:4px">Jacobiano del SIRS aumentado, con <span class="m"><i>E</i> = e<sup>−β<i>i</i></sup></span>:</p>
+    <div class="eq" style="font-size:.98rem"><i>F</i> = <span class="mat" style="grid-template-columns:repeat(4,auto)">
+      <span><i>E</i> − α</span><span>−<i>s</i>β<i>E</i> − α</span><span>−<i>s i E</i></span><span>0</span>
+      <span>1 − <i>E</i></span><span><i>s</i>β<i>E</i> + 1 − γ</span><span><i>s i E</i></span><span>−<i>i</i></span>
+      <span>0</span><span>0</span><span>1</span><span>0</span>
+      <span>0</span><span>0</span><span>0</span><span>1</span></span></div>
+    <p class="small muted">Columnas: derivadas respecto a <i>s</i>, <i>i</i>, β, γ. Las dos últimas filas dicen que los parámetros no cambian; el ruido de proceso <span class="m"><i>q</i><sub>β</sub></span> les permite moverse.</p>
+    <p class="small muted">Al inicio (<i>s</i> ≈ 1, <i>i</i> pequeño) las columnas de β y γ en la fila de <i>i</i> son <span class="m"><i>s i E</i> ≈ <i>i</i></span> y <span class="m">−<i>i</i></span>: iguales salvo el signo. Es la falta de observabilidad de la escena anterior.</p>
+  </div>
+</div>` });
+
+S.push({ id: "laboratorio", title: "EKF sobre el SIRS en tiempo real", html: `
+<p class="kicker">Laboratorio</p>
+<h2>El EKF identificando <em>β</em> y <em>γ</em> día a día</h2>
+<div class="cols lab">
+  <div>
+    <div class="btns"><button class="b" id="pp">▶ correr</button><button class="b" id="st">+1 día</button><button class="b" id="rs">reiniciar</button><button class="b" id="nd">otros datos</button></div>
+    <div class="btns"><button class="b on" data-k="c">β constante</button><button class="b" data-k="i">intervención día 40</button></div>
+    <div class="ctl">
+      <label for="qb">log₁₀ q<sub>β</sub></label><input id="qb" type="range" min="-4" max="-1" step="0.25" value="-3" data-d="2"><output for="qb"></output>
+      <label for="b0">β̂ inicial</label><input id="b0" type="range" min="0.1" max="0.9" step="0.05" value="0.3"><output for="b0"></output>
+      <label for="g0">γ̂ inicial</label><input id="g0" type="range" min="0.05" max="0.4" step="0.01" value="0.1"><output for="g0"></output>
+      <label for="rm">log₁₀ (R del filtro / R real)</label><input id="rm" type="range" min="-1" max="2" step="0.25" value="0"><output for="rm"></output>
+      <label for="vel">días por segundo</label><input id="vel" type="range" min="2" max="60" step="1" value="15" data-d="0"><output for="vel"></output>
+    </div>
+    <label class="small muted"><input type="checkbox" id="tv" checked> mostrar la verdad (negro)</label>
+    <div class="read">
+      <span>día</span><b id="r-k">0</b>
+      <span>β̂ ± 2σ</span><b id="r-b">–</b>
+      <span>γ̂ ± 2σ</span><b id="r-g">–</b>
+      <span>β̂ − γ̂</span><b id="r-d">–</b>
+      <span>correlación de β̂ y γ̂ (en P)</span><b id="r-c">–</b>
+      <span>innovaciones e/√S: media, σ</span><b id="r-e">–</b>
+    </div>
+  </div>
+  <div class="grid2">
+    <div class="panel" style="padding:8px"><canvas id="ci" class="mini"></canvas></div>
+    <div class="panel" style="padding:8px"><canvas id="cs" class="mini"></canvas></div>
+    <div class="panel" style="padding:8px"><canvas id="cb" class="mini"></canvas></div>
+    <div class="panel" style="padding:8px"><canvas id="cg" class="mini"></canvas></div>
+  </div>
+</div>
+<p class="small muted" style="margin-top:10px">Prueba: (1) corre con β constante y mira la correlación cerca de −1 antes del pico; (2) intervención con <span class="m">log₁₀ <i>q</i><sub>β</sub></span> = −3, −2 y −1.5; (3) sube <i>R</i> del filtro y mira la σ de las innovaciones; (4) parte de β̂ = 0.9.</p>`,
+  mount(root) {
+    const cfg = { esc: "c", qb: 1e-3, b0: 0.3, g0: 0.1, rm: 1, vel: 15, seed: 7, verdad: true };
+    const h = [0, 1, 0, 0]; let d, st, acc = 0;
+    const newData = () => { d = simularSIRS({ seed: cfg.seed, diaCambio: cfg.esc === "i" ? 40 : Infinity }); };
+    const reset = () => {
+      st = { k: 0, x: [0.99, 0.002, cfg.b0, cfg.g0], P: Mx.diag([0.01, 0.002, 0.2, 0.1].map((v) => v * v)), Q: Mx.diag([1e-4, 1e-4, cfg.qb, 1e-4].map((v) => v * v)), est: [], sd: [], z: [], rho: NaN };
+      st.est.push(st.x.slice()); st.sd.push(st.P.map((r, i) => Math.sqrt(r[i]))); acc = 0;
+    };
+    const f = (x) => sirsF(x, d.o.alpha);
+    const stepOnce = () => {
+      if (st.k >= d.t.length - 1) return false; st.k++;
+      const R = (d.o.rel * Math.max(st.x[1], 0) + d.o.abs) ** 2 * cfg.rm;
+      const o = ekfStep(st.x, st.P, d.y[st.k], f, h, st.Q, R);
+      st.x = o.x.map((v, i) => Math.max(v, i < 2 ? 0 : 1e-3)); st.P = o.P;
+      st.est.push(st.x.slice()); st.sd.push(st.P.map((r, i) => Math.sqrt(Math.max(r[i], 0))));
+      st.z.push(o.e / Math.sqrt(o.S)); st.rho = st.P[2][3] / Math.sqrt(st.P[2][2] * st.P[3][3]);
+    };
+    const one = (c, yr, title) => (ctx, w, hh) => {
+      const t = range(st.k + 1), e = col(st.est, c), s = col(st.sd, c);
+      panel(ctx, w, hh, { xr: [0, 240], yr, labels: ["día", ""], title,
+        vlines: cfg.esc === "i" ? [{ x: 40, color: C.dim }] : [],
+        bands: [{ t, hi: e.map((v, i) => v + 2 * s[i]), lo: e.map((v, i) => v - 2 * s[i]), color: hexA(C.teal, 0.2) }],
+        points: c === 1 ? [{ t, y: d.y.slice(0, st.k + 1), color: C.gold, r: 1.7 }] : [],
+        series: (cfg.verdad ? [{ t: d.t, y: col(d.x, c), color: "#eef7fb99", lw: 1.3 }] : []).concat([{ t, y: e, color: C.teal, lw: 2.2 }]) });
+    };
+    const cvs = [Canvas($("#ci", root), one(1, [0, 0.3], "i · infectados (medidos)")), Canvas($("#cs", root), one(0, [0, 1], "s · susceptibles (ocultos)")),
+      Canvas($("#cb", root), one(2, [0, 0.9], "β · transmisión")), Canvas($("#cg", root), one(3, [0, 0.4], "γ · recuperación"))];
+    const read = () => {
+      const x = st.x, s = st.sd[st.k];
+      $("#r-k", root).textContent = st.k;
+      $("#r-b", root).textContent = `${fmt(x[2], 3)} ± ${fmt(2 * s[2], 3)}`;
+      $("#r-g", root).textContent = `${fmt(x[3], 3)} ± ${fmt(2 * s[3], 3)}`;
+      $("#r-d", root).textContent = fmt(x[2] - x[3], 3);
+      $("#r-c", root).textContent = isFinite(st.rho) ? fmt(st.rho, 2) : "–";
+      const z = st.z, n = z.length, m = n ? z.reduce((a, b) => a + b, 0) / n : 0, sd = n > 1 ? Math.sqrt(z.reduce((a, b) => a + (b - m) ** 2, 0) / (n - 1)) : NaN;
+      $("#r-e", root).textContent = n > 1 ? `${fmt(m, 2)}, ${fmt(sd, 2)}` : "–";
+    };
+    const draw = () => { cvs.forEach((c) => c.draw()); read(); };
+    const btn = $("#pp", root);
+    const loop = Loop((dt) => { acc += dt * cfg.vel; let alive = true; while (acc >= 1) { if (stepOnce() === false) { alive = false; break; } acc--; } draw(); if (!alive) { btn.textContent = "▶ correr"; return false; } });
+    const restart = () => { loop.stop(); btn.textContent = "▶ correr"; reset(); draw(); };
+    btn.addEventListener("click", () => {
+      if (loop.on) { loop.stop(); btn.textContent = "▶ seguir"; return; }
+      if (st.k >= d.t.length - 1) reset();
+      if (RM) { while (stepOnce() !== false); draw(); return; }
+      loop.start(); btn.textContent = "⏸ pausa";
+    });
+    $("#st", root).addEventListener("click", () => { stepOnce(); draw(); });
+    $("#rs", root).addEventListener("click", restart);
+    $("#nd", root).addEventListener("click", () => { cfg.seed++; newData(); restart(); });
+    choice(root, "[data-k]", (k) => { cfg.esc = k; newData(); restart(); });
+    $("#tv", root).addEventListener("change", (e) => { cfg.verdad = e.target.checked; draw(); });
+    newData(); reset();
+    slider(root, "qb", (v) => { cfg.qb = 10 ** v; restart(); });
+    slider(root, "b0", (v) => { cfg.b0 = v; restart(); });
+    slider(root, "g0", (v) => { cfg.g0 = v; restart(); });
+    slider(root, "rm", (v) => { cfg.rm = 10 ** v; restart(); });
+    slider(root, "vel", (v) => { cfg.vel = v; });
+    window.__ekf = { get k() { return st.k; }, get x() { return st.x; } };   // para pruebas
+    return () => { loop.stop(); cvs.forEach((c) => c.dispose()); delete window.__ekf; };
+  } });
+
+S.push({ id: "sintonia", title: "Sintonizar y diagnosticar", html: `
+<p class="kicker">En la práctica</p>
+<h2>Sintonizar y <em>diagnosticar</em></h2>
+<div class="cols even">
+  <div class="panel"><ul class="clean">
+    <li><b><i>R</i></b> sale del sensor o de los datos (la varianza del ruido de medición). Aquí depende del nivel: <span class="m">σ = 0.05 <i>i</i> + 0.0005</span>, así que <i>R</i>(<i>k</i>) cambia en el tiempo.</li>
+    <li><b><i>Q</i></b> es la perilla: cuánto se permite que el modelo se equivoque. Para un parámetro, <span class="m"><i>q</i><sub>β</sub></span> es la velocidad con la que puede cambiar: pequeño es suave pero lento, grande es rápido pero ruidoso.</li>
+    <li><b><i>P</i>(0)</b> debe ser honesto con la suposición inicial: si dice "estoy seguro" y no lo está, el filtro ignora los datos.</li>
+  </ul></div>
+  <div class="panel"><ul class="clean">
+    <li><b>Innovaciones:</b> si todo está bien, <span class="m"><i>e</i>/√<i>S</i></span> es ruido blanco de media 0 y varianza 1. Es el análisis de residuos de identificación, pero en línea.</li>
+    <li><b>Observabilidad primero:</b> si una dirección del estado no se ve, su banda no se cierra, y ninguna sintonía lo arregla. Hay que medir otra cosa o esperar datos más informativos (el pico).</li>
+    <li><b>Detalles numéricos:</b> la forma de Joseph mantiene <i>P</i> simétrica y positiva; proyectar la estimación a valores con sentido (fracciones y tasas no negativas) evita que el EKF diverja.</li>
+  </ul></div>
+</div>` });
+
+S.push({ id: "matlab", title: "El código en MATLAB", html: `
+<p class="kicker">MATLAB</p>
+<h2>Diez líneas de <em>filtro</em></h2>
+<div class="cols">
+  <div>
+    <pre class="code"><span class="c">% un paso del EKF (ekfPaso.m)</span>
+[x, F] = f(x);                 <span class="c">% predicción con el modelo</span>
+P = F*P*F' + Q;
+e = y - H*x;                   <span class="c">% innovación</span>
+S = H*P*H' + R;
+K = P*H' / S;                  <span class="c">% ganancia de Kalman</span>
+x = x + K*e;                   <span class="c">% corrección</span>
+I = eye(numel(x));
+P = (I - K*H)*P*(I - K*H)' + K*R*K';</pre>
+    <p class="small muted">Con <span class="m"><i>f</i> = @(x) deal(A*x, A)</span> es el filtro de Kalman lineal; con <code>sirsAumentado</code> es el EKF del SIRS. El objeto <code>extendedKalmanFilter</code> de Control System Toolbox da el mismo resultado (diferencia del orden de 10<sup>−16</sup> en el live script).</p>
+  </div>
+  <div class="panel">
+    <p><b>Archivos</b></p>
+    <ul class="clean small">
+      <li><a href="matlab/kalman_sirs_live.m" download><code>kalman_sirs_live.m</code></a>: la clase como live script, de la observabilidad al EKF y la comparación con <code>extendedKalmanFilter</code>.</li>
+      <li><a href="matlab/kalman_tiempo_real.m" download><code>kalman_tiempo_real.m</code></a>: el filtro día a día con la figura redibujándose; arriba se escoge escenario, <span class="m"><i>q</i><sub>β</sub></span> y velocidad.</li>
+      <li><a href="matlab/sirsAumentado.m" download><code>sirsAumentado.m</code></a> (modelo y jacobiano), <a href="matlab/ekfPaso.m" download><code>ekfPaso.m</code></a> (un paso), <a href="matlab/simularSIRS.m" download><code>simularSIRS.m</code></a> (datos), <a href="matlab/correrEKF.m" download><code>correrEKF.m</code></a> (toda la serie), <a href="matlab/observabilidadLocal.m" download><code>observabilidadLocal.m</code></a>.</li>
+    </ul>
+    <p class="small muted">Los datos de esta página y los de MATLAB usan generadores aleatorios distintos: los números no coinciden punto a punto, pero el comportamiento es el mismo.</p>
+  </div>
+</div>` });
+
+S.push({ id: "sintesis", title: "Lo que te llevas", html: `
+<p class="kicker">Síntesis</p>
+<h2>Lo que te <em>llevas</em></h2>
+<div class="cols even">
+  <div class="panel"><ul class="clean">
+    <li><b>Observabilidad</b>: el estado se puede reconstruir de las mediciones si rango 𝒪 = <i>n</i>. Lo que está en el núcleo de 𝒪 es invisible.</li>
+    <li>Un parámetro es un estado que no cambia: <b>identificabilidad = observabilidad del estado aumentado</b>. En el SIRS, antes del pico solo se ve β − γ.</li>
+    <li>El <b>filtro de Kalman</b> predice con el modelo y corrige con la innovación, con la ganancia que pesa <i>P</i> contra <i>R</i>.</li>
+  </ul></div>
+  <div class="panel"><ul class="clean">
+    <li>El <b>EKF</b> predice con el modelo no lineal y propaga <i>P</i> con el jacobiano evaluado en la estimación.</li>
+    <li><i>Q</i> y <i>R</i> son decisiones de modelación; las <b>innovaciones</b> dicen si fueron buenas.</li>
+    <li>Las bandas de <i>P</i> son honestas solo si el modelo lo es.</li>
+  </ul></div>
+</div>
+<p class="muted small" style="margin-top:22px">Referencias: R. Isermann y M. Münchhof, <i>Identification of Dynamic Systems: An Introduction with Applications</i>, Springer, 2011 (filtro de Kalman y filtro extendido para estimar estados y parámetros). R. E. Kalman, “A New Approach to Linear Filtering and Prediction Problems”, <i>Journal of Basic Engineering</i> 82 (1960) 35–45. Modelo SIRS discreto del Semillero de Matemáticas EAFIT.</p>` });
+
+/* ===================== motor de escenas ===================== */
+const stage = $("#stage"), prog = $("#prog"), lbl = $("#lbl");
+prog.max = S.length - 1;
+let cur = -1, dispose = null;
+function go(i, push = true) {
+  i = clamp(i | 0, 0, S.length - 1);
+  if (i === cur) return;
+  if (dispose) { try { dispose(); } catch (e) { console.error(e); } dispose = null; }
+  cur = i; const sc = S[i];
+  stage.innerHTML = sc.html;
+  dispose = sc.mount ? sc.mount(stage) || null : null;
+  prog.value = i; lbl.textContent = `${i + 1} / ${S.length} · ${sc.title}`;
+  $("#prev").disabled = i === 0; $("#next").disabled = i === S.length - 1;
+  document.title = i === 0 ? `${sc.title} · Semillero de Matemáticas` : `${sc.title} · Filtro de Kalman`;
+  if (push && location.hash.slice(1) !== sc.id) history.replaceState(null, "", "#" + sc.id);
+  window.scrollTo(0, 0);
+}
+function fromHash() { const h = decodeURIComponent(location.hash.slice(1)); const n = S.findIndex((s) => s.id === h); return n >= 0 ? n : /^\d+$/.test(h) ? +h - 1 : 0; }
+$("#prev").addEventListener("click", () => go(cur - 1));
+$("#next").addEventListener("click", () => go(cur + 1));
+prog.addEventListener("input", () => go(+prog.value));
+$("#full").addEventListener("click", toggleFull);
+function toggleFull() { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.().catch(() => {}); }
+window.addEventListener("hashchange", () => go(fromHash(), false));
+window.addEventListener("keydown", (e) => {
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea" || tag === "select" || e.altKey || e.ctrlKey || e.metaKey) return;
+  if (["ArrowRight", "PageDown"].includes(e.key) || (e.key === " " && tag !== "button")) { e.preventDefault(); go(cur + 1); }
+  else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); go(cur - 1); }
+  else if (e.key === "Home") { e.preventDefault(); go(0); }
+  else if (e.key === "End") { e.preventDefault(); go(S.length - 1); }
+  else if (e.key === "f" || e.key === "F") toggleFull();
+});
+go(fromHash());
+</script>
+</body>
+</html>

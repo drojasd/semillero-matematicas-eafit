@@ -94,7 +94,7 @@ window.SEMILLERO = {
       titulo: "Filtro de Kalman: de la observabilidad al filtro extendido",
       linea: "biomat",
       descripcion:
-        "Introducción corta e interactiva: observabilidad, el filtro de Kalman como predicción y corrección, y el filtro extendido identificando en tiempo real las tasas de un brote SIRS. Con el código en MATLAB.",
+        "Introducción corta e interactiva: observabilidad, el filtro de Kalman como predicción y corrección, y el filtro extendido identificando en tiempo real las tasas de un brote SIRS. Con el código en MATLAB y una plantilla en MATLAB y Python para aplicarlo a un modelo propio.",
       enlace: "cursos/filtro-kalman/presentacion.html",
     },
   ],

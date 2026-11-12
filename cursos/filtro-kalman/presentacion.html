@@ -752,6 +752,8 @@ P = (I - K*H)*P*(I - K*H)' + K*R*K';</pre>
       <li><a href="matlab/kalman_tiempo_real.m" download><code>kalman_tiempo_real.m</code></a>: el filtro día a día con la figura redibujándose; arriba se escoge escenario, <span class="m"><i>q</i><sub>β</sub></span> y velocidad.</li>
       <li><a href="matlab/sirsAumentado.m" download><code>sirsAumentado.m</code></a> (modelo y jacobiano), <a href="matlab/ekfPaso.m" download><code>ekfPaso.m</code></a> (un paso), <a href="matlab/simularSIRS.m" download><code>simularSIRS.m</code></a> (datos), <a href="matlab/correrEKF.m" download><code>correrEKF.m</code></a> (toda la serie), <a href="matlab/observabilidadLocal.m" download><code>observabilidadLocal.m</code></a>.</li>
     </ul>
+    <p><a class="b" href="plantilla/plantilla_ekf.zip" download>Descargar la plantilla (MATLAB y Python)</a></p>
+    <p class="small muted">La plantilla aplica el mismo filtro a cualquier modelo propio, continuo o discreto, con el estado aumentado con los parámetros y el número de condición de la observabilidad. Ver su <a href="https://github.com/drojasd/semillero-matematicas-eafit/tree/main/cursos/filtro-kalman/plantilla">README</a>.</p>
     <p class="small muted">Los datos de esta página y los de MATLAB usan generadores aleatorios distintos: los números no coinciden punto a punto, pero el comportamiento es el mismo.</p>
   </div>
 </div>` });
